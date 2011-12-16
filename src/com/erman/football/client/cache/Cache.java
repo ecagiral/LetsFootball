@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Cache {
 	
+	//Cache
 	private final MatchServiceAsync matchService = GWT.create(MatchService.class);
 	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
 	
