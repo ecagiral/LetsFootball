@@ -2,6 +2,7 @@ package com.erman.football.client.cache;
 
 import com.erman.football.shared.ClientMatch;
 
+
 public interface CacheMatchHandler {
 
 	public void matchLoaded();
