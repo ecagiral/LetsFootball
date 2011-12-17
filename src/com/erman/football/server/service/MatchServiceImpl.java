@@ -1,9 +1,11 @@
-package com.erman.football.server;
+package com.erman.football.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.erman.football.client.service.MatchService;
+import com.erman.football.server.data.Match;
+import com.erman.football.server.data.Match_JDO_DB;
 import com.erman.football.shared.ClientMatch;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -11,7 +13,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class MatchServiceImpl extends RemoteServiceServlet implements MatchService{
 
 	public ClientMatch createMatch(ClientMatch match) {
-		Match_JDO_DB.createMatch(match);
+		Match_JDO_DB.addMatch(match);
 		return match;
 		
 	}

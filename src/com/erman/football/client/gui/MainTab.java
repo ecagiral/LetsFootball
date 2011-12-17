@@ -8,8 +8,10 @@ public class MainTab extends HorizontalPanel{
 	public MainTab(Cache cache){
 		OtherPanel playerDetail = new OtherPanel();
 		OtherPanel matchDetail = new OtherPanel();
+		OtherPanel pitchDetail = new OtherPanel();
 		PlayerPanel playerPanel = new PlayerPanel(cache,playerDetail);
 		MatchPanel matchPanel = new MatchPanel(cache,matchDetail);
+		PitchPanel pitchPanel = new PitchPanel(cache,pitchDetail);
 	
 		this.setBorderWidth(1);
 		
@@ -17,6 +19,8 @@ public class MainTab extends HorizontalPanel{
 		this.add(playerDetail);
 		this.add(matchPanel);
 		this.add(matchDetail);
+		this.add(pitchPanel);
+		this.add(pitchDetail);
 		
 	}
 

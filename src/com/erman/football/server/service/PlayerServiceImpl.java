@@ -1,9 +1,11 @@
-package com.erman.football.server;
+package com.erman.football.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.erman.football.client.service.PlayerService;
+import com.erman.football.server.data.Player;
+import com.erman.football.server.data.Player_JDO_DB;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

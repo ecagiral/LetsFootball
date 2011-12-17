@@ -8,12 +8,17 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>playerServlet</servlet-name>
-    <servlet-class>com.erman.football.server.PlayerServiceImpl</servlet-class>
+    <servlet-class>com.erman.football.server.service.PlayerServiceImpl</servlet-class>
   </servlet>
   
   <servlet>
     <servlet-name>matchServlet</servlet-name>
-    <servlet-class>com.erman.football.server.MatchServiceImpl</servlet-class>
+    <servlet-class>com.erman.football.server.service.MatchServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>pitchServlet</servlet-name>
+    <servlet-class>com.erman.football.server.service.PitchServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -24,6 +29,11 @@
   <servlet-mapping>
     <servlet-name>matchServlet</servlet-name>
     <url-pattern>/LetsFootball/match</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>pitchServlet</servlet-name>
+    <url-pattern>/LetsFootball/pitch</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

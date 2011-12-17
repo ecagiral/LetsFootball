@@ -1,4 +1,4 @@
-package com.erman.football.server;
+package com.erman.football.server.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +12,14 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 public class Match_JDO_DB {
 	
-	public static void createMatch(ClientMatch match){
+	public static void addMatch(ClientMatch match){
 		
 		Match matchDO = Match.convert(match);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			pm.makePersistent(matchDO);
 		}catch(Exception e){
-			System.out.println("unable to add user");
+			System.out.println("unable to add match");
 		} finally {
 			pm.close();
 		}

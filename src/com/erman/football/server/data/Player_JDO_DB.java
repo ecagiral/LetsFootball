@@ -1,4 +1,4 @@
-package com.erman.football.server;
+package com.erman.football.server.data;
 
 import java.util.List;
 

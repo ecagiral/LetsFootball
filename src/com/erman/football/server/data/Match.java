@@ -1,4 +1,4 @@
-package com.erman.football.server;
+package com.erman.football.server.data;
 
 import java.util.HashSet;
 
@@ -16,10 +16,6 @@ public class Match {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
-
-    public void setKey(Key key) {
-        this.key = key;
-    }
     
     @Persistent
 	String date;
