@@ -124,6 +124,10 @@ h1 {
 	color: #efefef;
 }
 
-.gwt-TextBox-normalInput{
-
+.leftButton {
+  display: block;
+  font-size: 10pt;
+  background-color: #fff;
+  width: 100px;
+  height: 20px;
 }

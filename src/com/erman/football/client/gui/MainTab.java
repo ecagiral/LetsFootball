@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainTab extends HorizontalPanel{
 	
@@ -24,7 +25,13 @@ public class MainTab extends HorizontalPanel{
 	
 		this.setBorderWidth(1);
 		
+		leftPanel.setVerticalAlignment(ALIGN_TOP);
+		leftPanel.setHeight("500px");
+		
+		VerticalPanel buttonPanel = new VerticalPanel();
+
 		Button matchButton = new Button("Maclar");
+		matchButton.setStyleName("leftButton");
 		matchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -34,8 +41,9 @@ public class MainTab extends HorizontalPanel{
 			}
 			
 		});
-		leftPanel.add(matchButton);
+		buttonPanel.add(matchButton);
 		Button playerButton = new Button("Oyuncular");
+		playerButton.setStyleName("leftButton");
 		playerButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -45,8 +53,9 @@ public class MainTab extends HorizontalPanel{
 			}
 			
 		});
-		leftPanel.add(playerButton);
+		buttonPanel.add(playerButton);
 		Button pitchButton = new Button("Sahalar");
+		pitchButton.setStyleName("leftButton");
 		pitchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -56,8 +65,8 @@ public class MainTab extends HorizontalPanel{
 			}
 			
 		});
-		leftPanel.add(pitchButton);
-		
+		buttonPanel.add(pitchButton);
+		leftPanel.add(buttonPanel);
 		this.add(leftPanel );
 		this.add(listPanel);
 		this.add(detailPanel);

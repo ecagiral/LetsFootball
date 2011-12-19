@@ -30,6 +30,7 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		cache.regiserPitch(this);
+		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		this.add(new Label("Saha Paneli"));
 		pitchDialog = new PitchDialog(cache,other);
 		pitchListPanel.setWidth("210px");
