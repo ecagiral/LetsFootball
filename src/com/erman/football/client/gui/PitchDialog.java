@@ -5,6 +5,10 @@ import com.erman.football.client.cache.CachePitchHandler;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.maps.client.MapOptions;
+import com.google.gwt.maps.client.MapTypeId;
+import com.google.gwt.maps.client.MapWidget;
+import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Panel;
@@ -12,19 +16,19 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 
-	final VerticalPanel pitchInfoPanel = new VerticalPanel();
-	final TextInput pitchNameText = new TextInput(this);
-	final TextInput pitchLocationText = new TextInput(this);
-	final TextInput pitchCapacityText = new TextInput(this);
-	final Button updateButton = new Button("Apply");
+	private final TextInput pitchNameText = new TextInput(this);
+	private final TextInput pitchLocationText = new TextInput(this);
+	private final TextInput pitchCapacityText = new TextInput(this);
+	private final Button updateButton = new Button("Apply");
+	private final VerticalPanel pitchDialogPanel = new VerticalPanel();
 	
 	private Cache cache;
 	private boolean add;
-	private Grid pitchInfos;
 	private Pitch pitch;
 	private Panel basePanel;
 	private boolean admin;
-	
+	private MapWidget mapWidget;
+	 
 	public PitchDialog(Cache cache, Panel basePanel){
 		this.cache = cache;
 		this.basePanel = basePanel;
@@ -38,40 +42,59 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 			}
 
 		});
-		pitchInfoPanel.setWidth("250px");
+		pitchDialogPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		if(admin){
+		    pitchDialogPanel.add(pitchNameText.getTextBox());
+		    pitchDialogPanel.add(pitchLocationText.getTextBox());
+		    pitchDialogPanel.add(pitchCapacityText.getTextBox());
+			pitchNameText.setEnabled(true);
+			pitchLocationText.setEnabled(true);
+			pitchCapacityText.setEnabled(true);
+		}else{
+			pitchDialogPanel.add(pitchNameText.getTextBox());
+			pitchDialogPanel.add(pitchLocationText.getTextBox());
+			pitchDialogPanel.add(pitchCapacityText.getTextBox());
+			pitchNameText.setEnabled(false);
+			pitchLocationText.setEnabled(false);
+			pitchCapacityText.setEnabled(false);
+		}
+
+	    final MapOptions options = new MapOptions();
+	    // Zoom level. Required
+	    options.setZoom(8);
+	    // Open a map centered on Cawker City, KS USA. Required
+	    LatLng cor = new LatLng(39.509, -98.434);
+	    options.setCenter(cor);
+	    // Map type. Required.
+	    options.setMapTypeId(new MapTypeId().getRoadmap());
+	    
+	    // Enable maps drag feature. Disabled by default.
+	    options.setDraggable(true);
+	    // Enable and add default navigation control. Disabled by default.
+	    options.setNavigationControl(true);
+	    // Enable and add map type control. Disabled by default.
+	    options.setMapTypeControl(true);
+	    mapWidget = new MapWidget(options);
+	    mapWidget.setSize("400px", "400px"); 
+	    pitchDialogPanel.add(mapWidget);
+	    
+	    if(admin){
+	    	pitchDialogPanel.add(updateButton);
+	    }
+	    
+	    pitchDialogPanel.setSpacing(10);
+		
 	}
 	
 	public void render(boolean add, Pitch pitch){
 		this.add = add;
-		this.pitch = pitch;
-		pitchInfoPanel.clear();
-		if(admin){
-			pitchInfos = new Grid(4,2);
-			pitchNameText.setEnabled(true);
-			pitchInfos.setWidget(0, 0, pitchNameText.getTextBox());
-			pitchLocationText.setEnabled(true);
-			pitchInfos.setWidget(1, 0, pitchLocationText.getTextBox());
-			pitchCapacityText.setEnabled(true);
-			pitchInfos.setWidget(2, 0, pitchCapacityText.getTextBox());
-			pitchInfos.setWidget(3, 1, updateButton);
-		}else{
-			pitchInfos = new Grid(3,2);
-			pitchNameText.setEnabled(false);
-			pitchInfos.setWidget(0, 0, pitchNameText.getTextBox());
-			pitchLocationText.setEnabled(false);
-			pitchInfos.setWidget(1, 0, pitchLocationText.getTextBox());
-			pitchCapacityText.setEnabled(false);
-			pitchInfos.setWidget(2, 0, pitchCapacityText.getTextBox());
-		}
-		
+		this.pitch = pitch;	
 		pitchNameText.setText(pitch.getName(),add );
 		pitchLocationText.setText(pitch.getLocation(), add);
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
-
-		pitchInfoPanel.add(pitchInfos);
 		
 		basePanel.clear();
-		basePanel.add(pitchInfoPanel);
+		basePanel.add(pitchDialogPanel);
 	}
 	
 	private boolean retrieveData(){
@@ -95,7 +118,7 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 		if(retrieveData()){
 			if(add){
 				PitchDialog.this.cache.addPitch(pitch);
-				pitchInfoPanel.removeFromParent();
+				pitchDialogPanel.removeFromParent();
 				add=false;
 			}else{
 				PitchDialog.this.cache.updatePitch(pitch);
@@ -121,7 +144,7 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 
 	public void pitchRemoved(Long pitch) {
 		if(this.pitch.getKey()==pitch){
-			pitchInfoPanel.removeFromParent();
+			pitchDialogPanel.removeFromParent();
 		}
 	}
 
