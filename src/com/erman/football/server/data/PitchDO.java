@@ -55,7 +55,7 @@ public class PitchDO {
 	public static PitchDO generate(Pitch pitch){
 		PitchDO pitchDO = new PitchDO();
 		pitchDO.setCapacity(pitch.getCapacity());
-		pitchDO.setLocation(pitch.getLocation());
+		pitchDO.setLocation(pitch.getStrLocation());
 		pitchDO.setName(pitch.getName());
 		return pitchDO;
 	}
@@ -71,7 +71,7 @@ public class PitchDO {
 	
 	public void update(Pitch pitch){
 		this.setCapacity(pitch.getCapacity());
-		this.setLocation(pitch.getLocation());
+		this.setLocation(pitch.getStrLocation());
 		this.setName(pitch.getName());
 	}
 }

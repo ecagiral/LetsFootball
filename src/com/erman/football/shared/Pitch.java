@@ -2,6 +2,9 @@ package com.erman.football.shared;
 
 import java.io.Serializable;
 
+import com.google.gwt.maps.client.base.HasLatLng;
+import com.google.gwt.maps.client.base.LatLng;
+
 public class Pitch implements Serializable {
 	
 	/**
@@ -16,8 +19,8 @@ public class Pitch implements Serializable {
 	
 	public Pitch(){
 		name = "isim";
-		location = "00.0000000, 00.0000000";
-		capacity = 0;
+		location = "41.010,28.970";
+		capacity = 10;
 	}
 
 	public long getKey() {
@@ -36,12 +39,21 @@ public class Pitch implements Serializable {
 		this.name = name;
 	}
 
-	public String getLocation() {
-		return location;
+	public HasLatLng getLocation() {
+		String latlng[] = location.split(",");
+		return new LatLng(Double.parseDouble(latlng[0]),Double.parseDouble(latlng[1]));
 	}
 
+	public void setLocation(HasLatLng location) {
+		this.location = Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude());
+	}
+	
+	public String getStrLocation(){
+		return location;
+	}
+	
 	public void setLocation(String location) {
-		this.location = location;
+		this.location =  location;
 	}
 
 	public int getCapacity() {

@@ -9,6 +9,10 @@ import com.google.gwt.maps.client.MapOptions;
 import com.google.gwt.maps.client.MapTypeId;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
+import com.google.gwt.maps.client.event.HasMouseEvent;
+import com.google.gwt.maps.client.event.MapsEventListener;
+import com.google.gwt.maps.client.event.MouseEventCallback;
+import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Panel;
@@ -17,10 +21,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 
 	private final TextInput pitchNameText = new TextInput(this);
-	private final TextInput pitchLocationText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
 	private final Button updateButton = new Button("Apply");
 	private final VerticalPanel pitchDialogPanel = new VerticalPanel();
+	private final Marker marker = new Marker();
+	private final MapOptions options = new MapOptions();
 	
 	private Cache cache;
 	private boolean add;
@@ -45,28 +50,24 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 		pitchDialogPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		if(admin){
 		    pitchDialogPanel.add(pitchNameText.getTextBox());
-		    pitchDialogPanel.add(pitchLocationText.getTextBox());
 		    pitchDialogPanel.add(pitchCapacityText.getTextBox());
 			pitchNameText.setEnabled(true);
-			pitchLocationText.setEnabled(true);
 			pitchCapacityText.setEnabled(true);
 		}else{
 			pitchDialogPanel.add(pitchNameText.getTextBox());
-			pitchDialogPanel.add(pitchLocationText.getTextBox());
 			pitchDialogPanel.add(pitchCapacityText.getTextBox());
 			pitchNameText.setEnabled(false);
-			pitchLocationText.setEnabled(false);
 			pitchCapacityText.setEnabled(false);
 		}
 
 	    final MapOptions options = new MapOptions();
 	    // Zoom level. Required
-	    options.setZoom(8);
+	    options.setZoom(11);
 	    // Open a map centered on Cawker City, KS USA. Required
-	    LatLng cor = new LatLng(39.509, -98.434);
+	    LatLng cor = new LatLng(41.010,28.970);
 	    options.setCenter(cor);
 	    // Map type. Required.
-	    options.setMapTypeId(new MapTypeId().getRoadmap());
+	    options.setMapTypeId(new MapTypeId().getSatellite());
 	    
 	    // Enable maps drag feature. Disabled by default.
 	    options.setDraggable(true);
@@ -75,7 +76,16 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	    // Enable and add map type control. Disabled by default.
 	    options.setMapTypeControl(true);
 	    mapWidget = new MapWidget(options);
-	    mapWidget.setSize("400px", "400px"); 
+	    mapWidget.setSize("600px", "600px"); 
+	    marker.setMap(mapWidget.getMap());
+	    com.google.gwt.maps.client.event.Event.addListener(mapWidget.getMap(), "click", new MouseEventCallback(){
+
+			@Override
+			public void callback(HasMouseEvent event) {
+				marker.setPosition(event.getLatLng());
+			}
+	    	
+	    });
 	    pitchDialogPanel.add(mapWidget);
 	    
 	    if(admin){
@@ -90,9 +100,14 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 		this.add = add;
 		this.pitch = pitch;	
 		pitchNameText.setText(pitch.getName(),add );
-		pitchLocationText.setText(pitch.getLocation(), add);
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
-		
+		marker.setPosition(pitch.getLocation());
+		mapWidget.getMap().setCenter(pitch.getLocation());
+		if(add){
+			mapWidget.getMap().setZoom(13);
+		}else{
+			mapWidget.getMap().setZoom(16);
+		}
 		basePanel.clear();
 		basePanel.add(pitchDialogPanel);
 	}
@@ -103,8 +118,8 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 			pitch.setName(pitchNameText.getText());
 			result = true;
 		}
-		if(!pitchLocationText.getText().equals(pitch.getLocation())){
-			pitch.setLocation(pitchLocationText.getText());
+		if(!marker.getPosition().equals(pitch.getLocation())){
+			pitch.setLocation(marker.getPosition());
 			result = true;
 		}
 		if(!pitchCapacityText.getText().equals(pitch.getCapacity())){
