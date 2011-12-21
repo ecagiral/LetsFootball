@@ -37,10 +37,6 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 		this.admin = cache.getLoggedPlayer().isAdmin();
 				
 		cache.regiserPlayer(this);
-		this.setHorizontalAlignment(ALIGN_CENTER);
-
-		Label panelName = new Label("Oyuncu Paneli");
-		this.add(panelName);
 		
 		this.setHorizontalAlignment(ALIGN_LEFT);
 		
@@ -55,7 +51,7 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 			playerEmailPanel.insert(new NewPlayerCell(),0);
 		}
 		this.add(scrollEmailPanel);
-		
+		this.setBorderWidth(1);
 
 	}
 	
@@ -103,11 +99,12 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 		public NewPlayerCell(){
 			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
-			over.add(new Label("New User"));
+			over.setHorizontalAlignment(ALIGN_CENTER);
+			over.add(new Label("Oyuncu Ekle"));
 			over.setWidth("100%");
 			this.add(over);
 			this.addClickHandler(new NewPlayerHandler());
-			this.setStyleName("userCard");
+			this.setStyleName("newUserCard");
 		}
 		
 		public HandlerRegistration addClickHandler(ClickHandler handler) {

@@ -8,8 +8,11 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -39,14 +42,21 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	 */
 	public void onModuleLoad() {
 		loginPanel = new Login(this);
-		
+		Window.addResizeHandler(new ResizeHandler(){
+
+			public void onResize(ResizeEvent event) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setWidth("100%");
 		welcome = new Label("Lutfen login olun");
 		welcome.setStyleName("welcome");
 		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		headerPanel.add(welcome);
-		Label logo = new Label("Mac Yapiyoruz!");
+		Label logo = new Label("Test!");
 		logo.setStyleName("logo");
 		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		headerPanel.add(logo);

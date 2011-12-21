@@ -30,8 +30,6 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		cache.regiserPitch(this);
-		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		this.add(new Label("Saha Paneli"));
 		pitchDialog = new PitchDialog(cache,other);
 		pitchListPanel.setWidth("210px");
 		scrollPitchPanel.add(pitchListPanel);
@@ -41,7 +39,7 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 			pitchListPanel.insert(new NewPitchCell(), 0);
 		}
 		this.add(scrollPitchPanel);
-		
+		this.setBorderWidth(1);
 	}
 	
 	private class PitchCell extends SimplePanel{
@@ -85,11 +83,12 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 		public NewPitchCell(){
 			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
+			over.setHorizontalAlignment(ALIGN_CENTER);
 			over.add(new Label("Saha Ekle"));
 			over.setWidth("100%");
 			this.add(over);
 			this.addClickHandler(new NewPitchHandler());
-			this.setStyleName("matchCard");
+			this.setStyleName("newMatchCard");
 		}
 		
 		public HandlerRegistration addClickHandler(ClickHandler handler) {

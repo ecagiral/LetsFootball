@@ -23,7 +23,7 @@ public class MainTab extends HorizontalPanel{
 		matchPanel = new MatchPanel(cache,detailPanel);
 		pitchPanel = new PitchPanel(cache,detailPanel);
 	
-		this.setBorderWidth(1);
+		this.setSpacing(30);
 		
 		leftPanel.setVerticalAlignment(ALIGN_TOP);
 		leftPanel.setHeight("500px");

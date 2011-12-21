@@ -10,11 +10,10 @@ import com.google.gwt.maps.client.MapTypeId;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.event.HasMouseEvent;
-import com.google.gwt.maps.client.event.MapsEventListener;
 import com.google.gwt.maps.client.event.MouseEventCallback;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -23,9 +22,8 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	private final TextInput pitchNameText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
 	private final Button updateButton = new Button("Apply");
-	private final VerticalPanel pitchDialogPanel = new VerticalPanel();
+	private final HorizontalPanel pitchDialogPanel = new HorizontalPanel();
 	private final Marker marker = new Marker();
-	private final MapOptions options = new MapOptions();
 	
 	private Cache cache;
 	private boolean add;
@@ -47,19 +45,25 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 			}
 
 		});
-		pitchDialogPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		VerticalPanel pitchInfoPanel = new VerticalPanel();
+		pitchInfoPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		if(admin){
-		    pitchDialogPanel.add(pitchNameText.getTextBox());
-		    pitchDialogPanel.add(pitchCapacityText.getTextBox());
+			pitchInfoPanel.add(pitchNameText.getTextBox());
+			pitchInfoPanel.add(pitchCapacityText.getTextBox());
 			pitchNameText.setEnabled(true);
 			pitchCapacityText.setEnabled(true);
 		}else{
-			pitchDialogPanel.add(pitchNameText.getTextBox());
-			pitchDialogPanel.add(pitchCapacityText.getTextBox());
+			pitchInfoPanel.add(pitchNameText.getTextBox());
+			pitchInfoPanel.add(pitchCapacityText.getTextBox());
 			pitchNameText.setEnabled(false);
 			pitchCapacityText.setEnabled(false);
 		}
-
+	    if(admin){
+	    	pitchInfoPanel.add(updateButton);
+	    }
+	    
+	    pitchDialogPanel.add(pitchInfoPanel);
+	    
 	    final MapOptions options = new MapOptions();
 	    // Zoom level. Required
 	    options.setZoom(11);
@@ -75,10 +79,11 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	    options.setNavigationControl(true);
 	    // Enable and add map type control. Disabled by default.
 	    options.setMapTypeControl(true);
+	    options.setDisableDoubleClickZoom(true);
 	    mapWidget = new MapWidget(options);
 	    mapWidget.setSize("600px", "600px"); 
 	    marker.setMap(mapWidget.getMap());
-	    com.google.gwt.maps.client.event.Event.addListener(mapWidget.getMap(), "click", new MouseEventCallback(){
+	    com.google.gwt.maps.client.event.Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
 
 			@Override
 			public void callback(HasMouseEvent event) {
@@ -88,11 +93,9 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	    });
 	    pitchDialogPanel.add(mapWidget);
 	    
-	    if(admin){
-	    	pitchDialogPanel.add(updateButton);
-	    }
+
 	    
-	    pitchDialogPanel.setSpacing(10);
+	    pitchDialogPanel.setBorderWidth(1);
 		
 	}
 	

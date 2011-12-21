@@ -3,7 +3,6 @@ package com.erman.football.client.gui;
 import java.util.Date;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.client.cache.CachePitchHandler;
 import com.erman.football.shared.ClientMatch;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -57,7 +56,6 @@ public class MatchDialog{
 	
 	public MatchDialog(Cache cache){
 		this.cache = cache;
-		VerticalPanel matchOverviewPanel = new VerticalPanel(); 
 		detailPanel = new MatchDetailPanel(cache);
 		boolean admin = cache.getLoggedPlayer().isAdmin();
 		matchDateText.setWidth("52px");
@@ -136,7 +134,6 @@ public class MatchDialog{
 		}
 		matchInfoPanel.add(matchInfos);
 		matchInfoPanel.add(matchScorePanel);
-		matchOverviewPanel.add(matchInfoPanel);	
 		
 		matchUpdateButton.addClickHandler(new ClickHandler(){
 
@@ -171,6 +168,7 @@ public class MatchDialog{
 		matchBoxPanel.add(matchInfoPanel);
 		matchBoxPanel.add(detailPanel);
 		matchBoxPanel.add(infoButtonPanel);
+		matchBoxPanel.setBorderWidth(1);
 	}
 	
 	public void render(ClientMatch match, Boolean _add,Panel parent){

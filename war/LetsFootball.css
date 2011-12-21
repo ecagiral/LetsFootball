@@ -74,6 +74,15 @@ h1 {
 	border-top-color: #efefef
 }
 
+.newUserCard{
+	padding: 5px;
+	background-color: #fff;
+	width: 100%;
+	border-top:solid;
+	border-top-color: #efefef;
+	color: #FF0000;
+}
+
 .selectedUserCard{
 	padding: 5px;
 	background-color: #efef00;
@@ -87,7 +96,16 @@ h1 {
 	background-color: #efefef;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef
+	border-top-color: #efefef;
+}
+
+.newUserCard:hover{
+	padding: 5px;
+	background-color: #efefef;
+	width: 100%;
+	border-top:solid;
+	border-top-color: #efefef;
+	color: #FF0000;
 }
 
 .matchCard{
@@ -96,6 +114,15 @@ h1 {
 	width: 100%;
 	border-top:solid;
 	border-top-color: #efefef
+}
+
+.newMatchCard{
+	padding: 5px;
+	background-color: #fff;
+	width: 100%;
+	border-top:solid;
+	border-top-color: #efefef;
+	color: #FF0000;
 }
 
 .selectedMatchCard{
@@ -112,6 +139,15 @@ h1 {
 	width: 100%;
 	border-top:solid;
 	border-top-color: #efefef
+}
+
+.newMatchCard:hover{
+	padding: 5px;
+	background-color: #efefef;
+	width: 100%;
+	border-top:solid;
+	border-top-color: #efefef;
+	color: #FF0000;
 }
 
 .gwt-TextBox-updatedInput{

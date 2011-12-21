@@ -44,6 +44,7 @@ public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
 
 		});
 		playerInfoPanel.setWidth("250px");
+		playerInfoPanel.setBorderWidth(1);
 	}
 
 	public void render(boolean add, ClientPlayer player){

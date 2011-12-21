@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
+public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 	
 	private MatchDialog matchDialog;
 	
@@ -36,11 +36,6 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
-		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		Label panelName = new Label("Mac Paneli");
-		this.add(panelName);
-		
-		HorizontalPanel mainPanel = new HorizontalPanel();
 
 		VerticalPanel matchOverviewPanel = new VerticalPanel(); 
 
@@ -50,10 +45,8 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		scrollMatchPanel.setHeight("500px");
 		matchTimePanel.insert(new NewMatchCell(),0);
 		matchOverviewPanel.add(scrollMatchPanel);
-		mainPanel.add(matchOverviewPanel);
-		mainPanel.setHeight("350px");
-		this.add(mainPanel);
-	
+		this.add(matchOverviewPanel);
+		this.setBorderWidth(1);
 	}
 	
 	public void matchLoaded() {
@@ -78,10 +71,11 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		matches.remove(match).removeFromParent();
 	}
 
-	private class MatchCell extends SimplePanel{
+	private class MatchCell extends VerticalPanel{
 		
 		private ClientMatch match;
 		private Label dateTime = new Label();
+		private Label location = new Label();
 		
 		public MatchCell(ClientMatch match){
 			this.match = match;
@@ -89,6 +83,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			HorizontalPanel dateDel = new HorizontalPanel();
 			dateDel.setWidth("100%");
 			dateTime.setText(match.getDate()+" - "+match.getTime());
+			location.setText(match.getLocation());
 			dateDel.add(dateTime);
 			if(admin){
 				Button delete = new Button("-");
@@ -97,6 +92,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 				dateDel.add(delete);
 			}
 			this.add(dateDel);
+			this.add(location);
 			this.setStyleName("matchCard");
 			this.addClickHandler(new MatchInfoHandler(this));
 		}
@@ -111,6 +107,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		public void update(ClientMatch _match){
 			this.match = _match;
 			dateTime.setText(match.getDate()+" - "+match.getTime());
+			location.setText(match.getLocation());
 		}
 	}
 	
@@ -119,11 +116,12 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		public NewMatchCell(){
 			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
-			over.add(new Label("New Match"));
+			over.setHorizontalAlignment(ALIGN_CENTER);
+			over.add(new Label("Mac Ekle"));
 			over.setWidth("100%");
 			this.add(over);
 			this.addClickHandler(new NewMatchHandler());
-			this.setStyleName("matchCard");
+			this.setStyleName("newMatchCard");
 		}
 		
 		public HandlerRegistration addClickHandler(ClickHandler handler) {
