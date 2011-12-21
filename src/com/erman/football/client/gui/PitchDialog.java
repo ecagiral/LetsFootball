@@ -80,8 +80,9 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	    // Enable and add map type control. Disabled by default.
 	    options.setMapTypeControl(true);
 	    options.setDisableDoubleClickZoom(true);
+	    options.setScrollwheel(true);
 	    mapWidget = new MapWidget(options);
-	    mapWidget.setSize("600px", "600px"); 
+	    mapWidget.setSize("500px", "500px"); 
 	    marker.setMap(mapWidget.getMap());
 	    com.google.gwt.maps.client.event.Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
 

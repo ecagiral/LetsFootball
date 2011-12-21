@@ -35,6 +35,39 @@ public class Cache {
 	private ClientPlayer player;
 	
 	public void load(){
+		pitchService.getPitches(
+				new AsyncCallback<List<Pitch>>(){
+			public void onFailure(Throwable caught) {
+
+			}
+
+
+			@Override
+			public void onSuccess(List<Pitch> result) {
+				pitches.clear();
+				for(Pitch pitch:result){
+					pitches.put(pitch.getKey(), pitch);
+				}
+				notifyPitchLoaded();
+			}
+		});
+		playerService.getPlayers(
+				new AsyncCallback<List<ClientPlayer>>(){
+			public void onFailure(Throwable caught) {
+
+			}
+
+
+			@Override
+			public void onSuccess(List<ClientPlayer> result) {
+				players.clear();
+				for(ClientPlayer ply:result){
+					players.put(ply.getKey(), ply);
+				}
+				notifyPlayerLoaded();
+			}
+		});
+
 		matchService.getMatches(new AsyncCallback<List<ClientMatch>>(){
 
 			public void onFailure(Throwable caught) {
@@ -50,36 +83,6 @@ public class Cache {
 				notifyMatchLoaded();
 			}
 			
-		});
-		playerService.getPlayers(
-				new AsyncCallback<List<ClientPlayer>>(){
-			public void onFailure(Throwable caught) {
-
-			}
-
-
-			@Override
-			public void onSuccess(List<ClientPlayer> result) {
-				for(ClientPlayer ply:result){
-					players.put(ply.getKey(), ply);
-				}
-				notifyPlayerLoaded();
-			}
-		});
-		pitchService.getPitches(
-				new AsyncCallback<List<Pitch>>(){
-			public void onFailure(Throwable caught) {
-
-			}
-
-
-			@Override
-			public void onSuccess(List<Pitch> result) {
-				for(Pitch pitch:result){
-					pitches.put(pitch.getKey(), pitch);
-				}
-				notifyPitchLoaded();
-			}
 		});
 	}
 	
@@ -217,6 +220,10 @@ public class Cache {
 		return new ArrayList<Pitch>(pitches.values());
 	}
 	
+	public Pitch getPitch(Long id){
+		return pitches.get(id);
+	}
+	
 	public void addPitch(Pitch pitch){
 		pitchService.createPitch(pitch, new AsyncCallback<Pitch>(){
 
@@ -278,18 +285,21 @@ public class Cache {
 	}
 	
 	private void notifyPlayerAdded(ClientPlayer player){
+		players.put(player.getKey(), player);
 		for(CachePlayerHandler handler:playerHandlers){
 			handler.playerAdded(player);
 		}
 	}
 	
 	private void notifyPlayerUpdated(ClientPlayer player){
+		players.put(player.getKey(), player);
 		for(CachePlayerHandler handler:playerHandlers){
 			handler.playerUpdated(player);
 		}
 	}
 	
 	private void notifyPlayerRemoved(Long player){
+		players.remove(player);
 		for(CachePlayerHandler handler:playerHandlers){
 			handler.playerRemoved(player);
 		}
@@ -326,18 +336,21 @@ public class Cache {
 		}
 	}
 	private void notifyPitchAdded(Pitch pitch){
+		pitches.put(pitch.getKey(), pitch);
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchAdded(pitch);
 		}
 	}
 	
 	private void notifyPitchUpdated(Pitch pitch){
+		pitches.put(pitch.getKey(), pitch);
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchUpdated(pitch);
 		}
 	}
 	
 	private void notifyPitchRemoved(Long pitch){
+		pitches.remove(pitch);
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchRemoved(pitch);
 		}

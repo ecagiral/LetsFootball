@@ -3,6 +3,7 @@ package com.erman.football.client.gui;
 import java.util.Date;
 
 import com.erman.football.client.cache.Cache;
+import com.erman.football.client.cache.CachePitchHandler;
 import com.erman.football.shared.ClientMatch;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -23,7 +24,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
-public class MatchDialog{
+public class MatchDialog implements CachePitchHandler {
 	
 	final VerticalPanel matchInfoPanel = new VerticalPanel();
 	final HorizontalPanel infoButtonPanel = new HorizontalPanel();
@@ -56,6 +57,7 @@ public class MatchDialog{
 	
 	public MatchDialog(Cache cache){
 		this.cache = cache;
+		cache.regiserPitch(this);
 		detailPanel = new MatchDetailPanel(cache);
 		boolean admin = cache.getLoggedPlayer().isAdmin();
 		matchDateText.setWidth("52px");
@@ -172,19 +174,17 @@ public class MatchDialog{
 	}
 	
 	public void render(ClientMatch match, Boolean _add,Panel parent){
-		for(Pitch pitch:cache.getAllPitches()){
-			matchLocationList.addItem(pitch.getName());
-		}
 		this.add = _add;
 		detailPanel.render(match);
 		matchDateText.setText(match.getDate());
 		matchTimeText.setText(match.getTime());
 		for(int in = 0; in < matchLocationList.getItemCount();in++){
-			if(matchLocationList.getItemText(in).equals(match.getLocation())){
+			if(matchLocationList.getValue(in).equals(match.getLocation())){
 				matchLocationList.setSelectedIndex(in);
 				break;
 			}
 		}
+
 		matchPlayed = match.isPlayed();
 		if(matchPlayed){
 			teamAScore.setEnabled(true);
@@ -204,10 +204,42 @@ public class MatchDialog{
 	
 	private void retrieveData(){
 		match.setDate(matchDateText.getText());
-		match.setLocation(matchLocationList.getItemText(matchLocationList.getSelectedIndex()));
+		match.setLocation(matchLocationList.getValue(matchLocationList.getSelectedIndex()));
 		match.setTime(matchTimeText.getText());
 		match.setTeamA(detailPanel.getTeamA());
 		match.setTeamB(detailPanel.getTeamB());
+	}
+
+	@Override
+	public void pitchLoaded() {
+		updateLocationList();
+		
+	}
+
+	@Override
+	public void pitchAdded(Pitch pitch) {
+		updateLocationList();
+		
+	}
+
+	@Override
+	public void pitchUpdated(Pitch pitch) {
+		updateLocationList();
+		
+	}
+
+	@Override
+	public void pitchRemoved(Long pitch) {
+		updateLocationList();
+		
+	}
+	
+	private void updateLocationList(){
+		matchLocationList.clear();
+		matchLocationList.addItem("Not Selected", "0");
+		for(Pitch pitch:cache.getAllPitches()){
+			matchLocationList.addItem(pitch.getName(),Long.toString(pitch.getKey()));
+		}
 	}
 
 }

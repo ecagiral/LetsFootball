@@ -83,7 +83,15 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 			HorizontalPanel dateDel = new HorizontalPanel();
 			dateDel.setWidth("100%");
 			dateTime.setText(match.getDate()+" - "+match.getTime());
-			location.setText(match.getLocation());
+			String locationName;
+			try{
+				Long locationId = Long.parseLong(match.getLocation());
+				locationName = cache.getPitch(locationId).getName(); 
+			}catch(Exception e){
+				locationName = "Bilinmiyor";
+			}
+			
+			location.setText(locationName);
 			dateDel.add(dateTime);
 			if(admin){
 				Button delete = new Button("-");
