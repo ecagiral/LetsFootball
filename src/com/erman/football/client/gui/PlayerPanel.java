@@ -76,7 +76,16 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 				nameDel.add(delete);
 			}
 			this.add(nameDel);
-			this.addClickHandler(new PlayerInfoHandler(this));
+			this.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					if(currentPlayer!=null){
+						currentPlayer.setStyleName("userCard");
+					}
+					PlayerCell.this.setStyleName("selectedUserCard");
+					currentPlayer = PlayerCell.this;
+					infoDialogBox.render(false, PlayerCell.this.getPlayer());
+				}
+			});
 			this.setStyleName("userCard");
 			players.put(player.getKey(),this);
 		}
@@ -134,24 +143,6 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 			ClientPlayer player = new ClientPlayer();
 			infoDialogBox.render(true, player);
 		}
-	}
-	
-	private class PlayerInfoHandler implements ClickHandler{
-
-		private PlayerCell playerCell;
-		public PlayerInfoHandler(PlayerCell playerCell){
-			this.playerCell = playerCell;
-		}
-		
-		public void onClick(ClickEvent event) {
-			if(currentPlayer!=null){
-				currentPlayer.setStyleName("userCard");
-			}
-			playerCell.setStyleName("selectedUserCard");
-			currentPlayer = playerCell;
-			infoDialogBox.render(false, playerCell.getPlayer());
-		}
-		
 	}
 
 	public void playerLoaded() {

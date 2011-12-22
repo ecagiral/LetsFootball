@@ -115,7 +115,14 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 		public void update(ClientMatch _match){
 			this.match = _match;
 			dateTime.setText(match.getDate()+" - "+match.getTime());
-			location.setText(match.getLocation());
+			String locationName;
+			try{
+				Long locationId = Long.parseLong(match.getLocation());
+				locationName = cache.getPitch(locationId).getName(); 
+			}catch(Exception e){
+				locationName = "Bilinmiyor";
+			}
+			location.setText(locationName);
 		}
 	}
 	

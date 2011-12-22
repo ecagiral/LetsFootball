@@ -27,17 +27,19 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 public class MatchDialog implements CachePitchHandler {
 	
 	final VerticalPanel matchInfoPanel = new VerticalPanel();
-	final HorizontalPanel infoButtonPanel = new HorizontalPanel();
-	VerticalPanel matchBoxPanel = new VerticalPanel();
+	final VerticalPanel matchBoxPanel = new VerticalPanel();
 	final Button matchUpdateButton = new Button("OK");
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy");
 	
 	final Label matchLocationLabel = new Label("Yer: ");
+	final Label matchLocationText = new Label();
 	final ListBox matchLocationList = new ListBox();
 	final Label matchDateLabel = new Label("Tarih: ");
 	final TextBox matchDateText = new TextBox();
+	final Label matchDateDetail = new Label();
 	final Label matchTimeLabel = new Label("Saat: ");
 	final TextBox matchTimeText = new TextBox();
+	final Label matchTimeDetail = new Label();
 	final Label matchPlayedLabel = new Label("Oynandi: ");	
 	final Button gamePlayedButton = new Button("Oynandi");
 	final Label teamAScoreLabel = new Label("TeamA .");
@@ -123,13 +125,13 @@ public class MatchDialog implements CachePitchHandler {
 		}else{
 			matchInfos = new Grid(3,2);	
 			matchInfos.setWidget(0,0,matchDateLabel);
-			matchInfos.setWidget(0,1,matchDateText);
+			matchInfos.setWidget(0,1,matchDateDetail);
 			matchDateText.setEnabled(false);
 			matchInfos.setWidget(1,0,matchTimeLabel);
-			matchInfos.setWidget(1,1,matchTimeText);
+			matchInfos.setWidget(1,1,matchTimeDetail);
 			matchTimeText.setEnabled(false);
 			matchInfos.setWidget(2,0,matchLocationLabel);
-			matchInfos.setWidget(2,1,matchLocationList);
+			matchInfos.setWidget(2,1,matchLocationText);
 			matchLocationList.setEnabled(false);
 			teamAScore.setEnabled(false);
 			teamBScore.setEnabled(false);
@@ -150,19 +152,11 @@ public class MatchDialog implements CachePitchHandler {
 			}
 			
 		});
+		HorizontalPanel infoButtonPanel = new HorizontalPanel();
 		infoButtonPanel.add(matchUpdateButton);
 		HTML gap = new HTML();
 		gap.setWidth("50px");
 		infoButtonPanel.add(gap);
-		Button playerBackButton = new Button("Back");
-		playerBackButton.addClickHandler(new ClickHandler(){
-
-			public void onClick(ClickEvent event) {
-				matchBoxPanel.removeFromParent();
-			}
-			
-		});
-		infoButtonPanel.add(playerBackButton);	
 
 		
 		matchBoxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -184,7 +178,9 @@ public class MatchDialog implements CachePitchHandler {
 				break;
 			}
 		}
-
+		matchLocationText.setText(cache.getPitch(Long.valueOf(match.getLocation())).getName());
+		matchTimeDetail.setText(match.getTime());
+		matchDateDetail.setText(match.getDate());
 		matchPlayed = match.isPlayed();
 		if(matchPlayed){
 			teamAScore.setEnabled(true);
