@@ -10,17 +10,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
+public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 	
 	private MatchDialog matchDialog;
 	
-	final ScrollPanel scrollMatchPanel = new ScrollPanel();
 	final VerticalPanel matchTimePanel = new VerticalPanel();
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy");
 	final HashMap<Long,MatchCell> matches = new HashMap<Long,MatchCell>();
@@ -36,17 +36,16 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
-
-		VerticalPanel matchOverviewPanel = new VerticalPanel(); 
-
-		matchTimePanel.setWidth("210px");
-		scrollMatchPanel.add(matchTimePanel);
-		scrollMatchPanel.setWidth("250px");
-		scrollMatchPanel.setHeight("500px");
+		
+		//matchTimePanel.setWidth("210px");
+		
+		//this.setWidth("250px");
+		//this.setHeight("500px");
+		
+		this.setStyleName("listPanel");
+		this.add(matchTimePanel);
+		matchTimePanel.setWidth("100%");
 		matchTimePanel.insert(new NewMatchCell(),0);
-		matchOverviewPanel.add(scrollMatchPanel);
-		this.add(matchOverviewPanel);
-		this.setBorderWidth(1);
 	}
 	
 	public void matchLoaded() {
@@ -79,10 +78,9 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 		
 		public MatchCell(ClientMatch match){
 			this.match = match;
-			this.setWidth("100%");
 			HorizontalPanel dateDel = new HorizontalPanel();
 			dateDel.setWidth("100%");
-			dateTime.setText(match.getDate()+" - "+match.getTime());
+			dateTime.setText(match.getDate()+"-"+match.getTime());
 			String locationName;
 			try{
 				Long locationId = Long.parseLong(match.getLocation());
@@ -126,13 +124,13 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 		}
 	}
 	
-	private class NewMatchCell extends SimplePanel{
+	private class NewMatchCell extends VerticalPanel{
 		
 		public NewMatchCell(){
-			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
-			over.setHorizontalAlignment(ALIGN_CENTER);
-			over.add(new Label("Mac Ekle"));
+			over.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			Label label = new Label("Mac Ekle");
+			over.add(label);
 			over.setWidth("100%");
 			this.add(over);
 			this.addClickHandler(new NewMatchHandler());

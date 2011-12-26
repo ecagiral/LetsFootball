@@ -178,7 +178,12 @@ public class MatchDialog implements CachePitchHandler {
 				break;
 			}
 		}
-		matchLocationText.setText(cache.getPitch(Long.valueOf(match.getLocation())).getName());
+		Pitch pitch = cache.getPitch(Long.valueOf(match.getLocation()));
+		if(pitch==null){
+			matchLocationText.setText("Bilinmiyor");
+		}else{
+			matchLocationText.setText(pitch.getName());
+		}
 		matchTimeDetail.setText(match.getTime());
 		matchDateDetail.setText(match.getDate());
 		matchPlayed = match.isPlayed();

@@ -111,9 +111,9 @@ h1 {
 .matchCard{
 	padding: 5px;
 	background-color: #fff;
-	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef
+	border-top-color: #efefef;
+	width: 100%;
 }
 
 .newMatchCard{
@@ -128,17 +128,17 @@ h1 {
 .selectedMatchCard{
 	padding: 5px;
 	background-color: #efef00;
-	width: 100%;
 	border-top:solid;
-	border-top-color: #efef00
+	border-top-color: #efef00;
+	width: 100%;
 }
 
 .matchCard:hover{
 	padding: 5px;
 	background-color: #efefef;
-	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef
+	border-top-color: #efefef;
+	width: 100%;
 }
 
 .newMatchCard:hover{
@@ -167,3 +167,10 @@ h1 {
   width: 100px;
   height: 20px;
 }
+
+.listPanel{
+	background-color: #ccc;	
+  	height: 500px;
+  	width: 250px;
+}
+	

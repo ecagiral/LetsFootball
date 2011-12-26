@@ -25,7 +25,7 @@ public class ClientMatch implements Serializable{
 	public ClientMatch() {
 		this.date = "01.01.11";
 		this.time = "00:00";
-		this.location = "";
+		this.location = "0";
 		this.paid = false;
 		this.mailSent = false;
 		this.played = false;

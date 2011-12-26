@@ -21,7 +21,6 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 	private PlayerDialog infoDialogBox;
 	
 	final VerticalPanel playerEmailPanel = new VerticalPanel();
-	final ScrollPanel scrollEmailPanel = new ScrollPanel();
 	final Button addPlayerButton = new Button("Add");
 	
 	final HashMap<Long,PlayerCell> players = new HashMap<Long,PlayerCell>();
@@ -44,6 +43,7 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 		infoDialogBox = new PlayerDialog(cache,other);
 		
 		playerEmailPanel.setWidth("210px");
+		ScrollPanel scrollEmailPanel = new ScrollPanel();
 		scrollEmailPanel.add(playerEmailPanel);
 		scrollEmailPanel.setHeight("500px");
 		scrollEmailPanel.setWidth("250px");
