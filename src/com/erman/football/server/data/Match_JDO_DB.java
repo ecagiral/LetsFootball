@@ -12,14 +12,16 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 public class Match_JDO_DB {
 	
-	public static void addMatch(ClientMatch match){
+	public static ClientMatch addMatch(ClientMatch match){
 		
 		Match matchDO = Match.convert(match);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			pm.makePersistent(matchDO);
+			return matchDO.convert();
 		}catch(Exception e){
 			System.out.println("unable to add match");
+			return match;
 		} finally {
 			pm.close();
 		}

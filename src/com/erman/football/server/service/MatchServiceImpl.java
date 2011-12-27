@@ -13,9 +13,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class MatchServiceImpl extends RemoteServiceServlet implements MatchService{
 
 	public ClientMatch createMatch(ClientMatch match) {
-		Match_JDO_DB.addMatch(match);
-		return match;
-		
+		return Match_JDO_DB.addMatch(match);	
 	}
 
 	public List<ClientMatch> getMatches() {
