@@ -9,60 +9,46 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
+public class PlayerPanel extends ScrollPanel implements CachePlayerHandler{
 
 	
 	private PlayerDialog infoDialogBox;
 	
-	final VerticalPanel playerEmailPanel = new VerticalPanel();
-	final Button addPlayerButton = new Button("Add");
-	
+	final VerticalPanel playerEmailPanel = new VerticalPanel();	
 	final HashMap<Long,PlayerCell> players = new HashMap<Long,PlayerCell>();
 	
 	private PlayerCell currentPlayer;
 	private Cache cache;
 	private boolean admin;
-	private OtherPanel other;
 	
-	public PlayerPanel(Cache cache,OtherPanel other){
-		this.other = other;
+	public PlayerPanel(Cache cache, OtherPanel other){
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 				
 		cache.regiserPlayer(this);
-		
-		this.setHorizontalAlignment(ALIGN_LEFT);
-		
-		//===Info Dialog===
 		infoDialogBox = new PlayerDialog(cache,other);
-		
-		playerEmailPanel.setWidth("210px");
-		ScrollPanel scrollEmailPanel = new ScrollPanel();
-		scrollEmailPanel.add(playerEmailPanel);
-		scrollEmailPanel.setHeight("500px");
-		scrollEmailPanel.setWidth("250px");
+	
+		this.setStyleName("listPanel");
+		this.add(playerEmailPanel);
+		playerEmailPanel.setWidth("100%");
 		if(admin){
 			playerEmailPanel.insert(new NewPlayerCell(),0);
-		}
-		this.add(scrollEmailPanel);
-		this.setBorderWidth(1);
-
+		}		
 	}
 	
-	private class PlayerCell extends SimplePanel{
+	private class PlayerCell extends VerticalPanel{
 		
 		private ClientPlayer player;
 		private final Label name = new Label();
 		
 		public PlayerCell(ClientPlayer player){
 			this.player = player;
-			this.setWidth("100%");
 			HorizontalPanel nameDel = new HorizontalPanel();
 			nameDel.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
@@ -72,7 +58,7 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 			if(admin){
 				Button delete = new Button("-");
 				delete.addClickHandler(new PlayerDeleteHandler(this));
-				nameDel.setHorizontalAlignment(ALIGN_RIGHT);
+				nameDel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 				nameDel.add(delete);
 			}
 			this.add(nameDel);
@@ -103,12 +89,12 @@ public class PlayerPanel extends VerticalPanel implements CachePlayerHandler{
 		}
 	}
 	
-	private class NewPlayerCell extends SimplePanel{
+	private class NewPlayerCell extends VerticalPanel{
 		
 		public NewPlayerCell(){
 			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
-			over.setHorizontalAlignment(ALIGN_CENTER);
+			over.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			over.add(new Label("Oyuncu Ekle"));
 			over.setWidth("100%");
 			this.add(over);

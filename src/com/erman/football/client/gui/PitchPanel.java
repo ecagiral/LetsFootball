@@ -9,15 +9,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PitchPanel extends VerticalPanel implements CachePitchHandler{
+public class PitchPanel extends ScrollPanel implements CachePitchHandler{
 	
-	final ScrollPanel scrollPitchPanel = new ScrollPanel();
 	final VerticalPanel pitchListPanel = new VerticalPanel();
 	final HashMap<Long,PitchCell> pitches = new HashMap<Long,PitchCell>();
 	
@@ -31,33 +30,31 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		cache.regiserPitch(this);
 		pitchDialog = new PitchDialog(cache,other);
-		pitchListPanel.setWidth("210px");
-		scrollPitchPanel.add(pitchListPanel);
-		scrollPitchPanel.setWidth("250px");
-		scrollPitchPanel.setHeight("500px");
+		
+		this.setStyleName("listPanel");
+		this.add(pitchListPanel);
+		pitchListPanel.setWidth("100%");
 		if(admin){
 			pitchListPanel.insert(new NewPitchCell(), 0);
 		}
-		this.add(scrollPitchPanel);
-		this.setBorderWidth(1);
+
 	}
 	
-	private class PitchCell extends SimplePanel{
+	private class PitchCell extends VerticalPanel{
 		
 		private Pitch pitch;
 		private Label pitchName = new Label();
 		
 		public PitchCell(Pitch pitch){
 			this.pitch = pitch;
-			this.setWidth("100%");
-			pitchName.setText(pitch.getName());
 			HorizontalPanel nameDel = new HorizontalPanel();
-			nameDel.add(pitchName);
 			nameDel.setWidth("100%");
+			pitchName.setText(pitch.getName());
+			nameDel.add(pitchName);
 			if(admin){
 				Button delete = new Button("-");
 				delete.addClickHandler(new PitchDeleteHandler(this));
-				nameDel.setHorizontalAlignment(ALIGN_RIGHT);
+				nameDel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 				nameDel.add(delete);
 			}
 			this.add(nameDel);
@@ -78,12 +75,11 @@ public class PitchPanel extends VerticalPanel implements CachePitchHandler{
 		}
 	}
 	
-	private class NewPitchCell extends SimplePanel{
+	private class NewPitchCell extends VerticalPanel{
 		
 		public NewPitchCell(){
-			this.setWidth("100%");
 			VerticalPanel over = new VerticalPanel();
-			over.setHorizontalAlignment(ALIGN_CENTER);
+			over.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 			over.add(new Label("Saha Ekle"));
 			over.setWidth("100%");
 			this.add(over);

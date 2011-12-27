@@ -71,7 +71,7 @@ h1 {
 	background-color: #fff;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef
+	border-top-color: #bbb
 }
 
 .newUserCard{
@@ -79,7 +79,7 @@ h1 {
 	background-color: #fff;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	color: #FF0000;
 }
 
@@ -93,18 +93,18 @@ h1 {
 
 .userCard:hover{
 	padding: 5px;
-	background-color: #efefef;
+	background-color: #bbb;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 }
 
 .newUserCard:hover{
 	padding: 5px;
-	background-color: #efefef;
+	background-color: #bbb;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	color: #FF0000;
 }
 
@@ -112,7 +112,7 @@ h1 {
 	padding: 5px;
 	background-color: #fff;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	width: 100%;
 }
 
@@ -121,7 +121,7 @@ h1 {
 	background-color: #fff;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	color: #FF0000;
 }
 
@@ -135,18 +135,18 @@ h1 {
 
 .matchCard:hover{
 	padding: 5px;
-	background-color: #efefef;
+	background-color: #bbb;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	width: 100%;
 }
 
 .newMatchCard:hover{
 	padding: 5px;
-	background-color: #efefef;
+	background-color: #bbb;
 	width: 100%;
 	border-top:solid;
-	border-top-color: #efefef;
+	border-top-color: #bbb;
 	color: #FF0000;
 }
 
@@ -169,8 +169,11 @@ h1 {
 }
 
 .listPanel{
-	background-color: #ccc;	
   	height: 500px;
   	width: 250px;
+  	border-left:solid;
+	border-left-color: #bbb;
+	border-right:solid;
+	border-right-color: #bbb;
 }
 	

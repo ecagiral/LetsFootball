@@ -14,7 +14,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
@@ -36,11 +35,6 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
-		
-		//matchTimePanel.setWidth("210px");
-		
-		//this.setWidth("250px");
-		//this.setHeight("500px");
 		
 		this.setStyleName("listPanel");
 		this.add(matchTimePanel);
@@ -129,8 +123,7 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 		public NewMatchCell(){
 			VerticalPanel over = new VerticalPanel();
 			over.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			Label label = new Label("Mac Ekle");
-			over.add(label);
+			over.add(new Label("Mac Ekle"));
 			over.setWidth("100%");
 			this.add(over);
 			this.addClickHandler(new NewMatchHandler());
