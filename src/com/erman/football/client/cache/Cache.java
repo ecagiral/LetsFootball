@@ -1,9 +1,9 @@
 package com.erman.football.client.cache;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeMap;
 
 import com.erman.football.client.service.PitchService;
 import com.erman.football.client.service.PitchServiceAsync;
@@ -20,19 +20,33 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class Cache {
 	
 	//Cache
-	private final MatchServiceAsync matchService = GWT.create(MatchService.class);
-	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
-	private final PitchServiceAsync pitchService = GWT.create(PitchService.class);
+	private final MatchServiceAsync matchService;
+	private final PlayerServiceAsync playerService;
+	private final PitchServiceAsync pitchService;
 	
-	private TreeMap<Long,ClientPlayer> players = new TreeMap<Long,ClientPlayer>();
-	private TreeMap<Long,ClientMatch> matches = new TreeMap<Long,ClientMatch>(); 
-	private TreeMap<Long,Pitch> pitches = new TreeMap<Long,Pitch>();
+	private HashMap<Long,ClientPlayer> players;
+	private HashMap<Long,ClientMatch> matches; 
+	private HashMap<Long,Pitch> pitches;
 	
-	private ArrayList<CacheMatchHandler> matchHandlers = new ArrayList<CacheMatchHandler>();
-	private ArrayList<CachePlayerHandler> playerHandlers = new ArrayList<CachePlayerHandler>();
-	private ArrayList<CachePitchHandler> pitchHandlers = new ArrayList<CachePitchHandler>();
+	private ArrayList<CacheMatchHandler> matchHandlers;
+	private ArrayList<CachePlayerHandler> playerHandlers;
+	private ArrayList<CachePitchHandler> pitchHandlers;
  
 	private ClientPlayer player;
+	
+	public Cache(){
+		matchService = GWT.create(MatchService.class);
+		playerService = GWT.create(PlayerService.class);
+		pitchService = GWT.create(PitchService.class);
+		
+		players = new HashMap<Long,ClientPlayer>();
+		matches = new HashMap<Long,ClientMatch>();
+		pitches = new HashMap<Long,Pitch>();
+		
+		matchHandlers = new ArrayList<CacheMatchHandler>();
+		playerHandlers = new ArrayList<CachePlayerHandler>();
+		pitchHandlers = new ArrayList<CachePitchHandler>();
+	}
 	
 	public void load(){
 		pitchService.getPitches(
@@ -158,6 +172,11 @@ public class Cache {
 	}
 	
 	//Match methods
+	public ClientMatch getMatch(Long matchId){
+		return matches.get(matchId);
+		
+	}
+	
 	public ArrayList<ClientMatch> getAllMatches(){
 		return new ArrayList<ClientMatch>(matches.values());
 	}

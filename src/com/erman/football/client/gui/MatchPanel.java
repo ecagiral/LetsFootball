@@ -1,6 +1,9 @@
 package com.erman.football.client.gui;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CacheMatchHandler;
@@ -44,10 +47,9 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 	
 	public void matchLoaded() {
 		for(ClientMatch match:cache.getAllMatches()){
-			MatchCell matchCell = new MatchCell(match);
-			matches.put(new Long(match.getKey()), matchCell);
-			matchTimePanel.insert(matchCell,1);
+			new MatchCell(match);
 		}
+		updateList();
 	}
 
 	public void matchAdded(ClientMatch match) {
@@ -95,6 +97,7 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 			this.add(location);
 			this.setStyleName("matchCard");
 			this.addClickHandler(new MatchInfoHandler(this));
+			matches.put(match.getKey(),this);
 		}
 		public HandlerRegistration addClickHandler(ClickHandler handler) {
 		    return addDomHandler(handler, ClickEvent.getType());
@@ -173,6 +176,37 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 			cache.removeMatch(matchCell.getMatch());
 		}
 		
+	}
+	
+	private void updateList(){
+		matchTimePanel.clear();
+		matchTimePanel.insert(new NewMatchCell(),0);
+		ValueComparator comp = new ValueComparator(matches);
+		TreeMap<Long,MatchCell> ordMatches = new TreeMap(comp);
+		ordMatches.putAll(matches);
+		for(MatchCell matchCell: ordMatches.values()){
+			if(admin){
+				//first one new player cell
+				matchTimePanel.insert(matchCell,1);
+			}else{
+				matchTimePanel.insert(matchCell,0);
+			}
+		}
+	}
+
+	class ValueComparator implements Comparator<Long>{
+
+		Map base;
+		public ValueComparator(Map<Long,MatchCell> base) {
+			this.base = base;
+		}
+
+		public int compare(Long a, Long b) {
+			String aDate = cache.getMatch(a).getDate();
+			String bDate = cache.getMatch(b).getDate();
+			return bDate.compareToIgnoreCase(aDate);
+
+		}
 	}
 }
 
