@@ -1,6 +1,7 @@
 package com.erman.football.server.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -28,13 +29,18 @@ public class Match_JDO_DB {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<MatchDO> getMatches(){
+	public static List<MatchDO> getMatches(Date startDate,int start, int stop){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(MatchDO.class);
+		query.declareImports("import java.util.Date");
+		query.setOrdering("date ascending");
+		query.setRange(start,stop);
+		query.declareParameters("Date startDate");
+		query.setFilter("date > startDate");
 		List<MatchDO> matchDOs = new ArrayList<MatchDO>();
 		
 		try {
-			matchDOs = (List<MatchDO>)query.execute();
+			matchDOs = (List<MatchDO>)query.execute(startDate);
 			if (!matchDOs.isEmpty()) {
 				return matchDOs;
 			} else {

@@ -1,7 +1,9 @@
 package com.erman.football.client.cache;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +27,7 @@ public class Cache {
 	private final PitchServiceAsync pitchService;
 	
 	private HashMap<Long,ClientPlayer> players;
-	private HashMap<Long,ClientMatch> matches; 
+	private LinkedHashMap<Long,ClientMatch> matches; 
 	private HashMap<Long,Pitch> pitches;
 	
 	private ArrayList<CacheMatchHandler> matchHandlers;
@@ -40,7 +42,7 @@ public class Cache {
 		pitchService = GWT.create(PitchService.class);
 		
 		players = new HashMap<Long,ClientPlayer>();
-		matches = new HashMap<Long,ClientMatch>();
+		matches = new LinkedHashMap<Long,ClientMatch>();
 		pitches = new HashMap<Long,Pitch>();
 		
 		matchHandlers = new ArrayList<CacheMatchHandler>();
@@ -81,23 +83,9 @@ public class Cache {
 				notifyPlayerLoaded();
 			}
 		});
-
-		matchService.getMatches(new AsyncCallback<List<ClientMatch>>(){
-
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void onSuccess(List<ClientMatch> result) {
-				matches.clear();
-				for(ClientMatch match:result){
-					matches.put(match.getKey(), match);
-				}
-				notifyMatchLoaded();
-			}
-			
-		});
+		
+		getMatches(new Date(),0 ,5);
+		
 	}
 	
 	//Register Handlers
@@ -177,8 +165,23 @@ public class Cache {
 		
 	}
 	
-	public ArrayList<ClientMatch> getAllMatches(){
-		return new ArrayList<ClientMatch>(matches.values());
+	public void getMatches(Date date,int start ,int stop){
+		matchService.getMatches(date,start,stop,new AsyncCallback<List<ClientMatch>>(){
+
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void onSuccess(List<ClientMatch> result) {
+				matches.clear();
+				for(ClientMatch match:result){
+					matches.put(match.getKey(), match);
+				}
+				notifyMatchAdded(result);
+			}
+			
+		});
 	}
 	
 	public void addMatch(ClientMatch match){
@@ -192,7 +195,9 @@ public class Cache {
 
 			@Override
 			public void onSuccess(ClientMatch result) {
-				notifyMatchAdded(result);
+				ArrayList<ClientMatch> results = new ArrayList<ClientMatch>();
+				results.add(result);
+				notifyMatchAdded(results);
 			}
 			
 		});
@@ -325,14 +330,10 @@ public class Cache {
 	}
 	
 	//Match notifications
-	private void notifyMatchLoaded(){
+
+	private void notifyMatchAdded(List<ClientMatch> result){
 		for(CacheMatchHandler handler:matchHandlers){
-			handler.matchLoaded();
-		}
-	}
-	private void notifyMatchAdded(ClientMatch match){
-		for(CacheMatchHandler handler:matchHandlers){
-			handler.matchAdded(match);
+			handler.matchAdded(result);
 		}
 	}
 	

@@ -68,6 +68,7 @@ public class MainTab extends HorizontalPanel{
 		buttonPanel.add(pitchButton);
 		leftPanel.add(buttonPanel);
 		this.add(leftPanel );
+		listPanel.add(matchPanel);
 		this.add(listPanel);
 		this.add(detailPanel);
 		

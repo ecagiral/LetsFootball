@@ -36,7 +36,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	 private MainTab playerTab;
 	 private Label welcome;
 	 private final Button logout = new Button("Cikis");
-	 private final DockLayoutPanel mainLayout = new DockLayoutPanel(Unit.CM);
+	 private final DockLayoutPanel mainLayout = new DockLayoutPanel(Unit.PX);
 	/**
 	 * This is the entry point method.
 	 */
@@ -72,7 +72,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		logout.setVisible(false);
 		headerPanel.add(logout);
 		headerPanel.setStyleName("header");
-		mainLayout.addNorth(headerPanel, 2);
+		mainLayout.addNorth(headerPanel, 50);
 		mainLayout.add(loginPanel);
 		RootLayoutPanel.get().add(mainLayout);
 		

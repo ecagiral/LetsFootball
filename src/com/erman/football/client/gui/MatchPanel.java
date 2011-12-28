@@ -1,10 +1,8 @@
 package com.erman.football.client.gui;
 
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CacheMatchHandler;
@@ -27,9 +25,10 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 	private MatchDialog matchDialog;
 	
 	final VerticalPanel matchTimePanel = new VerticalPanel();
-	final HashMap<Long,MatchCell> matches = new HashMap<Long,MatchCell>();
+	final LinkedHashMap<Long,MatchCell> matches = new LinkedHashMap<Long,MatchCell>();
 	final FilterPanel filter = new FilterPanel();
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy HH:mm");
+	final UpdateListCell updateListCell = new UpdateListCell();
 	
 	private boolean admin;
 	private Cache cache;
@@ -68,18 +67,25 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		matchTimePanel.setWidth("100%");
 		this.add(listPanel);
 	}
-	
-	public void matchLoaded() {
-		for(ClientMatch match:cache.getAllMatches()){
-			new MatchCell(match);
-		}
-		updateList();
-	}
 
-	public void matchAdded(ClientMatch match) {
-		MatchCell matchCell = new MatchCell(match);
-		matches.put(new Long(match.getKey()), matchCell);
-		matchTimePanel.insert(matchCell,0);
+	public void matchAdded(List<ClientMatch> matches) {
+		MatchCell matchCell = null;
+		for(ClientMatch match:matches){
+			matchCell = new MatchCell(match);
+		}
+
+		if(currentMatch!=null){
+			currentMatch.setStyleName("matchCard");
+		}
+		if(matchCell!=null){
+			matchCell.setStyleName("selectedMatchCard");
+			currentMatch = matchCell;
+			matchDialog.render(matchCell.getMatch(),false,other);	
+		}
+		if(matches.size()>0){
+			matchTimePanel.insert(updateListCell,0);
+		}
+
 	}
 
 	public void matchUpdated(ClientMatch match) {
@@ -136,6 +142,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 				}
 			});
 			matches.put(match.getKey(),this);
+			matchTimePanel.insert(this,0);
 		}
 		public HandlerRegistration addClickHandler(ClickHandler handler) {
 		    return addDomHandler(handler, ClickEvent.getType());
@@ -159,17 +166,42 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		}
 	}
 	
+	private class UpdateListCell extends VerticalPanel{
+		
+		private Date startDate = new Date();
+		private int startIndex = 5;
+		
+		public UpdateListCell(){
+			Label label = new Label("Daha Fazla");
+			this.setHorizontalAlignment(ALIGN_CENTER);
+			this.add(label);
+			this.addDomHandler(new ClickHandler(){
+
+				public void onClick(ClickEvent event) {
+					cache.getMatches(startDate, startIndex, startIndex+5);
+					startIndex = startIndex+5;
+					updateListCell.removeFromParent();
+				}
+				
+			}, ClickEvent.getType());
+			this.setStyleName("matchCard");
+		}
+		
+		public void setStartDate(Date date,int index){
+			startDate = date;
+			startIndex = index;
+		}
+	}
+	
 	private class FilterPanel extends VerticalPanel{
 		
 		ListBox months = new ListBox(false);
 		ListBox years = new ListBox(false);
-		Date minDate;
-		Date maxDate;
 		
 		public FilterPanel(){
 			HorizontalPanel data = new HorizontalPanel();
 			data.add(new Label("Ay: "));
-			months.addItem("Hepsi","0");
+			months.addItem("Hepsi","01");
 			months.addItem("Ocak","01");
 			months.addItem("Subat","02");
 			months.addItem("Mart","03");
@@ -184,7 +216,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			months.addItem("Aralik","12");
 			months.addChangeHandler(new ChangeHandler(){
 				public void onChange(ChangeEvent event) {
-					if(months.getValue(months.getSelectedIndex()).equals("0")){
+					if(months.getItemText(months.getSelectedIndex()).equals("Hepsi")){
 						years.setItemSelected(0, true);
 					}else{
 						if(years.isItemSelected(0)){
@@ -196,13 +228,13 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			});
 			data.add(months);
 			data.add(new Label("Yil: "));
-			years.addItem("Hepsi","0");
+			years.addItem("Hepsi","00");
 			years.addItem("2011","11");
 			years.addItem("2012","12");
 			years.addItem("2013","13");
 			years.addChangeHandler(new ChangeHandler(){
 				public void onChange(ChangeEvent event) {
-					if(years.getValue(years.getSelectedIndex()).equals("0")){
+					if(years.getItemText(years.getSelectedIndex()).equals("Hepsi")){
 						months.setItemSelected(0, true);
 					}else{
 						if(months.isItemSelected(0)){
@@ -216,70 +248,21 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			
 			Button apply = new Button("Uygula");
 			apply.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event) {
-					updateList();
+				public void onClick(ClickEvent event){
+					String strDate = months.getValue(months.getSelectedIndex())+"."+years.getValue(years.getSelectedIndex());
+					Date date = dateFormat.parse("01."+strDate+" 00:00");
+					cache.getMatches(date, 0, 5);
+					updateListCell.setStartDate(date, 5);
+					matchTimePanel.clear();
+					matches.clear();
+					matchDialog.derender();
 				}				
 			});
 			data.setHorizontalAlignment(ALIGN_RIGHT);
 			data.add(apply);
 			this.add(data);
 		}
-
-		private boolean isValidDate(Date date){
-			if(date.after(minDate)||date.equals(minDate)){
-				if(date.before(maxDate)||date.equals(maxDate)){
-					return true;
-				}
-				//high than expected
-				return false;
-			}
-			//low than expected
-			return false;
-		}
 		
-		private boolean isFilterOn(){
-			boolean mNot = months.getValue(months.getSelectedIndex()).equalsIgnoreCase("0");
-			boolean yNot = years.getValue(years.getSelectedIndex()).equalsIgnoreCase("0");
-			if(mNot||yNot){
-				return false;
-			}
-			String filterDate = months.getValue(months.getSelectedIndex())+"."+years.getValue(years.getSelectedIndex());
-			maxDate = dateFormat.parse("31."+filterDate+" 23:59");
-			minDate = dateFormat.parse("01."+filterDate+" 00:00");
-			
-			return true;
-		}
-		
-	}
-	
-	private void updateList(){
-		matchTimePanel.clear();
-		ValueComparator comp = new ValueComparator(matches);
-		TreeMap<Long,MatchCell> ordMatches = new TreeMap(comp);
-		ordMatches.putAll(matches);
-		boolean filterOn = filter.isFilterOn();
-		for(MatchCell matchCell: ordMatches.values()){
-			if(filterOn){
-				if(filter.isValidDate(matchCell.getMatch().getDate())){
-					matchTimePanel.insert(matchCell,0);
-				}
-			}else{
-				matchTimePanel.insert(matchCell,0);
-			}
-		}
-	}
-
-	class ValueComparator implements Comparator<Long>{
-
-		Map<Long,MatchCell> base;
-		public ValueComparator(Map<Long,MatchCell> base) {
-			this.base = base;
-		}
-
-		public int compare(Long a, Long b) {
-			return cache.getMatch(b).getDate().compareTo(cache.getMatch(a).getDate());
-
-		}
 	}
 }
 

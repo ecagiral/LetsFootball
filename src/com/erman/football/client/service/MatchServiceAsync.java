@@ -1,5 +1,6 @@
 package com.erman.football.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.erman.football.shared.ClientMatch;
@@ -9,7 +10,7 @@ public interface MatchServiceAsync {
 
 	void createMatch(ClientMatch match, AsyncCallback<ClientMatch> callback);
 
-	void getMatches(AsyncCallback<List<ClientMatch>> callback);
+	void getMatches(Date startDate, int from, int to,AsyncCallback<List<ClientMatch>> callback);
 
 	void deleteMatch(ClientMatch match, AsyncCallback<Long> callback);
 

@@ -167,6 +167,10 @@ public class MatchDialog implements CachePitchHandler {
 		matchBoxPanel.setBorderWidth(1);
 	}
 	
+	public void derender(){
+		matchBoxPanel.setVisible(false);
+	}
+	
 	public void render(ClientMatch match, Boolean _add,Panel parent){
 		this.add = _add;
 		detailPanel.render(match);

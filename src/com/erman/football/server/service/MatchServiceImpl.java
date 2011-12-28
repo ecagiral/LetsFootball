@@ -1,6 +1,7 @@
 package com.erman.football.server.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.erman.football.client.service.MatchService;
@@ -16,9 +17,9 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		return Match_JDO_DB.addMatch(match);	
 	}
 
-	public List<ClientMatch> getMatches() {
+	public List<ClientMatch> getMatches(Date startDate, int from, int to) {
 		List<ClientMatch> result = new ArrayList<ClientMatch>();
-		for(MatchDO matchDO:Match_JDO_DB.getMatches()){
+		for(MatchDO matchDO:Match_JDO_DB.getMatches(startDate,from,to)){
 			result.add(matchDO.convert());
 		}
 		return result;
