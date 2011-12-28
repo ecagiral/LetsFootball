@@ -201,7 +201,10 @@ public class MatchDialog implements CachePitchHandler {
 		this.match = match;
 		parent.clear();
 		parent.add(matchBoxPanel);
+		matchBoxPanel.setVisible(true);
 	}
+	
+	
 	
 	private void retrieveData(){
 		match.setDate(matchDateText.getText());

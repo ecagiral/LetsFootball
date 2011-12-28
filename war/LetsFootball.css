@@ -112,18 +112,12 @@ h1 {
 	padding: 5px;
 	background-color: #fff;
 	border-top:solid;
-	border-top-color: #bbb;
+	border-top-color: #000;
+	border-top-width: 1px;
 	width: 100%;
 }
 
-.newMatchCard{
-	padding: 5px;
-	background-color: #fff;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb;
-	color: #FF0000;
-}
+
 
 .selectedMatchCard{
 	padding: 5px;
@@ -139,15 +133,6 @@ h1 {
 	border-top:solid;
 	border-top-color: #bbb;
 	width: 100%;
-}
-
-.newMatchCard:hover{
-	padding: 5px;
-	background-color: #bbb;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb;
-	color: #FF0000;
 }
 
 .gwt-TextBox-updatedInput{
@@ -172,8 +157,10 @@ h1 {
   	height: 500px;
   	width: 250px;
   	border-left:solid;
-	border-left-color: #bbb;
+	border-left-color: #000;
+	border-left-width: 1px;
 	border-right:solid;
-	border-right-color: #bbb;
+	border-right-color: #000;
+	border-right-width: 1px;
 }
 	

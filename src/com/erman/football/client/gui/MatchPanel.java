@@ -16,20 +16,19 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
+public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 	
 	private MatchDialog matchDialog;
 	
 	final VerticalPanel matchTimePanel = new VerticalPanel();
 	final HashMap<Long,MatchCell> matches = new HashMap<Long,MatchCell>();
-	final FilterCell filter = new FilterCell();
+	final FilterPanel filter = new FilterPanel();
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy HH:mm");
 	
 	private boolean admin;
@@ -44,9 +43,30 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
 		
-		this.setStyleName("listPanel");
-		this.add(matchTimePanel);
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.setSpacing(5);
+		Label addMatch = new Label("Mac Ekle");
+		addMatch.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				matchDialog.render(new ClientMatch(),true,MatchPanel.this.other);	
+			}
+		});
+		buttonPanel.add(addMatch);
+		Label addFilter = new Label("Filtre");
+		addFilter.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				filter.setVisible(!filter.isVisible());
+			}
+		});
+		buttonPanel.add(addFilter);
+		this.add(buttonPanel);
+		filter.setVisible(false);
+		this.add(filter);
+		ScrollPanel listPanel = new ScrollPanel();
+		listPanel.setStyleName("listPanel");
+		listPanel.add(matchTimePanel);
 		matchTimePanel.setWidth("100%");
+		this.add(listPanel);
 	}
 	
 	public void matchLoaded() {
@@ -59,7 +79,7 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 	public void matchAdded(ClientMatch match) {
 		MatchCell matchCell = new MatchCell(match);
 		matches.put(new Long(match.getKey()), matchCell);
-		matchTimePanel.insert(matchCell,2);
+		matchTimePanel.insert(matchCell,0);
 	}
 
 	public void matchUpdated(ClientMatch match) {
@@ -139,35 +159,14 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 		}
 	}
 	
-	private class NewMatchCell extends VerticalPanel{
-		
-		public NewMatchCell(){
-			VerticalPanel over = new VerticalPanel();
-			over.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			over.add(new Label("Mac Ekle"));
-			over.setWidth("100%");
-			this.add(over);
-			this.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event) {
-					matchDialog.render(new ClientMatch(),true,other);	
-				}
-			});
-			this.setStyleName("newMatchCard");
-		}
-		
-		public HandlerRegistration addClickHandler(ClickHandler handler) {
-		    return addDomHandler(handler, ClickEvent.getType());
-		}
-	}
-	
-	private class FilterCell extends VerticalPanel{
+	private class FilterPanel extends VerticalPanel{
 		
 		ListBox months = new ListBox(false);
 		ListBox years = new ListBox(false);
 		Date minDate;
 		Date maxDate;
 		
-		public FilterCell(){
+		public FilterPanel(){
 			HorizontalPanel data = new HorizontalPanel();
 			data.add(new Label("Ay: "));
 			months.addItem("Hepsi","0");
@@ -256,8 +255,6 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 	
 	private void updateList(){
 		matchTimePanel.clear();
-		matchTimePanel.insert(new NewMatchCell(),0);
-		matchTimePanel.insert(filter,1);
 		ValueComparator comp = new ValueComparator(matches);
 		TreeMap<Long,MatchCell> ordMatches = new TreeMap(comp);
 		ordMatches.putAll(matches);
@@ -265,10 +262,10 @@ public class MatchPanel extends ScrollPanel implements CacheMatchHandler{
 		for(MatchCell matchCell: ordMatches.values()){
 			if(filterOn){
 				if(filter.isValidDate(matchCell.getMatch().getDate()+" "+matchCell.getMatch().getTime())){
-					matchTimePanel.insert(matchCell,2);
+					matchTimePanel.insert(matchCell,0);
 				}
 			}else{
-				matchTimePanel.insert(matchCell,2);
+				matchTimePanel.insert(matchCell,0);
 			}
 		}
 	}
