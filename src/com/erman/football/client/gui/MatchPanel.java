@@ -100,7 +100,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			this.match = match;
 			HorizontalPanel dateDel = new HorizontalPanel();
 			dateDel.setWidth("100%");
-			dateTime.setText(match.getDate()+"-"+match.getTime());
+			dateTime.setText(dateFormat.format(match.getDate()));
 			String locationName;
 			try{
 				Long locationId = Long.parseLong(match.getLocation());
@@ -147,7 +147,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		
 		public void update(ClientMatch _match){
 			this.match = _match;
-			dateTime.setText(match.getDate()+" - "+match.getTime());
+			dateTime.setText(dateFormat.format(match.getDate()));
 			String locationName;
 			try{
 				Long locationId = Long.parseLong(match.getLocation());
@@ -225,8 +225,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 			this.add(data);
 		}
 
-		private boolean isValidDate(String strDate){
-			Date date = dateFormat.parse(strDate);
+		private boolean isValidDate(Date date){
 			if(date.after(minDate)||date.equals(minDate)){
 				if(date.before(maxDate)||date.equals(maxDate)){
 					return true;
@@ -261,7 +260,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		boolean filterOn = filter.isFilterOn();
 		for(MatchCell matchCell: ordMatches.values()){
 			if(filterOn){
-				if(filter.isValidDate(matchCell.getMatch().getDate()+" "+matchCell.getMatch().getTime())){
+				if(filter.isValidDate(matchCell.getMatch().getDate())){
 					matchTimePanel.insert(matchCell,0);
 				}
 			}else{
@@ -278,9 +277,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 		}
 
 		public int compare(Long a, Long b) {
-			Date aDate = dateFormat.parse(cache.getMatch(a).getDate()+" "+cache.getMatch(a).getTime());
-			Date bDate = dateFormat.parse(cache.getMatch(b).getDate()+" "+cache.getMatch(b).getTime());
-			return bDate.compareTo(aDate);
+			return cache.getMatch(b).getDate().compareTo(cache.getMatch(a).getDate());
 
 		}
 	}

@@ -29,6 +29,7 @@ public class MatchDialog implements CachePitchHandler {
 	final VerticalPanel matchInfoPanel = new VerticalPanel();
 	final VerticalPanel matchBoxPanel = new VerticalPanel();
 	final Button matchUpdateButton = new Button("OK");
+	final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("dd.MM.yy HH.mm");
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy");
 	
 	final Label matchLocationLabel = new Label("Yer: ");
@@ -75,7 +76,6 @@ public class MatchDialog implements CachePitchHandler {
 			public void onValueChange(ValueChangeEvent<Date> event) {
 				String date = dateFormat.format(event.getValue());
 				matchDateText.setText(date);
-				match.setDate(date);
 				dateDialog.hide();
 			}
 			
@@ -170,8 +170,9 @@ public class MatchDialog implements CachePitchHandler {
 	public void render(ClientMatch match, Boolean _add,Panel parent){
 		this.add = _add;
 		detailPanel.render(match);
-		matchDateText.setText(match.getDate());
-		matchTimeText.setText(match.getTime());
+		String dateTime[] =  dateTimeFormat.format(match.getDate()).split("\\s+");
+		matchDateText.setText(dateTime[0]);
+		matchTimeText.setText(dateTime[1]);
 		for(int in = 0; in < matchLocationList.getItemCount();in++){
 			if(matchLocationList.getValue(in).equals(match.getLocation())){
 				matchLocationList.setSelectedIndex(in);
@@ -184,8 +185,8 @@ public class MatchDialog implements CachePitchHandler {
 		}else{
 			matchLocationText.setText(pitch.getName());
 		}
-		matchTimeDetail.setText(match.getTime());
-		matchDateDetail.setText(match.getDate());
+		matchTimeDetail.setText(dateTime[1]);
+		matchDateDetail.setText(dateTime[0]);
 		matchPlayed = match.isPlayed();
 		if(matchPlayed){
 			teamAScore.setEnabled(true);
@@ -207,9 +208,8 @@ public class MatchDialog implements CachePitchHandler {
 	
 	
 	private void retrieveData(){
-		match.setDate(matchDateText.getText());
+		match.setDate(dateTimeFormat.parseStrict(matchDateText.getText()+" "+matchTimeText.getText()));
 		match.setLocation(matchLocationList.getValue(matchLocationList.getSelectedIndex()));
-		match.setTime(matchTimeText.getText());
 		match.setTeamA(detailPanel.getTeamA());
 		match.setTeamB(detailPanel.getTeamB());
 	}

@@ -1,5 +1,6 @@
 package com.erman.football.server.data;
 
+import java.util.Date;
 import java.util.HashSet;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -11,17 +12,14 @@ import com.erman.football.shared.ClientMatch;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
-public class Match {
+public class MatchDO {
 
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Key key;
     
     @Persistent
-	String date;
-    
-    @Persistent
-	String time;
+	Date date;
     
     @Persistent
 	String location;
@@ -41,16 +39,12 @@ public class Match {
     public long getKey() {
 		return key.getId();
 	}
-
-	public Match(String date){
-    	this.date = date;
-    }
     
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -68,14 +62,6 @@ public class Match {
 
 	public void setTeamB(HashSet<Long> teamB) {
 		this.teamB = teamB;
-	}
-	 
-    public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
 	}
 
 	public String getLocation() {
@@ -102,10 +88,10 @@ public class Match {
 		this.paid = paid;
 	}
 
-	public static Match convert(ClientMatch match){
-    	Match matchDO = new Match(match.getDate());
+	public static MatchDO convert(ClientMatch match){
+    	MatchDO matchDO = new MatchDO();
+    	matchDO.setDate(match.getDate());
     	matchDO.setLocation(match.getLocation());
-    	matchDO.setTime(match.getTime());
     	matchDO.setPaid(match.isPaid());
     	matchDO.setMailSent(match.isMailSent());
     	matchDO.setTeamA(match.getTeamA());
@@ -117,7 +103,6 @@ public class Match {
 		this.setLocation(match.getLocation());
 		this.setMailSent(match.isMailSent());
 		this.setPaid(match.isPaid());
-		this.setTime(match.getTime());
 		this.setTeamA(match.getTeamA());
 		this.setTeamB(match.getTeamB());
 	}
@@ -126,7 +111,6 @@ public class Match {
     	ClientMatch match = new ClientMatch();
     	match.setKey(this.getKey());
     	match.setDate(this.getDate());
-    	match.setTime(this.getTime());
     	match.setLocation(this.getLocation());
     	match.setMailSent(this.isMailSent());
     	match.setPaid(this.isPaid());

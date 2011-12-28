@@ -14,7 +14,7 @@ public class Match_JDO_DB {
 	
 	public static ClientMatch addMatch(ClientMatch match){
 		
-		Match matchDO = Match.convert(match);
+		MatchDO matchDO = MatchDO.convert(match);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			pm.makePersistent(matchDO);
@@ -28,13 +28,13 @@ public class Match_JDO_DB {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<Match> getMatches(){
+	public static List<MatchDO> getMatches(){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query query = pm.newQuery(Match.class);
-		List<Match> matchDOs = new ArrayList<Match>();
+		Query query = pm.newQuery(MatchDO.class);
+		List<MatchDO> matchDOs = new ArrayList<MatchDO>();
 		
 		try {
-			matchDOs = (List<Match>)query.execute();
+			matchDOs = (List<MatchDO>)query.execute();
 			if (!matchDOs.isEmpty()) {
 				return matchDOs;
 			} else {
@@ -49,10 +49,10 @@ public class Match_JDO_DB {
 	}
 	
 	public static void deleteMatch(Long id){
-		Key key = KeyFactory.createKey(Match.class.getSimpleName(), id);
+		Key key = KeyFactory.createKey(MatchDO.class.getSimpleName(), id);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			Match m = pm.getObjectById(Match.class, key);
+			MatchDO m = pm.getObjectById(MatchDO.class, key);
 			pm.deletePersistent(m);
 		}catch(Exception e){
 			System.out.println(e.getMessage());
@@ -62,10 +62,10 @@ public class Match_JDO_DB {
 	}
 	
 	public static void updateMatch(ClientMatch match){
-		Key key = KeyFactory.createKey(Match.class.getSimpleName(), match.getKey());
+		Key key = KeyFactory.createKey(MatchDO.class.getSimpleName(), match.getKey());
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			Match matchDO = pm.getObjectById(Match.class, key);
+			MatchDO matchDO = pm.getObjectById(MatchDO.class, key);
 			if (matchDO!=null) {
 				matchDO.update(match);
 			}else{

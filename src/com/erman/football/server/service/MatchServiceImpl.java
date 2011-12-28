@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.erman.football.client.service.MatchService;
-import com.erman.football.server.data.Match;
+import com.erman.football.server.data.MatchDO;
 import com.erman.football.server.data.Match_JDO_DB;
 import com.erman.football.shared.ClientMatch;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -18,7 +18,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	public List<ClientMatch> getMatches() {
 		List<ClientMatch> result = new ArrayList<ClientMatch>();
-		for(Match matchDO:Match_JDO_DB.getMatches()){
+		for(MatchDO matchDO:Match_JDO_DB.getMatches()){
 			result.add(matchDO.convert());
 		}
 		return result;
