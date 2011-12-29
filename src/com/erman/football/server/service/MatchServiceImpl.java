@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.erman.football.client.service.MatchService;
 import com.erman.football.server.data.MatchDO;
 import com.erman.football.server.data.Match_JDO_DB;
@@ -17,9 +19,18 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		return Match_JDO_DB.addMatch(match);	
 	}
 
-	public List<ClientMatch> getMatches(Date startDate, int from, int to) {
+	public List<ClientMatch> getMatches(Date startDate, int from, int to, boolean attendOnly) {
 		List<ClientMatch> result = new ArrayList<ClientMatch>();
-		for(MatchDO matchDO:Match_JDO_DB.getMatches(startDate,from,to)){
+		HttpServletRequest request = this.getThreadLocalRequest();
+		String strPlayer = null;
+		if(attendOnly){
+			strPlayer = (String)request.getSession().getAttribute("player");
+		}
+		if(strPlayer==null){
+			strPlayer = "0";
+		}
+		Long player = Long.parseLong(strPlayer);
+		for(MatchDO matchDO:Match_JDO_DB.getMatches(startDate,from,to,player)){
 			result.add(matchDO.convert());
 		}
 		return result;

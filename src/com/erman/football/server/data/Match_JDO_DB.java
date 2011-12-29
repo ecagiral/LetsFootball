@@ -29,18 +29,23 @@ public class Match_JDO_DB {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static List<MatchDO> getMatches(Date startDate,int start, int stop){
+	public static List<MatchDO> getMatches(Date startDate,int start, int stop, Long player){
+		List<MatchDO> matchDOs = new ArrayList<MatchDO>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(MatchDO.class);
 		query.declareImports("import java.util.Date");
 		query.setOrdering("date ascending");
 		query.setRange(start,stop);
-		query.declareParameters("Date startDate");
-		query.setFilter("date > startDate");
-		List<MatchDO> matchDOs = new ArrayList<MatchDO>();
-		
 		try {
-			matchDOs = (List<MatchDO>)query.execute(startDate);
+			if(player == 0){
+				query.declareParameters("Date startDate");
+				query.setFilter("date > startDate");
+				matchDOs = (List<MatchDO>)query.execute(startDate);
+			}else{
+				query.declareParameters("Date startDate, Long player");
+				query.setFilter("date > startDate && team.contains(player)");
+				matchDOs = (List<MatchDO>)query.execute(startDate,player);
+			}
 			if (!matchDOs.isEmpty()) {
 				return matchDOs;
 			} else {

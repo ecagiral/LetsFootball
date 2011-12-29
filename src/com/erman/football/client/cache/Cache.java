@@ -84,7 +84,7 @@ public class Cache {
 			}
 		});
 		
-		getMatches(new Date(),0 ,5);
+		getMatches(new Date(),0 ,5,false);
 		
 	}
 	
@@ -165,8 +165,8 @@ public class Cache {
 		
 	}
 	
-	public void getMatches(Date date,int start ,int stop){
-		matchService.getMatches(date,start,stop,new AsyncCallback<List<ClientMatch>>(){
+	public void getMatches(Date date,int start ,int stop, boolean attendOnly){
+		matchService.getMatches(date,start,stop,attendOnly,new AsyncCallback<List<ClientMatch>>(){
 
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub

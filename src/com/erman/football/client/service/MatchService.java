@@ -21,7 +21,7 @@ public interface MatchService extends RemoteService{
 	 * @param to
 	 * @return
 	 */
-	public List<ClientMatch> getMatches(Date startDate, int from, int to);
+	public List<ClientMatch> getMatches(Date startDate, int from, int to, boolean attendOnly);
 	public Long deleteMatch(ClientMatch match);
 	public ClientMatch updateMatch(ClientMatch match);
 }

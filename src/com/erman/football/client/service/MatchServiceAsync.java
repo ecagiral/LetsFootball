@@ -10,7 +10,7 @@ public interface MatchServiceAsync {
 
 	void createMatch(ClientMatch match, AsyncCallback<ClientMatch> callback);
 
-	void getMatches(Date startDate, int from, int to,AsyncCallback<List<ClientMatch>> callback);
+	void getMatches(Date startDate, int from, int to,boolean attendOnly,AsyncCallback<List<ClientMatch>> callback);
 
 	void deleteMatch(ClientMatch match, AsyncCallback<Long> callback);
 

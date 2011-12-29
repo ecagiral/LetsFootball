@@ -75,6 +75,9 @@ public class MatchDetailPanel extends HorizontalPanel{
 		teamBAddButton.setText("Add Me");
 		teamBAddButton.setVisible(true);
 		for(Long playerId:match.getTeamA()){
+			if(playerId==null){
+				continue;
+			}
 			String name = cache.getPlayer(playerId).getFullName();
 			teamAPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){

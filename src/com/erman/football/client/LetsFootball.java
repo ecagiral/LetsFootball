@@ -52,7 +52,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		});
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setWidth("100%");
-		welcome = new Label("Lutfen login olun");
+		welcome = new Label("Giris Yap");
 		welcome.setStyleName("welcome");
 		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		headerPanel.add(welcome);

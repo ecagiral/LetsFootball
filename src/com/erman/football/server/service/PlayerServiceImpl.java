@@ -3,6 +3,8 @@ package com.erman.football.server.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.erman.football.client.service.PlayerService;
 import com.erman.football.server.data.Player;
 import com.erman.football.server.data.Player_JDO_DB;
@@ -36,6 +38,8 @@ PlayerService {
 		if(playerDO==null){
 			return null;
 		}else{
+			HttpServletRequest request = this.getThreadLocalRequest();
+			request.getSession().setAttribute("player",String.valueOf(playerDO.getKey()));
 			return playerDO.convert();
 		}
 	}
