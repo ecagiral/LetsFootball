@@ -3,15 +3,15 @@ package com.erman.football.client.gui;
 import com.erman.football.client.cache.Cache;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MainTab extends HorizontalPanel{
+public class MainTab extends VerticalPanel{
 	
-	private final OtherPanel leftPanel = new OtherPanel();
-	private final OtherPanel listPanel = new OtherPanel();
-	private final OtherPanel detailPanel = new OtherPanel();
+	private final SimplePanel listPanel = new SimplePanel();
+	private final SimplePanel detailPanel = new SimplePanel();
 	
 	private final PlayerPanel playerPanel;
 	private final MatchPanel matchPanel;
@@ -22,16 +22,13 @@ public class MainTab extends HorizontalPanel{
 		playerPanel = new PlayerPanel(cache,detailPanel);
 		matchPanel = new MatchPanel(cache,detailPanel);
 		pitchPanel = new PitchPanel(cache,detailPanel);
-	
-		this.setSpacing(30);
 		
-		leftPanel.setVerticalAlignment(ALIGN_TOP);
-		leftPanel.setHeight("500px");
-		
-		VerticalPanel buttonPanel = new VerticalPanel();
-
-		Button matchButton = new Button("Maclar");
-		matchButton.setStyleName("leftButton");
+		SimplePanel topPanel = new SimplePanel();
+		topPanel.setStyleName("topPanel");
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		//buttonPanel.setStyleName("topButtonPanel");
+		Label matchButton = new Label("Maclar");
+		matchButton.setStyleName("topButton");
 		matchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -42,10 +39,10 @@ public class MainTab extends HorizontalPanel{
 			
 		});
 		buttonPanel.add(matchButton);
-		Button playerButton = new Button("Oyuncular");
-		playerButton.setStyleName("leftButton");
+		Label playerButton = new Label("Oyuncular");
+		playerButton.setStyleName("topButton");
 		playerButton.addClickHandler(new ClickHandler(){
-
+		
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
 				detailPanel.clear();
@@ -54,8 +51,8 @@ public class MainTab extends HorizontalPanel{
 			
 		});
 		buttonPanel.add(playerButton);
-		Button pitchButton = new Button("Sahalar");
-		pitchButton.setStyleName("leftButton");
+		Label pitchButton = new Label("Sahalar");
+		pitchButton.setStyleName("topButton");
 		pitchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -66,12 +63,15 @@ public class MainTab extends HorizontalPanel{
 			
 		});
 		buttonPanel.add(pitchButton);
-		leftPanel.add(buttonPanel);
-		this.add(leftPanel );
+		topPanel.add(buttonPanel);
+		this.add(topPanel);
+		HorizontalPanel centerPanel = new HorizontalPanel();
 		listPanel.add(matchPanel);
-		this.add(listPanel);
-		this.add(detailPanel);
-		
+		centerPanel.add(listPanel);
+		centerPanel.add(detailPanel);
+
+		this.add(centerPanel);
+		this.setWidth("100%");
 	}
 
 }

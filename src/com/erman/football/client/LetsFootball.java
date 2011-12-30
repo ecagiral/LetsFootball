@@ -79,7 +79,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	}
 	
 	public void reset(){
-		welcome.setText("Lutfen login olun");
+		welcome.setText("Giris Yap");
 		logout.setVisible(false);
 		playerTab.removeFromParent();
 		playerTab = null;

@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PlayerPanel extends ScrollPanel implements CachePlayerHandler{
@@ -30,7 +31,7 @@ public class PlayerPanel extends ScrollPanel implements CachePlayerHandler{
 	private Cache cache;
 	private boolean admin;
 
-	public PlayerPanel(Cache cache, OtherPanel other){
+	public PlayerPanel(Cache cache, SimplePanel other){
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		players = new HashMap<Long,PlayerCell>();

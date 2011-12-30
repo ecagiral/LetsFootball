@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PitchPanel extends ScrollPanel implements CachePitchHandler{
@@ -25,7 +26,7 @@ public class PitchPanel extends ScrollPanel implements CachePitchHandler{
 	private boolean admin;
 	private PitchCell currentPitch;
 	
-	public PitchPanel(Cache cache, OtherPanel other){
+	public PitchPanel(Cache cache, SimplePanel other){
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		cache.regiserPitch(this);

@@ -7,8 +7,6 @@ import java.util.List;
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CacheMatchHandler;
 import com.erman.football.shared.ClientMatch;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -16,14 +14,16 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.datepicker.client.DatePicker;
 
-public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
+public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 	
 	private static final int PAGINATION_NUM = 5;
 	private MatchDialog matchDialog;	
@@ -32,57 +32,49 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 	final FilterPanel filter = new FilterPanel();
 	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy HH:mm");
 	final UpdateListCell updateListCell = new UpdateListCell();
+	final StatusCell status = new StatusCell();
+	
 	
 	private boolean admin;
 	private Cache cache;
 	private MatchCell currentMatch;
-	private OtherPanel other;
+	private SimplePanel other;
 	
-	public MatchPanel(Cache cache, OtherPanel other){
+	
+	public MatchPanel(Cache cache, SimplePanel other){
 		this.cache = cache;
 		this.other = other;
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
 		
-		HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.setSpacing(5);
+		VerticalPanel buttonPanel = new VerticalPanel();
 		Label addMatch = new Label("Mac Ekle");
+		addMatch.setStyleName("leftButton");
 		addMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				displayMatch(null);
 			}
 		});
 		buttonPanel.add(addMatch);
-		Label addFilter = new Label("Filtre");
-		addFilter.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				filter.setVisible(!filter.isVisible());
-			}
-		});
-		buttonPanel.add(addFilter);
+		buttonPanel.add(filter);
 		this.add(buttonPanel);
-		filter.setVisible(false);
-		this.add(filter);
 		ScrollPanel listPanel = new ScrollPanel();
 		listPanel.setStyleName("listPanel");
 		listPanel.add(matchTimePanel);
 		matchTimePanel.setWidth("100%");
+		matchTimePanel.add(status);
 		this.add(listPanel);
 	}
 
 	public void matchAdded(List<ClientMatch> matches) {
-		MatchCell matchCell = null;
+		status.removeFromParent();
 		for(ClientMatch match:matches){
-			matchCell = new MatchCell(match);
-		}
-		if(matchCell!=null){
-			displayMatch(matchCell);
+			new MatchCell(match);
 		}
 		if(matches.size() == PAGINATION_NUM){
-			matchTimePanel.insert(updateListCell,0);
+			matchTimePanel.add(updateListCell);
 		}
-
 	}
 
 	public void matchUpdated(ClientMatch match) {
@@ -147,7 +139,7 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 				}
 			});
 			matches.put(match.getKey(),this);
-			matchTimePanel.insert(this,0);
+			matchTimePanel.add(this);
 		}
 		public HandlerRegistration addClickHandler(ClickHandler handler) {
 		    return addDomHandler(handler, ClickEvent.getType());
@@ -187,107 +179,67 @@ public class MatchPanel extends VerticalPanel implements CacheMatchHandler{
 
 	}
 	
+	private class StatusCell extends VerticalPanel{
+		
+		public StatusCell(){
+			this.setHorizontalAlignment(ALIGN_CENTER);
+			this.add(new Image("loader.gif"));
+			this.setSpacing(10);
+			this.setWidth("100%");
+		}
+	}
+	
 	private class FilterPanel extends VerticalPanel{
 		
-		private final ListBox months = new ListBox(false);
-		private final ListBox years = new ListBox(false);
-		private final CheckBox attendOnly = new CheckBox();
-		private final CheckBox startToday = new CheckBox();
-		private final HorizontalPanel dateInfo = new HorizontalPanel();
+		final DialogBox dateDialog = new DialogBox();
+		private Date startDate;
+		private boolean attend;
 		private int startIndex = 5;
 		
 		public FilterPanel(){
-			this.setBorderWidth(1);
-			HorizontalPanel startInfo = new HorizontalPanel();
-			startInfo.add(new Label("Bugunden Basla"));
-			startToday.addValueChangeHandler(new ValueChangeHandler<Boolean>(){
-				public void onValueChange(ValueChangeEvent<Boolean> event) {
-					if(event.getValue()){
-						dateInfo.setVisible(false);
-					}else{
-						dateInfo.setVisible(true);
-					}
+
+			Label attendButton = new Label("Katildiklarim ");
+			attendButton.setStyleName("leftButton");
+			attendButton.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					attend = !attend;
+					applyFilter(true);
+				}	
+			});
+			this.add(attendButton);
+			
+			DatePicker datePicker = new DatePicker();
+			datePicker.addValueChangeHandler(new ValueChangeHandler<Date>(){
+
+				public void onValueChange(ValueChangeEvent<Date> event) {
+					startDate = event.getValue();
+					dateDialog.hide();
+					applyFilter(true);
 				}
 				
 			});
-			startInfo.add(startToday);
-			startToday.setValue(true);
-			dateInfo.setVisible(false);
-			this.add(startInfo);
-			
-			dateInfo.add(new Label("Ay: "));
-			months.addItem("Hepsi","01");
-			months.addItem("Ocak","01");
-			months.addItem("Subat","02");
-			months.addItem("Mart","03");
-			months.addItem("Nisan","04");
-			months.addItem("Mayis","05");
-			months.addItem("Haziran","06");
-			months.addItem("Temmuz","07");
-			months.addItem("Agustos","08");
-			months.addItem("Eylul","09");
-			months.addItem("Ekim","10");
-			months.addItem("Kasim","11");
-			months.addItem("Aralik","12");
-			months.addChangeHandler(new ChangeHandler(){
-				public void onChange(ChangeEvent event) {
-					if(months.getItemText(months.getSelectedIndex()).equals("Hepsi")){
-						years.setItemSelected(0, true);
-					}else{
-						if(years.isItemSelected(0)){
-							years.setItemSelected(1, true);
-						}
-					}
-				}
-
+			dateDialog.add(datePicker);
+			Label startDate = new Label("Baslangic");
+			startDate.setStyleName("leftButton");
+			startDate.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					dateDialog.setPopupPosition(event.getClientX()+10, event.getClientY()+10);
+					dateDialog.show();
+				}	
 			});
-			dateInfo.add(months);
-			dateInfo.add(new Label("Yil: "));
-			years.addItem("Hepsi","00");
-			years.addItem("2011","11");
-			years.addItem("2012","12");
-			years.addItem("2013","13");
-			years.addChangeHandler(new ChangeHandler(){
-				public void onChange(ChangeEvent event) {
-					if(years.getItemText(years.getSelectedIndex()).equals("Hepsi")){
-						months.setItemSelected(0, true);
-					}else{
-						if(months.isItemSelected(0)){
-							months.setItemSelected(1, true);
-						}
-					}
-				}
-
-			});
-			dateInfo.add(years);
-			
-			Button apply = new Button("Uygula");
-			apply.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event){
-					applyFilter(true);
-				}				
-			});
-			this.add(dateInfo);
-			HorizontalPanel attendInfo = new HorizontalPanel();
-			attendInfo.add(new Label("Katildiklarim "));
-			attendInfo.add(attendOnly);
-			this.add(attendInfo);
-			this.add(apply);
+			this.add(startDate);
+			this.setWidth("150px");	
 		}
 		
 		public void applyFilter(boolean init){
-			Date date = new Date();
-			if(!startToday.getValue()){
-				String strDate = months.getValue(months.getSelectedIndex())+"."+years.getValue(years.getSelectedIndex());
-				date = dateFormat.parse("01."+strDate+" 00:00");
-			}
 			if(init){
 				startIndex = 0;
 				matchTimePanel.clear();
 				matches.clear();
 			}
 			updateListCell.removeFromParent();
-			cache.getMatches(date, startIndex, startIndex+PAGINATION_NUM ,attendOnly.getValue());
+			matchTimePanel.add(status);
+			cache.getMatches(startDate, startIndex, startIndex+PAGINATION_NUM ,attend);
 			startIndex = startIndex+PAGINATION_NUM;
 		}
 	}
