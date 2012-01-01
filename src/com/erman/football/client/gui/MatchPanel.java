@@ -1,6 +1,5 @@
 package com.erman.football.client.gui;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -9,45 +8,41 @@ import com.erman.football.client.cache.CacheMatchHandler;
 import com.erman.football.shared.ClientMatch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.datepicker.client.DatePicker;
 
-public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
+public class MatchPanel extends HorizontalPanel implements CacheMatchHandler, FilterHandler{
 	
-	private static final int PAGINATION_NUM = 5;
+	
 	private MatchDialog matchDialog;	
-	final VerticalPanel matchTimePanel = new VerticalPanel();
-	final LinkedHashMap<Long,MatchCell> matches = new LinkedHashMap<Long,MatchCell>();
-	final FilterPanel filter = new FilterPanel();
-	final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd.MM.yy HH:mm");
-	final UpdateListCell updateListCell = new UpdateListCell();
-	final StatusCell status = new StatusCell();
-	
+	final private VerticalPanel matchTimePanel = new VerticalPanel();
+	final private LinkedHashMap<Long,MatchCell> matches = new LinkedHashMap<Long,MatchCell>();
+	final private FilterPanel filter;
+	final private DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy - HH:mm");
+	final private UpdateListCell updateListCell = new UpdateListCell();
+	final private StatusCell status = new StatusCell();
+	final private VerticalPanel listMainPanel = new VerticalPanel();
 	
 	private boolean admin;
 	private Cache cache;
 	private MatchCell currentMatch;
-	private SimplePanel other;
+	private final SimplePanel other;
 	
 	
-	public MatchPanel(Cache cache, SimplePanel other){
+	public MatchPanel(Cache cache, SimplePanel _other){
 		this.cache = cache;
-		this.other = other;
+		this.other = _other;
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
-		
+		filter =  new FilterPanel(cache,this);
 		VerticalPanel buttonPanel = new VerticalPanel();
 		Label addMatch = new Label("Mac Ekle");
 		addMatch.setStyleName("leftButton");
@@ -57,22 +52,41 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 			}
 		});
 		buttonPanel.add(addMatch);
-		buttonPanel.add(filter);
+		Label searchMatch = new Label("Mac Ara");
+		searchMatch.setStyleName("leftButton");
+		searchMatch.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				other.clear();
+				listMainPanel.setVisible(true);
+			}
+		});
+		buttonPanel.add(searchMatch);
+		buttonPanel.setWidth("100px");
 		this.add(buttonPanel);
+		
+		listMainPanel.setStyleName("listMainPanel");
+		listMainPanel.add(filter);
+		listMainPanel.setCellHorizontalAlignment(filter, ALIGN_CENTER);
 		ScrollPanel listPanel = new ScrollPanel();
 		listPanel.setStyleName("listPanel");
 		listPanel.add(matchTimePanel);
 		matchTimePanel.setWidth("100%");
 		matchTimePanel.add(status);
-		this.add(listPanel);
+		listMainPanel.add(listPanel);
+		this.add(listMainPanel);
 	}
 
 	public void matchAdded(List<ClientMatch> matches) {
 		status.removeFromParent();
+		int index = 1;
 		for(ClientMatch match:matches){
+			if(index==FilterPanel.PAGINATION_NUM){
+				break;
+			}
 			new MatchCell(match);
+			index++;
 		}
-		if(matches.size() == PAGINATION_NUM){
+		if(matches.size() == FilterPanel.PAGINATION_NUM){
 			matchTimePanel.add(updateListCell);
 		}
 	}
@@ -86,12 +100,13 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 	}
 	
 	private void displayMatch(MatchCell cell){
-		if(currentMatch!=null){
-			currentMatch.setStyleName("matchCard");
-		}
 		if(cell == null){
+			listMainPanel.setVisible(false);
 			matchDialog.render(new ClientMatch(),true,other);	
 		}else{
+			if(currentMatch!=null){
+				currentMatch.setStyleName("matchCard");
+			}
 			cell.setStyleName("selectedMatchCard");
 			currentMatch = cell;
 			matchDialog.render(cell.getMatch(),false,other);	
@@ -171,7 +186,8 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 			this.add(label);
 			this.addDomHandler(new ClickHandler(){
 				public void onClick(ClickEvent event) {
-					filter.applyFilter(false);
+					filter.applyFilter(true);
+					UpdateListCell.this.removeFromParent();
 				}
 			}, ClickEvent.getType());
 			this.setStyleName("matchCard");
@@ -188,61 +204,16 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler{
 			this.setWidth("100%");
 		}
 	}
-	
-	private class FilterPanel extends VerticalPanel{
-		
-		final DialogBox dateDialog = new DialogBox();
-		private Date startDate;
-		private boolean attend;
-		private int startIndex = 5;
-		
-		public FilterPanel(){
 
-			Label attendButton = new Label("Katildiklarim ");
-			attendButton.setStyleName("leftButton");
-			attendButton.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event) {
-					attend = !attend;
-					applyFilter(true);
-				}	
-			});
-			this.add(attendButton);
-			
-			DatePicker datePicker = new DatePicker();
-			datePicker.addValueChangeHandler(new ValueChangeHandler<Date>(){
-
-				public void onValueChange(ValueChangeEvent<Date> event) {
-					startDate = event.getValue();
-					dateDialog.hide();
-					applyFilter(true);
-				}
-				
-			});
-			dateDialog.add(datePicker);
-			Label startDate = new Label("Baslangic");
-			startDate.setStyleName("leftButton");
-			startDate.addClickHandler(new ClickHandler(){
-				public void onClick(ClickEvent event) {
-					dateDialog.setPopupPosition(event.getClientX()+10, event.getClientY()+10);
-					dateDialog.show();
-				}	
-			});
-			this.add(startDate);
-			this.setWidth("150px");	
+	public void filterApplied(boolean pagination) {
+		if(!pagination){
+			matchTimePanel.clear();
+			matches.clear();
 		}
-		
-		public void applyFilter(boolean init){
-			if(init){
-				startIndex = 0;
-				matchTimePanel.clear();
-				matches.clear();
-			}
-			updateListCell.removeFromParent();
-			matchTimePanel.add(status);
-			cache.getMatches(startDate, startIndex, startIndex+PAGINATION_NUM ,attend);
-			startIndex = startIndex+PAGINATION_NUM;
-		}
+		matchTimePanel.add(status);
 	}
+	
+	
 	
 
 }

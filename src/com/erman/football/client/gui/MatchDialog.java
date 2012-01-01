@@ -147,24 +147,16 @@ public class MatchDialog implements CachePitchHandler {
 					MatchDialog.this.cache.addMatch(match);
 				}else{
 					MatchDialog.this.cache.updateMatch(match);
+					
 				}
-				matchBoxPanel.removeFromParent();
 			}
 			
-		});
-		HorizontalPanel infoButtonPanel = new HorizontalPanel();
-		infoButtonPanel.add(matchUpdateButton);
-		HTML gap = new HTML();
-		gap.setWidth("50px");
-		infoButtonPanel.add(gap);
-
-		
+		});	
 		matchBoxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
 		matchBoxPanel.add(matchInfoPanel);
 		matchBoxPanel.add(detailPanel);
-		matchBoxPanel.add(infoButtonPanel);
-		matchBoxPanel.setBorderWidth(1);
+		matchBoxPanel.add(matchUpdateButton);
 	}
 	
 	public void derender(){

@@ -22,12 +22,13 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 	public List<ClientMatch> getMatches(Date startDate, int from, int to, boolean attendOnly) {
 		List<ClientMatch> result = new ArrayList<ClientMatch>();
 		HttpServletRequest request = this.getThreadLocalRequest();
-		String strPlayer = null;
+		//By default get all matches
+		String strPlayer = "0";
 		if(attendOnly){
 			strPlayer = (String)request.getSession().getAttribute("player");
 		}
 		if(strPlayer==null){
-			strPlayer = "0";
+			strPlayer = "-1";
 		}
 		Long player = Long.parseLong(strPlayer);
 		for(MatchDO matchDO:Match_JDO_DB.getMatches(startDate,from,to,player)){

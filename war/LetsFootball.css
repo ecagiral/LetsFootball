@@ -22,9 +22,7 @@ h1 {
 }
 
 /** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
-}
+
 
 .dialogVPanel {
   margin: 5px;
@@ -111,25 +109,27 @@ h1 {
 .matchCard{
 	padding: 5px;
 	background-color: #fff;
-	border-top:solid;
-	border-top-color: #000;
-	border-top-width: 1px;
+	border-bottom:solid;
+	border-bottom-color: #000;
+	border-bottom-width: 1px;
 	width: 100%;
 }
 
 .selectedMatchCard{
 	padding: 5px;
-	background-color: #efef00;
-	border-top:solid;
-	border-top-color: #efef00;
+	background-color: #efef99;
+	border-bottom:solid;
+	border-bottom-color: #000;
+	border-bottom-width: 1px;
 	width: 100%;
 }
 
 .matchCard:hover{
 	padding: 5px;
-	background-color: #bbb;
-	border-top:solid;
-	border-top-color: #bbb;
+	background-color: #eee;
+	border-bottom:solid;
+	border-bottom-color: #000;
+	border-bottom-width: 1px;
 	width: 100%;
 }
 
@@ -143,24 +143,23 @@ h1 {
 	color: #bbbbbb;
 }
 
-
-.listPanel{
-  	height: 500px;
-  	width: 250px;
-  	border-left:solid;
+.listMainPanel{
+	border-left:solid;
 	border-left-color: #000;
 	border-left-width: 1px;
 	border-right:solid;
 	border-right-color: #000;
 	border-right-width: 1px;
-	border-bottom:solid;
-	border-bottom-color: #000;
-	border-bottom-width: 1px;
+}
+.listPanel{
+  	height: 500px;
+  	width: 270px;
+
 }
 
 .topButton{
-	padding-left:20px;
-	padding-right:20px;
+	margin-left:20px;
+	margin-right:20px;
 }
 
 .topButton:hover{
@@ -173,10 +172,32 @@ h1 {
   	border-bottom:solid;
 	border-bottom-color: #000;
 	border-bottom-width: 1px;
+	margin-bottom:20px;
 	width:100%;
+}
+
+.leftButton{
+	padding-left:10px;
+	margin-top:5px;
+	cursor:pointer;
 }
 
 .leftButton:hover{
 	cursor:pointer;
 }
-	
+
+.dateCell:hover{
+	cursor:pointer;
+	background-color: #eee;
+}
+
+.filterButton{
+	padding-right:5px;
+	cursor:pointer;
+	font-weight: bold;
+	color:blue;
+}
+
+.filterButton:hover{
+	cursor:pointer;
+}
