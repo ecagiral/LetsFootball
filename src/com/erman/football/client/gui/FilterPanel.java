@@ -25,7 +25,7 @@ public class FilterPanel extends HorizontalPanel{
 	private String month;
 	private String year;
 	private boolean attend = false;
-	private int startIndex =PAGINATION_NUM;
+	private int startIndex =PAGINATION_NUM-1;
 	private FilterHandler handler;
 	final private DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MM yy");
 	final private Label monthButton;
