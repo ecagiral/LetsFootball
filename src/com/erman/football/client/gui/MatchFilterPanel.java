@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.TreeMap;
 
 import com.erman.football.client.cache.Cache;
+import com.erman.football.client.gui.list.FilterHandler;
+import com.erman.football.client.gui.list.ListFilter;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -13,7 +15,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MatchFilterPanel extends HorizontalPanel{
+public class MatchFilterPanel extends ListFilter{
 	static final int PAGINATION_NUM = 6;
 	static final TreeMap<String,String> months = new TreeMap<String,String>();
 	static final TreeMap<String,String> years = new TreeMap<String,String>();
@@ -32,8 +34,7 @@ public class MatchFilterPanel extends HorizontalPanel{
 	final private Label yearButton;
 	final private Label attendButton;
 	
-	public MatchFilterPanel(Cache cache, FilterHandler handler){
-		this.handler = handler;
+	public MatchFilterPanel(Cache cache){
 		this.cache = cache;
 		months.put("01", "Ocak");
 		months.put("02", "Subat");
@@ -118,6 +119,10 @@ public class MatchFilterPanel extends HorizontalPanel{
 		this.add(white);
 		this.add(attendButton);
 		this.add(new Label("maclar"));
+	}
+	
+	public void setHandler(FilterHandler _handler){
+		this.handler = _handler;
 	}
 	
 	public void applyFilter(boolean pagination){
