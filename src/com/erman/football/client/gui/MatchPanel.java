@@ -24,25 +24,23 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler, Fi
 	private MatchDialog matchDialog;	
 	final private VerticalPanel matchTimePanel = new VerticalPanel();
 	final private LinkedHashMap<Long,MatchCell> matches = new LinkedHashMap<Long,MatchCell>();
-	final private FilterPanel filter;
+	final private MatchFilterPanel filter;
 	final private DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy - HH:mm");
 	final private UpdateListCell updateListCell = new UpdateListCell();
 	final private StatusCell status = new StatusCell();
 	final private VerticalPanel listMainPanel = new VerticalPanel();
+	final private SimplePanel infoPanel = new SimplePanel();
 	
 	private boolean admin;
 	private Cache cache;
 	private MatchCell currentMatch;
-	private final SimplePanel other;
 	
-	
-	public MatchPanel(Cache cache, SimplePanel _other){
+	public MatchPanel(Cache cache){
 		this.cache = cache;
-		this.other = _other;
 		cache.regiserMatch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		matchDialog = new MatchDialog(cache);
-		filter =  new FilterPanel(cache,this);
+		filter =  new MatchFilterPanel(cache,this);
 		VerticalPanel buttonPanel = new VerticalPanel();
 		Label addMatch = new Label("Mac Ekle");
 		addMatch.setStyleName("leftButton");
@@ -56,7 +54,7 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler, Fi
 		searchMatch.setStyleName("leftButton");
 		searchMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				other.clear();
+				infoPanel.clear();
 				listMainPanel.setVisible(true);
 			}
 		});
@@ -74,19 +72,20 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler, Fi
 		matchTimePanel.add(status);
 		listMainPanel.add(listPanel);
 		this.add(listMainPanel);
+		this.add(infoPanel);
 	}
 
 	public void matchAdded(List<ClientMatch> matches) {
 		status.removeFromParent();
 		int index = 1;
 		for(ClientMatch match:matches){
-			if(index==FilterPanel.PAGINATION_NUM){
+			if(index==MatchFilterPanel.PAGINATION_NUM){
 				break;
 			}
 			new MatchCell(match);
 			index++;
 		}
-		if(matches.size() == FilterPanel.PAGINATION_NUM){
+		if(matches.size() == MatchFilterPanel.PAGINATION_NUM){
 			matchTimePanel.add(updateListCell);
 		}
 	}
@@ -102,14 +101,14 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler, Fi
 	private void displayMatch(MatchCell cell){
 		if(cell == null){
 			listMainPanel.setVisible(false);
-			matchDialog.render(new ClientMatch(),true,other);	
+			matchDialog.render(new ClientMatch(),true,infoPanel);	
 		}else{
 			if(currentMatch!=null){
 				currentMatch.setStyleName("matchCard");
 			}
 			cell.setStyleName("selectedMatchCard");
 			currentMatch = cell;
-			matchDialog.render(cell.getMatch(),false,other);	
+			matchDialog.render(cell.getMatch(),false,infoPanel);	
 		}
 		
 	}

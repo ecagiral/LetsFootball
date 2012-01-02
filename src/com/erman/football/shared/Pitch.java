@@ -5,12 +5,13 @@ import java.io.Serializable;
 import com.google.gwt.maps.client.base.HasLatLng;
 import com.google.gwt.maps.client.base.LatLng;
 
-public class Pitch implements Serializable {
+public class Pitch extends DataObject implements Serializable {
+
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 816063373769471937L;
+	private static final long serialVersionUID = -9204615732872513610L;
 	
 	private long key;
 	private String name;

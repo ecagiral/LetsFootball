@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.HashSet;
 
 
-public class ClientMatch implements Serializable{
+public class ClientMatch extends DataObject implements Serializable{
 
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4726841911137789340L;
-
+	private static final long serialVersionUID = -5868415561756106979L;
+	
 	private long key;
 	private Date date;
 	private String location;

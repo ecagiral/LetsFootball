@@ -19,29 +19,41 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PlayerPanel extends ScrollPanel implements CachePlayerHandler{
+public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler{
 
 
 	private PlayerDialog infoDialogBox;
 
-	final VerticalPanel playerEmailPanel = new VerticalPanel();	
-	final HashMap<Long,PlayerCell> players;
-
+	final private VerticalPanel playerEmailPanel = new VerticalPanel();	
+	final private HashMap<Long,PlayerCell> players;
+	final private SimplePanel dialogPanel = new SimplePanel();
 	private PlayerCell currentPlayer;
 	private Cache cache;
 	private boolean admin;
 
-	public PlayerPanel(Cache cache, SimplePanel other){
+	public PlayerPanel(Cache cache){
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		players = new HashMap<Long,PlayerCell>();
-
 		cache.regiserPlayer(this);
-		infoDialogBox = new PlayerDialog(cache,other);
-
-		this.setStyleName("listPanel");
-		this.add(playerEmailPanel);
-		playerEmailPanel.setWidth("100%");		
+		
+		VerticalPanel buttonPanel = new VerticalPanel();
+		Label addMatch = new Label("Oyuncu Ekle");
+		addMatch.setStyleName("leftButton");
+		buttonPanel.add(addMatch);
+		Label searchMatch = new Label("Oyuncu Ara");
+		searchMatch.setStyleName("leftButton");
+		buttonPanel.add(searchMatch);
+		buttonPanel.setWidth("100px");
+		this.add(buttonPanel);
+		
+		infoDialogBox = new PlayerDialog(cache,dialogPanel);
+		ScrollPanel scrollPanel = new ScrollPanel();
+		scrollPanel.setStyleName("listPanel");
+		scrollPanel.add(playerEmailPanel);
+		playerEmailPanel.setWidth("100%");	
+		this.add(scrollPanel);
+		this.add(dialogPanel);
 	}
 
 	private class PlayerCell extends VerticalPanel{

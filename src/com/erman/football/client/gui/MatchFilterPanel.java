@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class FilterPanel extends HorizontalPanel{
+public class MatchFilterPanel extends HorizontalPanel{
 	static final int PAGINATION_NUM = 6;
 	static final TreeMap<String,String> months = new TreeMap<String,String>();
 	static final TreeMap<String,String> years = new TreeMap<String,String>();
@@ -32,7 +32,7 @@ public class FilterPanel extends HorizontalPanel{
 	final private Label yearButton;
 	final private Label attendButton;
 	
-	public FilterPanel(Cache cache, FilterHandler handler){
+	public MatchFilterPanel(Cache cache, FilterHandler handler){
 		this.handler = handler;
 		this.cache = cache;
 		months.put("01", "Ocak");

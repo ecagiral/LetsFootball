@@ -8,10 +8,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MainTab extends VerticalPanel{
+public class MainTab extends SimplePanel{
 	
 	private final SimplePanel listPanel = new SimplePanel();
-	private final SimplePanel detailPanel = new SimplePanel();
 	
 	private final PlayerPanel playerPanel;
 	private final MatchPanel matchPanel;
@@ -19,10 +18,10 @@ public class MainTab extends VerticalPanel{
 	
 	public MainTab(Cache cache){
 
-		playerPanel = new PlayerPanel(cache,detailPanel);
-		matchPanel = new MatchPanel(cache,detailPanel);
-		pitchPanel = new PitchPanel(cache,detailPanel);
-		
+		playerPanel = new PlayerPanel(cache);
+		matchPanel = new MatchPanel(cache);
+		pitchPanel = new PitchPanel(cache);
+		VerticalPanel mainPanel = new VerticalPanel();
 		SimplePanel topPanel = new SimplePanel();
 		topPanel.setStyleName("topPanel");
 		HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -33,7 +32,6 @@ public class MainTab extends VerticalPanel{
 
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
-				detailPanel.clear();
 				listPanel.add(matchPanel);
 			}
 			
@@ -45,7 +43,6 @@ public class MainTab extends VerticalPanel{
 		
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
-				detailPanel.clear();
 				listPanel.add(playerPanel);
 			}
 			
@@ -57,20 +54,19 @@ public class MainTab extends VerticalPanel{
 
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
-				detailPanel.clear();
 				listPanel.add(pitchPanel);
 			}
 			
 		});
 		buttonPanel.add(pitchButton);
 		topPanel.add(buttonPanel);
-		this.add(topPanel);
+		mainPanel.add(topPanel);
 		HorizontalPanel centerPanel = new HorizontalPanel();
 		listPanel.add(matchPanel);
 		centerPanel.add(listPanel);
-		centerPanel.add(detailPanel);
-
-		this.add(centerPanel);
+		mainPanel.add(centerPanel);
+		mainPanel.setWidth("100%");
+		this.add(mainPanel);
 		this.setWidth("100%");
 	}
 

@@ -16,28 +16,42 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PitchPanel extends ScrollPanel implements CachePitchHandler{
+public class PitchPanel extends HorizontalPanel implements CachePitchHandler{
 	
-	final VerticalPanel pitchListPanel = new VerticalPanel();
-	final HashMap<Long,PitchCell> pitches = new HashMap<Long,PitchCell>();
+	final private VerticalPanel pitchListPanel = new VerticalPanel();
+	final private HashMap<Long,PitchCell> pitches = new HashMap<Long,PitchCell>();
+	final private SimplePanel infoPanel = new SimplePanel();
 	
 	private PitchDialog pitchDialog;
 	private Cache cache;
 	private boolean admin;
 	private PitchCell currentPitch;
 	
-	public PitchPanel(Cache cache, SimplePanel other){
+	public PitchPanel(Cache cache){
 		this.cache = cache;
 		this.admin = cache.getLoggedPlayer().isAdmin();
 		cache.regiserPitch(this);
-		pitchDialog = new PitchDialog(cache,other);
+			
+		VerticalPanel buttonPanel = new VerticalPanel();
+		Label addMatch = new Label("Saha Ekle");
+		addMatch.setStyleName("leftButton");
+		buttonPanel.add(addMatch);
+		Label searchMatch = new Label("Saha Ara");
+		searchMatch.setStyleName("leftButton");
+		buttonPanel.add(searchMatch);
+		buttonPanel.setWidth("100px");
+		this.add(buttonPanel);
 		
-		this.setStyleName("listPanel");
-		this.add(pitchListPanel);
+		ScrollPanel scrollPanel = new ScrollPanel();
+		scrollPanel.setStyleName("listPanel");
+		scrollPanel.add(pitchListPanel);
 		pitchListPanel.setWidth("100%");
 		if(admin){
 			pitchListPanel.insert(new NewPitchCell(), 0);
 		}
+		this.add(scrollPanel);
+		pitchDialog = new PitchDialog(cache,infoPanel);
+		this.add(infoPanel);
 
 	}
 	

@@ -2,13 +2,14 @@ package com.erman.football.shared;
 
 import java.io.Serializable;
 
-public class ClientPlayer implements Serializable {
+public class ClientPlayer extends DataObject implements Serializable {
 
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2510949175026722055L;
+	private static final long serialVersionUID = 6486401923712917968L;
+	
 	private long key;
 	private String email;
 	private String name;
