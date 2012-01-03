@@ -1,6 +1,7 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.match;
 
 import java.util.Date;
+import java.util.List;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CachePitchHandler;
@@ -14,7 +15,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -211,25 +211,16 @@ public class MatchDialog implements CachePitchHandler {
 		match.setTeamB(detailPanel.getTeamB());
 	}
 
-	@Override
-	public void pitchLoaded() {
+	public void pitchAdded(List<Pitch> pitch) {
 		updateLocationList();
 		
 	}
 
-	@Override
-	public void pitchAdded(Pitch pitch) {
-		updateLocationList();
-		
-	}
-
-	@Override
 	public void pitchUpdated(Pitch pitch) {
 		updateLocationList();
 		
 	}
 
-	@Override
 	public void pitchRemoved(Long pitch) {
 		updateLocationList();
 		
@@ -238,9 +229,8 @@ public class MatchDialog implements CachePitchHandler {
 	private void updateLocationList(){
 		matchLocationList.clear();
 		matchLocationList.addItem("Not Selected", "0");
-		for(Pitch pitch:cache.getAllPitches()){
-			matchLocationList.addItem(pitch.getName(),Long.toString(pitch.getKey()));
-		}
+		//TODO Implement location listing
+			
 	}
 
 }

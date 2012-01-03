@@ -25,11 +25,12 @@ public class Pitch_JDO_DB {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<PitchDO> getPitches(){
+	public static List<PitchDO> getPitches(int start, int stop){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query query = pm.newQuery(PitchDO.class);
 		List<PitchDO> pitchDOs = new ArrayList<PitchDO>();
-		
+		Query query = pm.newQuery(PitchDO.class);
+		query.setOrdering("name ascending");
+		query.setRange(start,stop);
 		try{
 			pitchDOs = (List<PitchDO>)query.execute();
 		}catch(Exception e){

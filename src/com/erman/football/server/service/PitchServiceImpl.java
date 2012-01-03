@@ -18,9 +18,9 @@ public class PitchServiceImpl extends RemoteServiceServlet implements PitchServi
 		
 	}
 
-	public List<Pitch> getPitches() {
+	public List<Pitch> getPitches(int start, int stop) {
 		List<Pitch> result = new ArrayList<Pitch>();
-		for(PitchDO pitchDO:Pitch_JDO_DB.getPitches()){
+		for(PitchDO pitchDO:Pitch_JDO_DB.getPitches(start, stop)){
 			result.add(pitchDO.convert());
 		}
 		return result;

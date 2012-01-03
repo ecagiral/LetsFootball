@@ -51,22 +51,7 @@ public class Cache {
 	}
 	
 	public void load(){
-		pitchService.getPitches(
-				new AsyncCallback<List<Pitch>>(){
-			public void onFailure(Throwable caught) {
 
-			}
-
-
-			@Override
-			public void onSuccess(List<Pitch> result) {
-				pitches.clear();
-				for(Pitch pitch:result){
-					pitches.put(pitch.getKey(), pitch);
-				}
-				notifyPitchLoaded();
-			}
-		});
 		playerService.getPlayers(
 				new AsyncCallback<List<ClientPlayer>>(){
 			public void onFailure(Throwable caught) {
@@ -83,7 +68,7 @@ public class Cache {
 				notifyPlayerLoaded();
 			}
 		});
-		
+		getPitches(0,6);
 		getMatches(new Date(),0 ,6,false);
 		
 	}
@@ -162,7 +147,6 @@ public class Cache {
 	//Match methods
 	public ClientMatch getMatch(Long matchId){
 		return matches.get(matchId);
-		
 	}
 	
 	public void getMatches(Date date,int start ,int stop, boolean attendOnly){
@@ -240,8 +224,23 @@ public class Cache {
 	}
 	
 	//Pitch methods
-	public ArrayList<Pitch> getAllPitches(){
-		return new ArrayList<Pitch>(pitches.values());
+	public void getPitches(int start ,int stop){
+		pitchService.getPitches(start,stop,
+				new AsyncCallback<List<Pitch>>(){
+			public void onFailure(Throwable caught) {
+
+			}
+
+
+			@Override
+			public void onSuccess(List<Pitch> result) {
+				pitches.clear();
+				for(Pitch pitch:result){
+					pitches.put(pitch.getKey(), pitch);
+				}
+				notifyPitchAdded(result);
+			}
+		});
 	}
 	
 	public Pitch getPitch(Long id){
@@ -259,7 +258,9 @@ public class Cache {
 
 			@Override
 			public void onSuccess(Pitch result) {
-				notifyPitchAdded(result);
+				ArrayList<Pitch> list = new ArrayList<Pitch>();
+				list.add(result);
+				notifyPitchAdded(list);
 			}
 			
 		});
@@ -349,28 +350,19 @@ public class Cache {
 		}
 	}
 	
-	//Pitch notifications
-	private void notifyPitchLoaded(){
-		for(CachePitchHandler handler:pitchHandlers){
-			handler.pitchLoaded();
-		}
-	}
-	private void notifyPitchAdded(Pitch pitch){
-		pitches.put(pitch.getKey(), pitch);
+	private void notifyPitchAdded(List<Pitch> pitch){
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchAdded(pitch);
 		}
 	}
 	
 	private void notifyPitchUpdated(Pitch pitch){
-		pitches.put(pitch.getKey(), pitch);
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchUpdated(pitch);
 		}
 	}
 	
 	private void notifyPitchRemoved(Long pitch){
-		pitches.remove(pitch);
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchRemoved(pitch);
 		}

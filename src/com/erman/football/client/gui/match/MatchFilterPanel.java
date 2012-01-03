@@ -1,10 +1,9 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.match;
 
 import java.util.Date;
 import java.util.TreeMap;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.client.gui.list.FilterHandler;
 import com.erman.football.client.gui.list.ListFilter;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -28,7 +27,6 @@ public class MatchFilterPanel extends ListFilter{
 	private String year;
 	private boolean attend = false;
 	private int startIndex =PAGINATION_NUM-1;
-	private FilterHandler handler;
 	final private DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MM yy");
 	final private Label monthButton;
 	final private Label yearButton;
@@ -119,10 +117,6 @@ public class MatchFilterPanel extends ListFilter{
 		this.add(white);
 		this.add(attendButton);
 		this.add(new Label("maclar"));
-	}
-	
-	public void setHandler(FilterHandler _handler){
-		this.handler = _handler;
 	}
 	
 	public void applyFilter(boolean pagination){

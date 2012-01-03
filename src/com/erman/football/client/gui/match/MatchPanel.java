@@ -1,4 +1,4 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.match;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,ListPanelListener{
-	
-	
-	private MatchDialog matchDialog;	
+		
+	final private MatchDialog matchDialog;	
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
-	private Cache cache;
+	final private Cache cache;
 	
 	private MatchCell currentMatch;
 	

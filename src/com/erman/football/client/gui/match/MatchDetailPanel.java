@@ -1,4 +1,4 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.match;
 
 import java.util.HashSet;
 

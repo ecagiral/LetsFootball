@@ -1,7 +1,8 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.pitch;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.client.cache.CachePitchHandler;
+import com.erman.football.client.gui.ParamUpdateHandler;
+import com.erman.football.client.gui.TextInput;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -17,7 +18,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
+public class PitchDialog implements ParamUpdateHandler{
 
 	private final TextInput pitchNameText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
@@ -28,14 +29,11 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 	private Cache cache;
 	private boolean add;
 	private Pitch pitch;
-	private Panel basePanel;
 	private boolean admin;
 	private MapWidget mapWidget;
 	 
-	public PitchDialog(Cache cache, Panel basePanel){
+	public PitchDialog(Cache cache){
 		this.cache = cache;
-		this.basePanel = basePanel;
-		cache.regiserPitch(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 		
 		updateButton.addClickHandler(new ClickHandler(){
@@ -100,7 +98,7 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 		
 	}
 	
-	public void render(boolean add, Pitch pitch){
+	public void render(boolean add, Pitch pitch,Panel basePanel){
 		this.add = add;
 		this.pitch = pitch;	
 		pitchNameText.setText(pitch.getName(),add );
@@ -142,28 +140,6 @@ public class PitchDialog implements ParamUpdateHandler,CachePitchHandler{
 			}else{
 				PitchDialog.this.cache.updatePitch(pitch);
 			}
-		}
-	}
-
-	public void pitchLoaded() {
-		// TODO Auto-generated method stub
-	}
-
-	public void pitchAdded(Pitch pitch) {
-		if(this.pitch.getKey()==0L){
-			render(false,pitch);
-		}
-	}
-
-	public void pitchUpdated(Pitch pitch) {
-		if(this.pitch.getKey()==pitch.getKey()){
-			render(false,pitch);
-		}
-	}
-
-	public void pitchRemoved(Long pitch) {
-		if(this.pitch.getKey()==pitch){
-			pitchDialogPanel.removeFromParent();
 		}
 	}
 

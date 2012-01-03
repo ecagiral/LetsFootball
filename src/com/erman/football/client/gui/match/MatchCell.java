@@ -1,4 +1,4 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.match;
 
 import com.erman.football.client.gui.list.DataCell;
 import com.erman.football.client.gui.list.ListPanelListener;

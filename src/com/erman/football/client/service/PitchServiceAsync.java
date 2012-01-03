@@ -11,7 +11,7 @@ public interface PitchServiceAsync {
 
 	void deletePitch(Pitch pitch, AsyncCallback<Long> callback);
 
-	void getPitches(AsyncCallback<List<Pitch>> callback);
+	void getPitches(int start, int stop, AsyncCallback<List<Pitch>> callback);
 
 	void updatePitch(Pitch pitch, AsyncCallback<Pitch> callback);
 
