@@ -1,5 +1,6 @@
 package com.erman.football.server.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -12,24 +13,22 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class Player_JDO_DB {
 	
 	@SuppressWarnings("unchecked")
-	public static List<Player> getUsers(){
+	public static List<Player> getUsers(String firstChar,int start, int stop){
+		List<Player> playerDOs = new ArrayList<Player>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(Player.class);
-		List<Player> clientDOs = null;
-		
+		query.setOrdering("name ascending");
+		query.setRange(start,stop);
+		query.declareParameters("String startChar");
+		query.setFilter("name >= startChar");
 		try {
-			clientDOs = (List<Player>)query.execute();
-			if (!clientDOs.isEmpty()) {
-				return clientDOs;
-			} else {
-				// ... no results ...
-			}
+			playerDOs = (List<Player>)query.execute(firstChar);
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		} finally {
 			query.closeAll();
 		}
-		return null;
+		return playerDOs;
 	}
 
 	public static ClientPlayer addUser(ClientPlayer clientPlayer){

@@ -1,7 +1,8 @@
-package com.erman.football.client.gui;
+package com.erman.football.client.gui.player;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.client.cache.CachePlayerHandler;
+import com.erman.football.client.gui.ParamUpdateHandler;
+import com.erman.football.client.gui.TextInput;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -12,7 +13,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
+public class PlayerDialog implements ParamUpdateHandler{
 
 	final VerticalPanel playerInfoPanel = new VerticalPanel();
 
@@ -27,13 +28,10 @@ public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
 	private boolean add;
 	private Grid playerInfos;
 	private ClientPlayer player;
-	private Panel basePanel;
 	private boolean admin;
 
-	public PlayerDialog(Cache _cache, Panel basePanel){
+	public PlayerDialog(Cache _cache){
 		this.cache = _cache;
-		this.basePanel = basePanel;
-		cache.regiserPlayer(this);
 		admin = cache.getLoggedPlayer().isAdmin();
 
 		updateButton.addClickHandler(new ClickHandler(){
@@ -47,7 +45,7 @@ public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
 		playerInfoPanel.setBorderWidth(1);
 	}
 
-	public void render(boolean add, ClientPlayer player){
+	public void render(boolean add, ClientPlayer player, Panel parent){
 		this.add = add;
 		this.player = player;
 		playerInfoPanel.clear();
@@ -96,8 +94,8 @@ public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
 		playerNotifyBox.setValue(player.isNotify());
 		playerAdminBox.setValue(player.isAdmin());
 
-		basePanel.clear();
-		basePanel.add(playerInfoPanel);
+		parent.clear();
+		parent.add(playerInfoPanel);
 	}
 
 	private boolean retrieveData(){
@@ -137,26 +135,4 @@ public class PlayerDialog implements ParamUpdateHandler, CachePlayerHandler{
 		}
 	}
 
-	public void playerLoaded() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void playerAdded(ClientPlayer player) {
-		if(this.player.getKey()==0L){
-			render(false,player);
-		}
-	}
-
-	public void playerUpdated(ClientPlayer player) {
-		if(this.player.getKey()==player.getKey()){
-			render(false,player);
-		}
-	}
-
-	public void playerRemoved(Long player) {
-		if(this.player.getKey()==player){
-			playerInfoPanel.removeFromParent();
-		}
-	}
 }

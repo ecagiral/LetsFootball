@@ -78,7 +78,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 			if(playerId==null){
 				continue;
 			}
-			String name = cache.getPlayer(playerId).getFullName();
+			String name = Long.toString(playerId);
 			teamAPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
 				teamAAddButton.setText("Remove Me");
@@ -94,7 +94,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 		teamBPlayers.clear();
 		teamBPanel.clear();
 		for(Long playerId:match.getTeamB()){
-			String name = cache.getPlayer(playerId).getFullName();
+			String name = Long.toString(playerId);
 			teamBPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
 				teamBAddButton.setText("Remove Me");

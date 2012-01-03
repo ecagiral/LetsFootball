@@ -176,12 +176,7 @@ public class MatchDialog implements CachePitchHandler {
 				break;
 			}
 		}
-		Pitch pitch = cache.getPitch(Long.valueOf(match.getLocation()));
-		if(pitch==null){
-			matchLocationText.setText("Bilinmiyor");
-		}else{
-			matchLocationText.setText(pitch.getName());
-		}
+		matchLocationText.setText(match.getLocation());
 		matchTimeDetail.setText(dateTime[1]);
 		matchDateDetail.setText(dateTime[0]);
 		matchPlayed = match.isPlayed();
@@ -229,8 +224,7 @@ public class MatchDialog implements CachePitchHandler {
 	private void updateLocationList(){
 		matchLocationList.clear();
 		matchLocationList.addItem("Not Selected", "0");
-		//TODO Implement location listing
-			
+		//TODO Implement location listing	
 	}
 
 }

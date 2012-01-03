@@ -11,7 +11,7 @@ public interface PlayerServiceAsync {
 
 	void deletePlayer(Long id, AsyncCallback<Long> callback);
 
-	void getPlayers(AsyncCallback<List<ClientPlayer>> callback);
+	void getPlayers(String firstChar, int start,int stop,AsyncCallback<List<ClientPlayer>> callback);
 
 	void updatePlayer(ClientPlayer player, AsyncCallback<ClientPlayer> callback);
 

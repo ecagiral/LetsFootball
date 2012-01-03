@@ -14,6 +14,6 @@ public interface PlayerService extends RemoteService {
 	ClientPlayer addPlayer(ClientPlayer player);
 	Long deletePlayer(Long id);
 	ClientPlayer updatePlayer(ClientPlayer player);
-	List<ClientPlayer> getPlayers();
+	List<ClientPlayer> getPlayers(String firstChar,int start, int stop);
 	ClientPlayer getPlayer(String email);
 }

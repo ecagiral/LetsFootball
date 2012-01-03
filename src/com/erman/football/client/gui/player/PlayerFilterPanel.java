@@ -1,4 +1,4 @@
-package com.erman.football.client.gui.pitch;
+package com.erman.football.client.gui.player;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.gui.list.ListFilter;
@@ -6,13 +6,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 
-public class PitchFilterPanel extends ListFilter {
-
+public class PlayerFilterPanel extends ListFilter{
+	
 	private Cache cache;
 	private int startIndex =PAGINATION_NUM-1;
 	final private Label filterButton = new Label("filter");
 	
-	public PitchFilterPanel(Cache _cache){
+	public PlayerFilterPanel(Cache _cache){
 		this.cache = _cache;
 		
 		this.setHorizontalAlignment(ALIGN_CENTER);
@@ -31,7 +31,8 @@ public class PitchFilterPanel extends ListFilter {
 			startIndex = 0;
 		}
 		handler.filterApplied(pagination);
-		cache.getPitches(startIndex, startIndex+PAGINATION_NUM);
+		cache.getPlayers("A",startIndex, startIndex+PAGINATION_NUM);
 		startIndex = startIndex+PAGINATION_NUM-1;// -1 is required for extra data to display more button
 	}
+
 }

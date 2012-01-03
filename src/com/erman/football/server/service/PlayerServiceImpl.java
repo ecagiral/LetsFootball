@@ -27,8 +27,8 @@ PlayerService {
 		return id;
 	}
 
-	public List<ClientPlayer> getPlayers() {
-		List<ClientPlayer> players = convert(Player_JDO_DB.getUsers());
+	public List<ClientPlayer> getPlayers(String firstChar,int start,int stop) {
+		List<ClientPlayer> players = convert(Player_JDO_DB.getUsers(firstChar,start,stop));
 		return players;
 
 	}

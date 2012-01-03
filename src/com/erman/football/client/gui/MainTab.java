@@ -3,6 +3,7 @@ package com.erman.football.client.gui;
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.gui.match.MatchPanel;
 import com.erman.football.client.gui.pitch.PitchPanel;
+import com.erman.football.client.gui.player.PlayerPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
