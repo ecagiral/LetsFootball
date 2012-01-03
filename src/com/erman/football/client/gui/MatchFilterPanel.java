@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MatchFilterPanel extends ListFilter{
-	static final int PAGINATION_NUM = 6;
+
 	static final TreeMap<String,String> months = new TreeMap<String,String>();
 	static final TreeMap<String,String> years = new TreeMap<String,String>();
 	

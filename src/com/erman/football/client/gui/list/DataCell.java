@@ -3,8 +3,6 @@ package com.erman.football.client.gui.list;
 import com.erman.football.shared.DataObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class DataCell extends VerticalPanel{
@@ -16,36 +14,21 @@ public class DataCell extends VerticalPanel{
 		listener = _listener;
 	}
 	
-	public DataCell generateCell(DataObject _data){
-		DataCell result = generateCell();
-		result.setData(_data);
-		result.setListener(listener);
-		HorizontalPanel dateDel = generateCard(_data);
-		result.add(dateDel);
-		result.setStyleName("matchCard");
-		result.addDomHandler(new ClickHandler(){
-
-			public void onClick(ClickEvent event) {
-				listener.CellClicked(DataCell.this);
-			}
-			
-		}, ClickEvent.getType());
-		return result;
-	}
-	
-	private void setData(DataObject _data){
-		this.data = _data;
-	}
-	
-	private void setListener(ListPanelListener _listener){
-		this.listener = _listener;
-	}
 	/**
 	 * Implement in subclass
 	 * @return
 	 */
-	protected DataCell generateCell(){
-		return new DataCell(listener);
+	protected DataCell generateCell(DataObject _data){
+		DataCell result = new DataCell(listener);
+		return result;
+	}
+	
+	protected void setData(DataObject _data){
+		this.data = _data;
+	}
+	
+	protected void setListener(ListPanelListener _listener){
+		this.listener = _listener;
 	}
 	
 	public DataObject getData(){
@@ -56,17 +39,34 @@ public class DataCell extends VerticalPanel{
 	 * Implement in subclass
 	 * @return
 	 */
-	protected HorizontalPanel generateCard(DataObject data){
-		HorizontalPanel result = new HorizontalPanel();
-		result.add(new Label("Empty"));
-		return result;
+	protected void update(DataObject data){
+		
 	}
 	
-	/**
-	 * Implement in subclass
-	 * @return
-	 */
-	protected void update(DataObject data){
+	protected class CellDeleteHandler implements ClickHandler{
+
+		private DataCell cell;
+		
+		public CellDeleteHandler(DataCell _cell){
+			this.cell = _cell;
+		}
+		@Override
+		public void onClick(ClickEvent event) {
+			listener.removeClicked(cell);
+		}
+	}
+	
+	protected class CellClickHandler implements ClickHandler{
+
+		private DataCell cell;
+		
+		public CellClickHandler(DataCell _cell){
+			this.cell = _cell;
+		}
+		@Override
+		public void onClick(ClickEvent event) {
+			listener.CellClicked(cell);
+		}
 		
 	}
 

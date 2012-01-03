@@ -4,6 +4,8 @@ import com.erman.football.client.service.PlayerService;
 import com.erman.football.client.service.PlayerServiceAsync;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,11 +38,19 @@ public class Login extends VerticalPanel {
 			}
 			
 		});
+		emailBox.addFocusHandler(new FocusHandler(){
+
+			public void onFocus(FocusEvent event) {
+				//emailBox.setFocus(true);
+				emailBox.selectAll();
+			}
+			
+		});
 		this.add(emailBox);
 		this.setVerticalAlignment(ALIGN_TOP);
 		this.add(loginStatus);
 		this.setHeight("50px");
-		
+
 	}
 
 	private void login(){
@@ -67,5 +77,9 @@ public class Login extends VerticalPanel {
 			}
 			
 		});
+	}
+	
+	public void setFocus(){
+		emailBox.setFocus(true);
 	}
 }

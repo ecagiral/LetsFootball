@@ -4,6 +4,7 @@ import com.erman.football.client.cache.Cache;
 import com.erman.football.client.gui.MainTab;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.Scheduler;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,8 +46,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		Window.addResizeHandler(new ResizeHandler(){
 
 			public void onResize(ResizeEvent event) {
-				// TODO Auto-generated method stub
-				
+
 			}
 			
 		});
@@ -75,7 +75,11 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		mainLayout.addNorth(headerPanel, 50);
 		mainLayout.add(loginPanel);
 		RootLayoutPanel.get().add(mainLayout);
-		
+	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand () {
+	        public void execute () {
+	            loginPanel.setFocus();
+	        }
+	    });
 	}
 	
 	public void reset(){
@@ -85,6 +89,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		playerTab = null;
 		loginPanel = new Login(this);
 		mainLayout.add(loginPanel);
+		loginPanel.setFocus();
 	}
 
 	public void LoggedIn(ClientPlayer player) {

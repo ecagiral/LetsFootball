@@ -80,7 +80,7 @@ public class ListPanel extends VerticalPanel implements DataHandler,FilterHandle
 	}
 
 	public void dataRemoved(List<Long> dataId) {
-		cellList.remove(dataId).removeFromParent();
+		cellList.remove(dataId.get(0)).removeFromParent();
 	}
 
 	public void dataUpdated(List<DataObject> data) {

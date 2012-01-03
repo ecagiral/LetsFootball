@@ -80,6 +80,7 @@ public class MatchDialog implements CachePitchHandler {
 			}
 			
 		});
+		dateDialog.setAutoHideEnabled(true);
 		dateDialog.add(date);
 		matchDateText.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {

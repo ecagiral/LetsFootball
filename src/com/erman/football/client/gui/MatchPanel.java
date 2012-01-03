@@ -23,10 +23,12 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	private MatchDialog matchDialog;	
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
+	private Cache cache;
 	
 	private MatchCell currentMatch;
 	
-	public MatchPanel(Cache cache){
+	public MatchPanel(Cache _cache){
+		this.cache = _cache;
 		cache.regiserMatch(this);
 		matchDialog = new MatchDialog(cache);
 		MatchFilterPanel filter =  new MatchFilterPanel(cache);
@@ -66,11 +68,13 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	public void matchUpdated(ClientMatch match) {
 		ArrayList<DataObject> data = new ArrayList<DataObject>();
 		data.add(match);
-		listMainPanel.dataAdded(data);
+		listMainPanel.dataUpdated(data);
 	}
 
 	public void matchRemoved(Long match) {
-
+		ArrayList<Long> data = new ArrayList<Long>();
+		data.add(match);
+		listMainPanel.dataRemoved(data);
 	}
 	
 	private void displayMatch(MatchCell cell){
@@ -96,7 +100,7 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 
 	@Override
 	public void removeClicked(DataCell dataCell) {
-		// TODO Auto-generated method stub
+		cache.removeMatch(((MatchCell)dataCell).getMatch());
 		
 	}
 
