@@ -64,4 +64,10 @@ public class TextInput{
 		box.setEnabled(enabled);
 	}
 
+	public void setFocus(boolean def){
+		box.setFocus(true);
+		if(def){
+			box.selectAll();
+		}
+	}
 }

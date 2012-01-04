@@ -162,7 +162,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 					teamBAddButton.setVisible(true);
 				}else{
 					teamAPlayers.add(loggedPlayer.getKey());
-					infoCell = new PlayerInfoCell(loggedPlayer.getFullName(),true);
+					infoCell = new PlayerInfoCell(loggedPlayer.getName(),true);
 					teamAPanel.add(infoCell);
 					teamAAddButton.setText("Remove Me");
 					teamAAddButton.setVisible(true);
@@ -185,7 +185,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 					teamAAddButton.setVisible(true);
 				}else{
 					teamBPlayers.add(loggedPlayer.getKey());
-					infoCell = new PlayerInfoCell(loggedPlayer.getFullName(),true);
+					infoCell = new PlayerInfoCell(loggedPlayer.getName(),true);
 					teamBPanel.add(infoCell);
 					teamBAddButton.setText("Remove Me");
 					teamBAddButton.setVisible(true);

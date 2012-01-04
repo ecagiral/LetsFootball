@@ -31,7 +31,7 @@ public class PlayerCell extends DataCell{
 	private HorizontalPanel generateCard(PlayerCell cell){
 		HorizontalPanel result = new HorizontalPanel();
 		result.setWidth("100%");
-		cell.getName().setText(cell.getPlayer().getFullName());
+		cell.getName().setText(cell.getPlayer().getName());
 		result.add(cell.getName());
 		boolean admin = true;
 		if(admin){

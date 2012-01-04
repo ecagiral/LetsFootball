@@ -18,7 +18,6 @@ public class PlayerDialog implements ParamUpdateHandler{
 	final VerticalPanel playerInfoPanel = new VerticalPanel();
 
 	final TextInput playerNameText = new TextInput(this);
-	final TextInput playerSurnameText = new TextInput(this);
 	final CheckBox playerNotifyBox = new CheckBox();
 	final CheckBox playerAdminBox = new CheckBox();
 	final TextInput playerEmailText = new TextInput(this);
@@ -50,52 +49,46 @@ public class PlayerDialog implements ParamUpdateHandler{
 		this.player = player;
 		playerInfoPanel.clear();
 		if(admin){
-			playerInfos = new Grid(5,2);	
+			playerInfos = new Grid(4,2);	
 			playerNameText.setEnabled(true);
 			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerSurnameText.setEnabled(true);
-			playerInfos.setWidget(1,0,playerSurnameText.getTextBox());
 			playerEmailText.setEnabled(true);
-			playerInfos.setWidget(2,0,playerEmailText.getTextBox());
-			playerInfos.setWidget(3,0,new Label("Admin:"));
+			playerInfos.setWidget(1,0,playerEmailText.getTextBox());
+			playerInfos.setWidget(2,0,new Label("Admin:"));
 			playerAdminBox.setEnabled(true);
-			playerInfos.setWidget(3,1,playerAdminBox);
-			playerInfos.setWidget(4, 1, updateButton);
+			playerInfos.setWidget(2,1,playerAdminBox);
+			playerInfos.setWidget(3, 1, updateButton);
 		}else if(player.getKey()==cache.getLoggedPlayer().getKey()){
 			playerInfos = new Grid(4,2);	
 			playerNameText.setEnabled(true);
 			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerSurnameText.setEnabled(true);
-			playerInfos.setWidget(1,0,playerSurnameText.getTextBox());
 			playerEmailText.setEnabled(true);
-			playerInfos.setWidget(2,0,playerEmailText.getTextBox());
-			playerInfos.setWidget(3, 1, updateButton);
+			playerInfos.setWidget(1,0,playerEmailText.getTextBox());
+			playerInfos.setWidget(2, 1, updateButton);
 		}else{	
-			playerInfos = new Grid(3,2);	
+			playerInfos = new Grid(1,2);	
 			playerNameText.setEnabled(false);
 			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerSurnameText.setEnabled(false);
-			playerInfos.setWidget(1,0,playerSurnameText.getTextBox());
 			playerAdminBox.setEnabled(false);
-			playerInfos.setWidget(2,0,new Label("Admin:"));
-			playerInfos.setWidget(2,1,playerAdminBox);
+			playerInfos.setWidget(1,0,new Label("Admin:"));
+			playerInfos.setWidget(1,1,playerAdminBox);
 		}
 		
 		playerInfoPanel.add(playerInfos);	
 		if(add){
-			playerNameText.setText(player.getName(),true);
-			playerSurnameText.setText(player.getSurname(),true);
-			playerEmailText.setText(player.getEmail(),true);
+			playerNameText.setText(player.getName(),add);
+			playerEmailText.setText(player.getEmail(),add);
 		}else{
-			playerNameText.setText(player.getName(),false);
-			playerSurnameText.setText(player.getSurname(),false);
-			playerEmailText.setText(player.getEmail(),false);
+			playerNameText.setText(player.getName(),add);
+			playerEmailText.setText(player.getEmail(),add);
 		}		
 		playerNotifyBox.setValue(player.isNotify());
 		playerAdminBox.setValue(player.isAdmin());
-
 		parent.clear();
 		parent.add(playerInfoPanel);
+		if(add){
+			playerNameText.setFocus(add);
+		}
 	}
 
 	private boolean retrieveData(){
@@ -110,10 +103,6 @@ public class PlayerDialog implements ParamUpdateHandler{
 		}
 		if(!playerNameText.getText().equals(player.getName())){
 			player.setName(playerNameText.getText());
-			result = true;
-		}
-		if(!playerSurnameText.getText().equals(player.getSurname())){
-			player.setSurname(playerSurnameText.getText());
 			result = true;
 		}
 		if(!playerEmailText.getText().equals(player.getEmail())){

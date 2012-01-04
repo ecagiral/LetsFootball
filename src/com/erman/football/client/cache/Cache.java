@@ -42,7 +42,7 @@ public class Cache {
 	public void load(){
 		getPitches(0,6);
 		getMatches(new Date(),0 ,6,false);
-		getPlayers("a",0,6);
+		getPlayers("A",0,6);
 	}
 	
 	//Register Handlers

@@ -53,6 +53,7 @@ public class DataCell extends VerticalPanel{
 		@Override
 		public void onClick(ClickEvent event) {
 			listener.removeClicked(cell);
+			event.stopPropagation();
 		}
 	}
 	

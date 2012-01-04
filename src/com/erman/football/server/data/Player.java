@@ -28,9 +28,6 @@ public class Player {
 
     @Persistent
     private String name;
-
-    @Persistent
-    private String surname;
     
     @Persistent
     private boolean admin;
@@ -54,14 +51,6 @@ public class Player {
 		this.name = name;
 	}
 
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
 	public boolean isAdmin() {
 		return admin;
 	}
@@ -82,7 +71,6 @@ public class Player {
 		Player playerDO = new Player();
 		playerDO.setEmail(player.getEmail());
 		playerDO.setName(player.getName());
-		playerDO.setSurname(player.getSurname());
 		playerDO.setAdmin(player.isAdmin());
 		playerDO.setNotify(player.isNotify());
 		return playerDO;
@@ -92,7 +80,6 @@ public class Player {
 		this.setAdmin(player.isAdmin());
 		this.setNotify(player.isNotify());
 		this.setName(player.getName());
-		this.setSurname(player.getSurname());
 		this.setEmail(player.getEmail());
 	}
 	
@@ -100,7 +87,6 @@ public class Player {
 		ClientPlayer player = new ClientPlayer(this.email);
 		player.setKey(this.getKey());
 		player.setName(this.getName());
-		player.setSurname(this.getSurname());
 		player.setAdmin(this.isAdmin());
 		player.setNotify(this.isNotify());
 		return player;

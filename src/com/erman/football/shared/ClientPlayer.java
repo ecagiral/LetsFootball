@@ -13,14 +13,12 @@ public class ClientPlayer extends DataObject implements Serializable {
 	private long key;
 	private String email;
 	private String name;
-	private String surname;
 	private boolean admin;
 	private boolean notify;
 	
 	public ClientPlayer(){
 		email = "player@mail";
 		name = "name";
-		surname = "surname";
 		admin = false;
 		notify = false;
 	}
@@ -50,13 +48,13 @@ public class ClientPlayer extends DataObject implements Serializable {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
-	}
-	public String getSurname() {
-		return surname;
-	}
-	public void setSurname(String surname) {
-		this.surname = surname;
+		String[] tokens = name.trim().toLowerCase().split("\\s+");
+		String result = "";
+		for(String token:tokens){
+			String word = token.trim(); 
+			result += " "+Character.toUpperCase(word.charAt(0))+word.substring(1);
+		}
+		this.name = result.trim();
 	}
 
 	public boolean isAdmin() {
@@ -73,9 +71,5 @@ public class ClientPlayer extends DataObject implements Serializable {
 
 	public void setNotify(boolean notify) {
 		this.notify = notify;
-	}
-	
-	public String getFullName(){
-		return name+" "+surname;
 	}
 }
