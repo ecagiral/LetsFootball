@@ -15,12 +15,15 @@ public class Pitch extends DataObject implements Serializable {
 	
 	private long key;
 	private String name;
-	private String location;
+	private String phone;
+	private double latitude;
+	private double longitude;
 	private int capacity;
 	
 	public Pitch(){
 		name = "isim";
-		location = "41.010,28.970";
+		longitude = 41.010d;
+		latitude = 28.970d;
 		capacity = 10;
 	}
 
@@ -41,20 +44,12 @@ public class Pitch extends DataObject implements Serializable {
 	}
 
 	public HasLatLng getLocation() {
-		String latlng[] = location.split(",");
-		return new LatLng(Double.parseDouble(latlng[0]),Double.parseDouble(latlng[1]));
+		return new LatLng(latitude,longitude);
 	}
 
 	public void setLocation(HasLatLng location) {
-		this.location = Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude());
-	}
-	
-	public String getStrLocation(){
-		return location;
-	}
-	
-	public void setLocation(String location) {
-		this.location =  location;
+		this.latitude = location.getLatitude();
+		this.longitude = location.getLongitude();
 	}
 
 	public int getCapacity() {
@@ -63,5 +58,30 @@ public class Pitch extends DataObject implements Serializable {
 
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}	
+	
 }

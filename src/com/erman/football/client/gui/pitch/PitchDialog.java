@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.maps.client.event.Event;
 
 public class PitchDialog implements ParamUpdateHandler{
 
@@ -61,10 +62,10 @@ public class PitchDialog implements ParamUpdateHandler{
 	    }
 	    
 	    pitchDialogPanel.add(pitchInfoPanel);
-	    
+
 	    final MapOptions options = new MapOptions();
 	    // Zoom level. Required
-	    options.setZoom(11);
+	    options.setZoom(9);
 	    // Open a map centered on Cawker City, KS USA. Required
 	    LatLng cor = new LatLng(41.010,28.970);
 	    options.setCenter(cor);
@@ -80,9 +81,9 @@ public class PitchDialog implements ParamUpdateHandler{
 	    options.setDisableDoubleClickZoom(true);
 	    options.setScrollwheel(true);
 	    mapWidget = new MapWidget(options);
-	    mapWidget.setSize("500px", "500px"); 
+	    mapWidget.setSize("300px", "300px"); 
 	    marker.setMap(mapWidget.getMap());
-	    com.google.gwt.maps.client.event.Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
+	    Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
 
 			@Override
 			public void callback(HasMouseEvent event) {
@@ -90,8 +91,17 @@ public class PitchDialog implements ParamUpdateHandler{
 			}
 	    	
 	    });
-	    pitchDialogPanel.add(mapWidget);
 	    
+	    Event.addListener(marker, "mouseover", new MouseEventCallback(){
+
+			public void callback(HasMouseEvent event) {
+				marker.setTitle("Vezir");
+			}
+	    	
+	    });
+	    
+	    pitchDialogPanel.add(mapWidget);
+
 
 	    
 	    pitchDialogPanel.setBorderWidth(1);

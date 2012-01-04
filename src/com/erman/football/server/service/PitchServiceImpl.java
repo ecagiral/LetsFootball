@@ -25,6 +25,14 @@ public class PitchServiceImpl extends RemoteServiceServlet implements PitchServi
 		}
 		return result;
 	}
+	
+	public List<Pitch> getPitches(double NELat, double NELon, double SWLat, double SWLon) {
+		List<Pitch> result = new ArrayList<Pitch>();
+		for(PitchDO pitchDO:Pitch_JDO_DB.getPitches(NELat, NELon, SWLat, SWLon)){
+			result.add(pitchDO.convert());
+		}
+		return result;
+	}
 
 	public Long deletePitch(Pitch Pitch) {
 		Pitch_JDO_DB.deletePitch(Pitch.getKey());	

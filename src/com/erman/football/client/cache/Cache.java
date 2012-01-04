@@ -40,7 +40,7 @@ public class Cache {
 	}
 	
 	public void load(){
-		getPitches(0,6);
+		//getPitches(0,6);
 		getMatches(new Date(),0 ,6,false);
 		getPlayers("A",0,6);
 	}
@@ -173,6 +173,19 @@ public class Cache {
 	//Pitch methods
 	public void getPitches(int start ,int stop){
 		pitchService.getPitches(start,stop,
+				new AsyncCallback<List<Pitch>>(){
+			public void onFailure(Throwable caught) {
+
+			}
+
+			public void onSuccess(List<Pitch> result) {
+				notifyPitchAdded(result);
+			}
+		});
+	}
+
+	public void getPitches(double NELat, double NELon, double SWLat, double SWLon){
+		pitchService.getPitches(NELat, NELon,SWLat,SWLon,
 				new AsyncCallback<List<Pitch>>(){
 			public void onFailure(Throwable caught) {
 

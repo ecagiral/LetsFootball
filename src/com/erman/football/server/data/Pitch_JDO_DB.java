@@ -41,6 +41,24 @@ public class Pitch_JDO_DB {
 		return pitchDOs;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<PitchDO> getPitches(double NELat, double NELon, double SWLat, double SWLon){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<PitchDO> pitchDOs = new ArrayList<PitchDO>();
+		Query query = pm.newQuery(PitchDO.class);
+		query.declareParameters("double NELat, double NELon, double SWLat, double SWLon");
+		Object params[] = {Double.valueOf(NELat), Double.valueOf(NELon), Double.valueOf(SWLat), Double.valueOf(SWLon)};
+		query.setFilter("latitude < NELat && latitude > SWLat && longitude < NELon && longitude > SWLon");
+		try{
+			pitchDOs = (List<PitchDO>)query.executeWithArray(params);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally{
+			query.closeAll();
+		}
+		return pitchDOs;
+	}
+	
 	public static void deletePitch(Long id){
 		Key key = KeyFactory.createKey(PitchDO.class.getSimpleName(), id);
 		PersistenceManager pm = PMF.get().getPersistenceManager();

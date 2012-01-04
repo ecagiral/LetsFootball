@@ -19,10 +19,16 @@ public class PitchDO {
 	private String name;
 	
 	@Persistent
+	private String phone;
+	
+	@Persistent
 	private int capacity;
 	
 	@Persistent
-	private String location;
+	private double longitude;
+	
+	@Persistent
+	private double latitude;
 
 	public String getName() {
 		return name;
@@ -40,12 +46,28 @@ public class PitchDO {
 		this.capacity = capacity;
 	}
 
-	public String getLocation() {
-		return location;
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public long getKey() {
@@ -55,8 +77,10 @@ public class PitchDO {
 	public static PitchDO generate(Pitch pitch){
 		PitchDO pitchDO = new PitchDO();
 		pitchDO.setCapacity(pitch.getCapacity());
-		pitchDO.setLocation(pitch.getStrLocation());
+		pitchDO.setLatitude(pitch.getLatitude());
+		pitchDO.setLongitude(pitch.getLongitude());
 		pitchDO.setName(pitch.getName());
+		pitchDO.setPhone(pitch.getPhone());
 		return pitchDO;
 	}
 	
@@ -64,14 +88,18 @@ public class PitchDO {
 		Pitch pitch = new Pitch();
 		pitch.setKey(getKey());
 		pitch.setCapacity(getCapacity());
-		pitch.setLocation(getLocation());
+		pitch.setLatitude(getLatitude());
+		pitch.setLongitude(getLongitude());
+		pitch.setPhone(getPhone());
 		pitch.setName(getName());
 		return pitch;
 	}
 	
 	public void update(Pitch pitch){
 		this.setCapacity(pitch.getCapacity());
-		this.setLocation(pitch.getStrLocation());
+		this.setLatitude(pitch.getLatitude());
+		this.setLongitude(pitch.getLongitude());
+		this.setPhone(pitch.getPhone());
 		this.setName(pitch.getName());
 	}
 }
