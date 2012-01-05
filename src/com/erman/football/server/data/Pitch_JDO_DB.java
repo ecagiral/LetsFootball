@@ -12,7 +12,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 public class Pitch_JDO_DB {
 	
-	public static void addPitch(Pitch pitch){
+	public static Pitch addPitch(Pitch pitch){
 		PitchDO pitchDO = PitchDO.generate(pitch);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -22,6 +22,7 @@ public class Pitch_JDO_DB {
 		} finally {
 			pm.close();
 		}
+		return pitchDO.convert();
 	}
 	
 	@SuppressWarnings("unchecked")

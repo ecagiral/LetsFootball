@@ -13,8 +13,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class PitchServiceImpl extends RemoteServiceServlet implements PitchService{
 
 	public Pitch createPitch(Pitch Pitch) {
-		Pitch_JDO_DB.addPitch(Pitch);
-		return Pitch;
+		return Pitch_JDO_DB.addPitch(Pitch);
 		
 	}
 

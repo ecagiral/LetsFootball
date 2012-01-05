@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 public class MatchCell extends DataCell{
@@ -38,7 +39,7 @@ public class MatchCell extends DataCell{
 		result.add(cell.getDateTime());
 		boolean admin = true;
 		if(admin){
-			Button delete = new Button("-");
+			Image delete = new Image("delete.jpg");
 			delete.addClickHandler(new CellDeleteHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
 			result.add(delete);

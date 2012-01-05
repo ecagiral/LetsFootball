@@ -1,6 +1,7 @@
 package com.erman.football.client.gui.pitch;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.erman.football.client.cache.Cache;
@@ -26,24 +27,26 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,ListPanelListener{
 
-	final private PitchDialog pitchDialog;	
-	final private SimplePanel infoPanel = new SimplePanel();
-	final private SimplePanel mapPanel = new SimplePanel();
-	final private Cache cache;
-	final private ArrayList<Marker> markers = new ArrayList<Marker>();
+	private final PitchDialog pitchDialog;	
+	private final SimplePanel infoPanel = new SimplePanel();
+	private final SimplePanel mapPanel = new SimplePanel();
+	private final Cache cache;
+	private final HashMap<Long,Marker> markers = new HashMap<Long,Marker>();
+	private final Marker marker = new Marker();
 	
 	private MapWidget mapWidget;
 	
 	public PitchPanel(Cache _cache){
 		this.cache = _cache;
 		cache.regiserPitch(this);
-		pitchDialog = new PitchDialog(cache);
+		pitchDialog = new PitchDialog(cache,marker);
 		VerticalPanel buttonPanel = new VerticalPanel();
 		Label addMatch = new Label("Saha Ekle");
 		addMatch.setStyleName("leftButton");
 		addMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				displayPitch(null);
+				marker.setVisible(true);
 			}
 		});
 		buttonPanel.add(addMatch);
@@ -52,7 +55,6 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 		searchMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				infoPanel.clear();
-				mapPanel.setVisible(true);
 			}
 		});
 		buttonPanel.add(searchMatch);
@@ -78,6 +80,15 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 	    options.setScrollwheel(true);
 	    mapWidget = new MapWidget(options);
 	    mapWidget.setSize("500px", "500px"); 
+	    Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
+
+			@Override
+			public void callback(HasMouseEvent event) {
+				pitchDialog.doubleClick(event.getLatLng());
+			}
+	    	
+	    });
+	    marker.setMap(mapWidget.getMap());
 	    mapPanel.add(mapWidget);
 		this.add(buttonPanel);
 		this.add(mapPanel);
@@ -86,13 +97,13 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 	}
 	
 	private void displayPitch(Pitch pitch){
+		
 		if(pitch == null){
-			//listMainPanel.setVisible(false);
-			mapPanel.setVisible(false);
 			pitchDialog.render(true,new Pitch(),infoPanel);	
 		}else{
 			pitchDialog.render(false,pitch,infoPanel);	
 		}
+		infoPanel.setVisible(true);
 		
 	}
 
@@ -110,23 +121,16 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 			marker.setMap(mapWidget.getMap());
 			marker.setPosition(pitch.getLocation());
 		    Event.addListener(marker, "click", new MarkerClick(pitch));
-		    markers.add(marker);
+		    markers.put(pitch.getKey(),marker);
 		}
-		//ArrayList<DataObject> data = new ArrayList<DataObject>();
-		//data.addAll(pitch);
-		//listMainPanel.dataAdded(data);
 	}
 
 	public void pitchUpdated(Pitch pitch) {
-		ArrayList<DataObject> data = new ArrayList<DataObject>();
-		data.add(pitch);
-		//listMainPanel.dataUpdated(data);
+		markers.get(pitch.getKey()).setPosition(pitch.getLocation());
 	}
 
 	public void pitchRemoved(Long pitch) {
-		ArrayList<Long> data = new ArrayList<Long>();
-		data.add(pitch);
-		//listMainPanel.dataRemoved(data);
+		markers.remove(pitch).setVisible(false);
 	}
 	
 	private class MarkerClick extends MouseEventCallback{
