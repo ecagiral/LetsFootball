@@ -184,8 +184,8 @@ public class Cache {
 		});
 	}
 
-	public void getPitches(double NELat, double NELon, double SWLat, double SWLon){
-		pitchService.getPitches(NELat, NELon,SWLat,SWLon,
+	public void getPitches(){
+		pitchService.getPitches(
 				new AsyncCallback<List<Pitch>>(){
 			public void onFailure(Throwable caught) {
 

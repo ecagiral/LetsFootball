@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface PitchService extends RemoteService{
 	public Pitch createPitch(Pitch pitch);
 	public List<Pitch> getPitches(int start, int stop);
-	public List<Pitch> getPitches(double NELat, double NELon, double SWLat, double SWLon);
+	public List<Pitch> getPitches();
 	public Long deletePitch(Pitch pitch);
 	public Pitch updatePitch(Pitch pitch);
 }

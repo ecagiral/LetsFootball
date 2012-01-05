@@ -69,7 +69,7 @@ public class PitchDO {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
+	
 	public long getKey() {
 		return key.getId();
 	}

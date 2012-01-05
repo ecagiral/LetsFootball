@@ -13,7 +13,7 @@ public interface PitchServiceAsync {
 
 	void getPitches(int start, int stop, AsyncCallback<List<Pitch>> callback);
 	
-	void getPitches(double NELat, double NELon, double SWLat, double SWLon, AsyncCallback<List<Pitch>> callback);
+	void getPitches(AsyncCallback<List<Pitch>> callback);
 
 	void updatePitch(Pitch pitch, AsyncCallback<Pitch> callback);
 

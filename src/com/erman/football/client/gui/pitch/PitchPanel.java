@@ -53,7 +53,6 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 			public void onClick(ClickEvent event) {
 				infoPanel.clear();
 				mapPanel.setVisible(true);
-				//listMainPanel.setVisible(true);
 			}
 		});
 		buttonPanel.add(searchMatch);
@@ -79,16 +78,11 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 	    options.setScrollwheel(true);
 	    mapWidget = new MapWidget(options);
 	    mapWidget.setSize("500px", "500px"); 
-	    Event.addListener(mapWidget.getMap(), "dblclick", new MouseEventCallback(){
-			public void callback(HasMouseEvent event) {
-				retrievePitches();
-			}
-	    });
 	    mapPanel.add(mapWidget);
 		this.add(buttonPanel);
 		this.add(mapPanel);
 		this.add(infoPanel);
-		//retrievePitches();
+		cache.getPitches();
 	}
 	
 	private void displayPitch(Pitch pitch){
@@ -100,18 +94,6 @@ public class PitchPanel extends HorizontalPanel implements CachePitchHandler ,Li
 			pitchDialog.render(false,pitch,infoPanel);	
 		}
 		
-	}
-	
-	private void retrievePitches(){
-		for(Marker marker:markers){
-			marker.setMap(null);
-		}
-		markers.clear();
-		double NELat = mapWidget.getMap().getBounds().getNorthEast().getLatitude();
-		double NELon = mapWidget.getMap().getBounds().getNorthEast().getLongitude();
-		double SWLat = mapWidget.getMap().getBounds().getSouthWest().getLatitude();
-		double SWLon = mapWidget.getMap().getBounds().getSouthWest().getLongitude();
-		cache.getPitches(NELat, NELon,SWLat,SWLon);
 	}
 
 	public void CellClicked(DataCell dataCell) {

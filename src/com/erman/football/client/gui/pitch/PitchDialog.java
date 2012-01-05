@@ -116,9 +116,10 @@ public class PitchDialog implements ParamUpdateHandler{
 		marker.setPosition(pitch.getLocation());
 		mapWidget.getMap().setCenter(pitch.getLocation());
 		if(add){
+			mapWidget.setVisible(true);
 			mapWidget.getMap().setZoom(13);
 		}else{
-			mapWidget.getMap().setZoom(16);
+			mapWidget.setVisible(false);
 		}
 		basePanel.clear();
 		basePanel.add(pitchDialogPanel);
