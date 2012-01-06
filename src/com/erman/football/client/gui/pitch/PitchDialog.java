@@ -9,8 +9,8 @@ import com.erman.football.client.gui.TextInput;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.maps.client.base.HasLatLng;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerImage;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -21,22 +21,24 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 
 	private final TextInput pitchNameText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
-	private final Button updateButton = new Button("Apply");
+	private final Button updateButton = new Button("Guncelle");
 	private final Button deleteButton = new Button("Sil");
 	private final HorizontalPanel pitchDialogPanel = new HorizontalPanel();
 	private final Image laodImg = new Image("loader.gif");
+	private final Image successImg = new Image("success.jpg");
 	
 	private Cache cache;
 	private boolean add;
 	private Pitch pitch;
 	private boolean admin;
-	private final Marker marker;
+	private Marker marker;
 	private boolean inProgress;
+	private MarkerImage greenField;
 	 
-	public PitchDialog(Cache cache, Marker _marker){
+	public PitchDialog(Cache cache,MarkerImage _greenField){
 		this.cache = cache;
+		this.greenField = _greenField;
 		cache.regiserPitch(this);
-		this.marker = _marker;
 		admin = cache.getLoggedPlayer().isAdmin();
 		
 		updateButton.addClickHandler(new ClickHandler(){
@@ -53,7 +55,13 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 			}
 
 		});
-		
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.add(updateButton);
+		buttonPanel.add(deleteButton);
+		buttonPanel.add(laodImg);
+		buttonPanel.add(successImg);
+		laodImg.setVisible(false);
+		successImg.setVisible(false);
 		VerticalPanel pitchInfoPanel = new VerticalPanel();
 		pitchInfoPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		if(admin){
@@ -68,24 +76,38 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 			pitchCapacityText.setEnabled(false);
 		}
 	    if(admin){
-	    	pitchInfoPanel.add(updateButton);
-	    	pitchInfoPanel.add(deleteButton);
-	    	laodImg.setVisible(false);
-	    	pitchInfoPanel.add(laodImg);
+	    	pitchInfoPanel.add(buttonPanel);
+	    	
 	    }
 	    pitchDialogPanel.add(pitchInfoPanel);    		
 	}
 	
-	public void render(boolean add, Pitch pitch,Panel basePanel){
+	public void render(boolean add, Pitch pitch,Panel basePanel,Marker _marker){
+		//remove old idle marker
+		if(this.add && marker!=null){
+			this.marker.setVisible(false);
+		}
 		this.add = add;
+		this.marker = _marker;
+		marker.setDraggable(true);
+		this.pitch = pitch;	
 		laodImg.setVisible(false);
 		deleteButton.setVisible(!add);
-		this.pitch = pitch;	
+		deleteButton.setEnabled(!add);
+		if(add){
+			updateButton.setText("Ekle");
+		}else{
+			updateButton.setText("Guncelle");
+		}
+		updateButton.setEnabled(true);
 		pitchNameText.setText(pitch.getName(),add );
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
-		marker.setPosition(pitch.getLocation());
-		basePanel.clear();
-		basePanel.add(pitchDialogPanel);
+		inProgress = false;
+		if(basePanel!=null){
+			basePanel.clear();
+			basePanel.add(pitchDialogPanel);
+			successImg.setVisible(false);
+		}
 	}
 	
 	private boolean retrieveData(){
@@ -108,18 +130,17 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 	public void updateData() {
 		if(retrieveData()){
 			inProgress = true;
-			
+			marker.setDraggable(false);
 			if(add){
 				PitchDialog.this.cache.addPitch(pitch);
-				pitchDialogPanel.removeFromParent();
-				
+				marker.setVisible(false);
 			}else{
 				PitchDialog.this.cache.updatePitch(pitch);
 			}
 			add=false;
 			updateButton.setEnabled(false);
 			laodImg.setVisible(true);
-			marker.setVisible(false);
+			
 		}
 
 	}
@@ -127,51 +148,31 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 	private void deleteData(){
 		cache.removePitch(pitch);
 		deleteButton.setEnabled(false);
+		laodImg.setVisible(true);
 		inProgress = true;
 	}
 
 	public void pitchAdded(List<Pitch> pitch) {
 		if(inProgress){
-			Pitch aPitch = pitch.get(0);
-			this.add = false;
-			this.pitch = aPitch;	
-			pitchNameText.setText(aPitch.getName(),add );
-			pitchCapacityText.setText(Integer.toString(aPitch.getCapacity()), add);
-			marker.setPosition(aPitch.getLocation());
-			updateButton.setEnabled(true);
-			laodImg.setVisible(false);
-			inProgress = false;
+			successImg.setVisible(true);
+			render(false,pitch.get(0),null,marker);
 		}
 
 	}
 
 	public void pitchUpdated(Pitch pitch) {
 		if(inProgress){
-			this.add = false;
-			this.pitch = pitch;	
-			pitchNameText.setText(pitch.getName(),add );
-			pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
-			marker.setPosition(pitch.getLocation());
-			updateButton.setEnabled(true);
-			laodImg.setVisible(false);
-			inProgress = false;
+			successImg.setVisible(true);
+			render(false,pitch,null,marker);
+			marker.setIcon(greenField);
 		}
 	}
 
 	public void pitchRemoved(Long pitch) {
 		if(inProgress){
-			pitchDialogPanel.setVisible(false);
-			deleteButton.setEnabled(true);
-			laodImg.setVisible(false);
+			pitchDialogPanel.removeFromParent();
 			inProgress = false;
-			marker.setVisible(false);
 		}
 	}
-	
-    void doubleClick(HasLatLng latlgn){
-    	if(add){
-    		marker.setPosition(latlgn);
-    	}
-    }
 
 }
