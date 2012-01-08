@@ -66,7 +66,7 @@ public class PlayerDialog implements ParamUpdateHandler{
 			playerInfos.setWidget(1,0,playerEmailText.getTextBox());
 			playerInfos.setWidget(2, 1, updateButton);
 		}else{	
-			playerInfos = new Grid(1,2);	
+			playerInfos = new Grid(2,2);	
 			playerNameText.setEnabled(false);
 			playerInfos.setWidget(0,0,playerNameText.getTextBox());
 			playerAdminBox.setEnabled(false);

@@ -151,6 +151,7 @@ h1 {
 	border-right-color: #000;
 	border-right-width: 1px;
 }
+
 .listPanel{
   	height: 500px;
   	width: 270px;
@@ -200,4 +201,15 @@ h1 {
 
 .filterButton:hover{
 	cursor:pointer;
+}
+
+.addStage{
+  	width: 100px;
+  	padding-top:10px;
+  	padding-bottom:10px;
+  	text-align:center;
+}
+
+.addStage-selected{
+	background-color: #ffdddd;
 }

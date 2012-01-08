@@ -5,7 +5,6 @@ import com.erman.football.client.gui.list.ListPanelListener;
 import com.erman.football.shared.ClientPlayer;
 import com.erman.football.shared.DataObject;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -18,7 +17,7 @@ public class PlayerCell extends DataCell{
 		super(_listener);
 	}
 
-	protected DataCell generateCell(DataObject _data){
+	protected DataCell generateCell(DataObject _data,boolean isAdmin){
 		PlayerCell result = new PlayerCell(listener);
 		result.setData(_data);
 		result.setListener(listener);

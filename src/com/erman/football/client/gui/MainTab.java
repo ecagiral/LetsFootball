@@ -2,6 +2,7 @@ package com.erman.football.client.gui;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.gui.match.MatchPanel;
+import com.erman.football.client.gui.pitch.PitchMapPanel;
 import com.erman.football.client.gui.pitch.PitchPanel;
 import com.erman.football.client.gui.player.PlayerPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,8 +23,9 @@ public class MainTab extends SimplePanel{
 	public MainTab(Cache cache){
 
 		playerPanel = new PlayerPanel(cache);
-		matchPanel = new MatchPanel(cache);
-		pitchPanel = new PitchPanel(cache);
+		PitchMapPanel mapPanel = new PitchMapPanel(cache);
+		pitchPanel = new PitchPanel(cache,mapPanel);
+		matchPanel = new MatchPanel(cache,mapPanel);
 		VerticalPanel mainPanel = new VerticalPanel();
 		SimplePanel topPanel = new SimplePanel();
 		topPanel.setStyleName("topPanel");
@@ -35,6 +37,7 @@ public class MainTab extends SimplePanel{
 
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
+				matchPanel.load();
 				listPanel.add(matchPanel);
 			}
 			
@@ -58,6 +61,7 @@ public class MainTab extends SimplePanel{
 			public void onClick(ClickEvent event) {
 				listPanel.clear();
 				listPanel.add(pitchPanel);
+				pitchPanel.load();
 			}
 			
 		});

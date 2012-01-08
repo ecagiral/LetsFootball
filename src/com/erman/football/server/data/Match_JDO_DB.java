@@ -72,11 +72,12 @@ public class Match_JDO_DB {
 		}
 	}
 	
-	public static void updateMatch(ClientMatch match){
+	public static ClientMatch updateMatch(ClientMatch match){
 		Key key = KeyFactory.createKey(MatchDO.class.getSimpleName(), match.getKey());
 		PersistenceManager pm = PMF.get().getPersistenceManager();
+		MatchDO matchDO = null;
 		try {
-			MatchDO matchDO = pm.getObjectById(MatchDO.class, key);
+			matchDO = pm.getObjectById(MatchDO.class, key);
 			if (matchDO!=null) {
 				matchDO.update(match);
 			}else{
@@ -88,5 +89,6 @@ public class Match_JDO_DB {
 		}finally {
 			pm.close();
 		}
+		return matchDO.convert();
 	}
 }

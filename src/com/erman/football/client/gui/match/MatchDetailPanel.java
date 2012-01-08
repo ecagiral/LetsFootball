@@ -25,10 +25,8 @@ public class MatchDetailPanel extends HorizontalPanel{
 	private Button teamBAddButton;
 	private ClientPlayer loggedPlayer;
 	private PlayerInfoCell infoCell;
-	private Cache cache;
 	
 	public MatchDetailPanel(Cache cache){
-		this.cache = cache;
 		loggedPlayer = cache.getLoggedPlayer();
 		
 		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);

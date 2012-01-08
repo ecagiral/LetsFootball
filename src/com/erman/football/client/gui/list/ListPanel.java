@@ -62,14 +62,21 @@ public class ListPanel extends VerticalPanel implements DataHandler,FilterHandle
 
 	}
 
-	public void dataAdded(List<DataObject> data) {
+	public void dataAdded(List<DataObject> data,long loggedUser) {
 		status.removeFromParent();
 		int index = 1;
 		for(DataObject aData:data){
 			if(index==ListFilter.PAGINATION_NUM){
 				break;
 			}
-			DataCell cell = dataCell.generateCell(aData);
+			boolean admin = false;
+			if(aData.getOwner()==loggedUser){
+				admin = true;
+			}
+			if(loggedUser==0){
+				admin = true;
+			}
+			DataCell cell = dataCell.generateCell(aData,admin);
 			cellList.put(aData.getKey(), cell);
 			cardListPanel.add(cell);
 			index++;

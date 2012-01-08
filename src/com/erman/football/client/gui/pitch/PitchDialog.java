@@ -83,10 +83,6 @@ public class PitchDialog implements ParamUpdateHandler, CachePitchHandler{
 	}
 	
 	public void render(boolean add, Pitch pitch,Panel basePanel,Marker _marker){
-		//remove old idle marker
-		if(this.add && marker!=null){
-			this.marker.setVisible(false);
-		}
 		this.add = add;
 		this.marker = _marker;
 		marker.setDraggable(true);

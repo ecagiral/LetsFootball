@@ -24,6 +24,9 @@ public class MatchDO {
 
 	@Persistent
 	String location;
+	
+	@Persistent
+	long owner;
 
 	@Persistent
 	boolean mailSent;
@@ -96,17 +99,27 @@ public class MatchDO {
 		this.paid = paid;
 	}
 
+	public long getOwner() {
+		return owner;
+	}
+
+	public void setOwner(long owner) {
+		this.owner = owner;
+	}
+
 	public static MatchDO convert(ClientMatch match){
 		MatchDO matchDO = new MatchDO();
 		matchDO.setDate(match.getDate());
 		matchDO.setLocation(match.getLocation());
 		matchDO.setPaid(match.isPaid());
 		matchDO.setMailSent(match.isMailSent());
+		matchDO.setOwner(match.getOwner());
 		convertTeams(match,matchDO);
 		return matchDO;
 	}
 
 	public void update(ClientMatch match){
+		this.setDate(match.getDate());
 		this.setLocation(match.getLocation());
 		this.setMailSent(match.isMailSent());
 		this.setPaid(match.isPaid());
@@ -120,6 +133,7 @@ public class MatchDO {
 		match.setLocation(this.getLocation());
 		match.setMailSent(this.isMailSent());
 		match.setPaid(this.isPaid());
+		match.setOwner(this.getOwner());
 		HashSet<Long> teamA = new HashSet<Long>();
 		if(this.getTeamA()!=null){
 			

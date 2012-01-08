@@ -4,5 +4,6 @@ public interface ListPanelListener {
 	
 	public void CellClicked(DataCell dataCell);
 	public void removeClicked(DataCell dataCell);
+	public void modifyClicked(DataCell dataCell);
 
 }

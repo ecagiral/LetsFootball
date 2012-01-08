@@ -16,6 +16,7 @@ public class ClientMatch extends DataObject implements Serializable{
 	private long key;
 	private Date date;
 	private String location;
+	private long owner;
 	private boolean paid;
 	private boolean mailSent;
 	private boolean played;
@@ -25,6 +26,7 @@ public class ClientMatch extends DataObject implements Serializable{
 	public ClientMatch() {
 		this.date = new Date();
 		this.location = "0";
+		this.owner = 0;
 		this.paid = false;
 		this.mailSent = false;
 		this.played = false;
@@ -94,6 +96,14 @@ public class ClientMatch extends DataObject implements Serializable{
 	
 	public void setMailSent(boolean mailSent) {
 		this.mailSent = mailSent;
+	}
+
+	public long getOwner() {
+		return owner;
+	}
+
+	public void setOwner(long owner) {
+		this.owner = owner;
 	}
 	
 }

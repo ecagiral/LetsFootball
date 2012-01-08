@@ -5,7 +5,6 @@ import com.erman.football.client.gui.list.ListPanelListener;
 import com.erman.football.shared.DataObject;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -14,11 +13,11 @@ public class PitchCell extends DataCell{
 
 	private Label name = new Label();
 	
-	public PitchCell(ListPanelListener _listener) {
+	public PitchCell(ListPanelListener _listener){
 		super(_listener);
 	}
 	
-	protected DataCell generateCell(DataObject _data){
+	protected DataCell generateCell(DataObject _data,boolean isAdmin){
 		PitchCell result = new PitchCell(listener);
 		result.setData(_data);
 		result.setListener(listener);

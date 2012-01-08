@@ -83,7 +83,7 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 	public void playerAdded(List<ClientPlayer> player) {
 		ArrayList<DataObject> data = new ArrayList<DataObject>();
 		data.addAll(player);
-		listMainPanel.dataAdded(data);
+		listMainPanel.dataAdded(data,cache.getLoggedPlayer().getKey());
 	}
 
 	public void playerUpdated(ClientPlayer player) {
@@ -96,6 +96,12 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 		ArrayList<Long> data = new ArrayList<Long>();
 		data.add(player);
 		listMainPanel.dataRemoved(data);
+	}
+
+	@Override
+	public void modifyClicked(DataCell dataCell) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

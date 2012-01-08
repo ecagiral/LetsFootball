@@ -16,6 +16,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class MatchServiceImpl extends RemoteServiceServlet implements MatchService{
 
 	public ClientMatch createMatch(ClientMatch match) {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		String strPlayer = (String)request.getSession().getAttribute("player");
+		if(strPlayer == null){
+			strPlayer = "0";
+		}
+		match.setOwner(Long.parseLong(strPlayer));
 		return Match_JDO_DB.addMatch(match);	
 	}
 
@@ -45,8 +51,7 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public ClientMatch updateMatch(ClientMatch match) {
-		Match_JDO_DB.updateMatch(match);
-		return match;
+		return Match_JDO_DB.updateMatch(match);
 	}
 
 }
