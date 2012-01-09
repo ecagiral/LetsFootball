@@ -35,7 +35,7 @@ public class PlayerCell extends DataCell{
 		result.add(cell.getName());
 		boolean admin = true;
 		if(admin){
-			Image delete = new Image("delete.jpg");
+			Image delete = new Image("delete.png");
 			delete.addClickHandler(new CellDeleteHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
 			result.add(delete);

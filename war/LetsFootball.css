@@ -64,48 +64,6 @@ h1 {
     color: #fff;
 }
 
-.userCard{
-	padding: 5px;
-	background-color: #fff;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb
-}
-
-.newUserCard{
-	padding: 5px;
-	background-color: #fff;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb;
-	color: #FF0000;
-}
-
-.selectedUserCard{
-	padding: 5px;
-	background-color: #efef00;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #efef00
-}
-
-.userCard:hover{
-	padding: 5px;
-	background-color: #bbb;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb;
-}
-
-.newUserCard:hover{
-	padding: 5px;
-	background-color: #bbb;
-	width: 100%;
-	border-top:solid;
-	border-top-color: #bbb;
-	color: #FF0000;
-}
-
 .matchCard{
 	padding: 5px;
 	background-color: #fff;
@@ -124,6 +82,10 @@ h1 {
 	width: 100%;
 }
 
+.selectedMatchCard:hover{
+	cursor:pointer;
+}
+
 .matchCard:hover{
 	padding: 5px;
 	background-color: #eee;
@@ -131,6 +93,7 @@ h1 {
 	border-bottom-color: #000;
 	border-bottom-width: 1px;
 	width: 100%;
+	cursor:pointer;
 }
 
 .gwt-TextBox-updatedInput{
@@ -145,10 +108,10 @@ h1 {
 
 .listMainPanel{
 	border-left:solid;
-	border-left-color: #000;
+	border-left-color: #ccc;
 	border-left-width: 1px;
 	border-right:solid;
-	border-right-color: #000;
+	border-right-color: #ccc;
 	border-right-width: 1px;
 }
 
@@ -173,7 +136,7 @@ h1 {
   	border-bottom:solid;
 	border-bottom-color: #000;
 	border-bottom-width: 1px;
-	margin-bottom:20px;
+	margin-bottom:50px;
 	width:100%;
 }
 
@@ -205,11 +168,14 @@ h1 {
 
 .addStage{
   	width: 100px;
-  	padding-top:10px;
-  	padding-bottom:10px;
+  	margin-bottom:10px;
   	text-align:center;
 }
 
 .addStage-selected{
 	background-color: #ffdddd;
+}
+
+.nextButton:hover{
+	cursor:pointer;
 }
