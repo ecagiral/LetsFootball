@@ -57,6 +57,19 @@ public class Player_JDO_DB {
 		}
 	}
 	
+	public static Player getUserbyId(Long id){
+		Key key = KeyFactory.createKey(Player.class.getSimpleName(), id);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			return pm.getObjectById(Player.class, key);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			pm.close();
+		}
+		return null;
+	}
+	
 	public static Player getUser(String email){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(Player.class);

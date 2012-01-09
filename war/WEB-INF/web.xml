@@ -7,6 +7,11 @@
   
   <!-- Servlets -->
   <servlet>
+    <servlet-name>loginServlet</servlet-name>
+    <servlet-class>com.erman.football.server.service.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet>
     <servlet-name>playerServlet</servlet-name>
     <servlet-class>com.erman.football.server.service.PlayerServiceImpl</servlet-class>
   </servlet>
@@ -20,6 +25,11 @@
     <servlet-name>pitchServlet</servlet-name>
     <servlet-class>com.erman.football.server.service.PitchServiceImpl</servlet-class>
   </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>loginServlet</servlet-name>
+    <url-pattern>/LetsFootball/login</url-pattern>
+  </servlet-mapping>
   
   <servlet-mapping>
     <servlet-name>playerServlet</servlet-name>
