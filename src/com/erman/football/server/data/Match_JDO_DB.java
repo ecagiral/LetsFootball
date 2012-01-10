@@ -37,7 +37,7 @@ public class Match_JDO_DB {
 		query.setOrdering("date ascending");
 		query.setRange(start,stop);
 		try {
-			if(player == 0){
+			if(player == -1){
 				query.declareParameters("Date startDate");
 				query.setFilter("date > startDate");
 				matchDOs = (List<MatchDO>)query.execute(startDate);

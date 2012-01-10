@@ -38,7 +38,7 @@ public class MatchCell extends DataCell{
 		cell.getSummary().setText(dateFormat.format(cell.getMatch().getDate())+" "+cell.getMatch().getLocation());
 		result.add(cell.getSummary());
 		if(cell.isAdmin()){
-			Image edit = new Image("edit.png");
+			Image edit = new Image("modify.png");
 			edit.addClickHandler(new CellModifyHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
 			result.add(edit);

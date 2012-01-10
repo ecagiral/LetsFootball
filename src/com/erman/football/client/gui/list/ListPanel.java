@@ -73,7 +73,7 @@ public class ListPanel extends VerticalPanel implements DataHandler,FilterHandle
 			if(aData.getOwner()==loggedUser){
 				admin = true;
 			}
-			if(loggedUser==0){
+			if(loggedUser==-1){
 				admin = true;
 			}
 			DataCell cell = dataCell.generateCell(aData,admin);

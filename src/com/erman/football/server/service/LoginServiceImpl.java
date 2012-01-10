@@ -59,7 +59,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 
 	public boolean logout() {
 		HttpServletRequest request = this.getThreadLocalRequest();
-		request.getSession().setAttribute("player","0");
+		request.getSession().setAttribute("player",null);
 		return false;
 	}
 

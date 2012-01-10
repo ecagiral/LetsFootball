@@ -23,8 +23,6 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
-
-
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -44,28 +42,24 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	public void onModuleLoad() {
 		loginPanel = new Login(this);
 		Window.addResizeHandler(new ResizeHandler(){
-
 			public void onResize(ResizeEvent event) {
 
-			}
-			
+			}	
 		});
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setWidth("100%");
-		welcome = new Label("Giris Yap");
+		welcome = new Label("");
 		welcome.setStyleName("welcome");
-		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		headerPanel.add(welcome);
 		Label logo = new Label("Test!");
 		logo.setStyleName("logo");
-		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		headerPanel.add(logo);
 		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		logout.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				reset();
+				loginPanel.logout();
 			}
 			
 		});
@@ -74,6 +68,8 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		headerPanel.setStyleName("header");
 		mainLayout.addNorth(headerPanel, 50);
 		mainLayout.add(loginPanel);
+		mainLayout.setVisible(false);
+		mainLayout.setStyleName("mainLayout");
 		RootLayoutPanel.get().add(mainLayout);
 	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand () {
 	        public void execute () {
@@ -82,17 +78,12 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	    });
 	}
 	
-	public void reset(){
-		welcome.setText("Giris Yap");
-		logout.setVisible(false);
-		playerTab.removeFromParent();
-		playerTab = null;
-		loginPanel = new Login(this);
-		mainLayout.add(loginPanel);
-		loginPanel.setFocus();
+	public void init(){
+		mainLayout.setVisible(true);
 	}
 
-	public void LoggedIn(ClientPlayer player) {
+	public void loggedIn(ClientPlayer player) {
+		mainLayout.setVisible(true);
 		Cache cache = new Cache();
 		cache.setLoggedPlayer(player);
 		welcome.setText("Merhaba "+player.getName());
@@ -101,6 +92,16 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		playerTab = new MainTab(cache);
 		mainLayout.add(playerTab);
 		cache.load();
+	}
+	
+	public void loggedOut() {
+		welcome.setText("");
+		logout.setVisible(false);
+		playerTab.removeFromParent();
+		playerTab = null;
+		loginPanel = new Login(this);
+		mainLayout.add(loginPanel);
+		loginPanel.setFocus();
 	}
 
 }

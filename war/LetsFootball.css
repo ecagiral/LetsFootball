@@ -2,6 +2,19 @@
 
 
 /** Example rules used by the template application (remove for your app) */
+.mainLayout{
+background: white url('bg.gif') repeat-x top left;
+background-image: url('bg.gif');
+background-repeat-x: repeat;
+background-repeat-y: no-repeat;
+background-attachment: initial;
+background-position-x: 0%;
+background-position-y: 0%;
+background-origin: initial;
+background-clip: initial;
+background-color: #ccc;
+}
+
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -37,13 +50,6 @@ h1 {
   margin: 15px 6px 6px;
 }
 
-.photoFrame{
-	background-color: #ccc;
-	width: 70px;
-	height: 70px;
-	text-align: center;
-}
-
 .header{
 	background-color: #010101;
 }
@@ -66,7 +72,7 @@ h1 {
 
 .matchCard{
 	padding: 5px;
-	background-color: #fff;
+	background-color: transparent;
 	border-bottom:solid;
 	border-bottom-color: #000;
 	border-bottom-width: 1px;
@@ -168,12 +174,14 @@ h1 {
 
 .addStage{
   	width: 100px;
+  	margin-top:7px;
   	margin-bottom:10px;
   	text-align:center;
 }
 
 .addStage-selected{
-	background-color: #ffdddd;
+	color: red;
+	font-weight: bold;
 }
 
 .nextButton:hover{

@@ -4,5 +4,7 @@ import com.erman.football.shared.ClientPlayer;
 
 public interface LoginHandler {
 
-	public void LoggedIn(ClientPlayer player);
+	public void loggedIn(ClientPlayer player);
+	public void loggedOut();
+	public void init();
 }

@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 public class ClientMatch extends DataObject implements Serializable{
 
-
 	/**
 	 * 
 	 */
@@ -20,6 +19,8 @@ public class ClientMatch extends DataObject implements Serializable{
 	private boolean paid;
 	private boolean mailSent;
 	private boolean played;
+	private String teamAName;
+	private String teamBName;
 	private HashSet<Long> teamA;
 	private HashSet<Long> teamB;
 	
@@ -30,6 +31,8 @@ public class ClientMatch extends DataObject implements Serializable{
 		this.paid = false;
 		this.mailSent = false;
 		this.played = false;
+		this.teamAName = "Team A";
+		this.teamBName = "Team B";
 		this.teamA = new HashSet<Long>();
 		this.teamB = new HashSet<Long>();
 	}
@@ -104,6 +107,22 @@ public class ClientMatch extends DataObject implements Serializable{
 
 	public void setOwner(long owner) {
 		this.owner = owner;
+	}
+
+	public String getTeamAName() {
+		return teamAName;
+	}
+
+	public void setTeamAName(String teamAName) {
+		this.teamAName = teamAName;
+	}
+
+	public String getTeamBName() {
+		return teamBName;
+	}
+
+	public void setTeamBName(String teamBName) {
+		this.teamBName = teamBName;
 	}
 	
 }

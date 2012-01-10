@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
@@ -29,13 +30,15 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	private final VerticalPanel mapPanel = new VerticalPanel();
 	private final VerticalPanel datePanel = new VerticalPanel();
 	private final SimplePanel playerPanel = new SimplePanel();
-	private final Label selectPitch = new Label("Saha Sec");
-	private final Label selectDate = new Label("Gun Sec");
-	private final Label selectPlayer = new Label("Oyuncu Sec");
+	private final Label selectPitch = new Label("Saha");
+	private final Label selectDate = new Label("Tarih");
+	private final Label selectPlayer = new Label("Takimlar");
 	private final Image nextButton = new Image("arrow_right.png");
 	private final Image backButton = new Image("arrow_left.png");
 	private final Label applyButton = new Label("Ekle");
 	private final Label pitchName = new Label("Haritadan seciniz");
+	private final TextBox teamAName = new TextBox();
+	private final TextBox teamBName = new TextBox();
 	private final Cache cache;
 	private final Image laodImg = new Image("loader.gif");
 	private final Image successImg = new Image("success.jpg");
@@ -92,7 +95,11 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		datePanel.add(datePicker);
 		datePanel.setVisible(false);
 
-		playerPanel.add(new Label("Oyuncu sec"));
+		VerticalPanel teamPanel = new VerticalPanel();
+		teamPanel.add(new Label("Takim Isimleri"));
+		teamPanel.add(teamAName);
+		teamPanel.add(teamBName);
+		playerPanel.add(teamPanel);
 
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		mainPanel.add(mapPanel);
@@ -148,11 +155,13 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		}else{
 			modify = true;
 			match = _match;
-			datePicker.setValue(match.getDate());
 			Pitch pitch = new Pitch();
 			pitch.setKey(Long.parseLong(match.getLocation()));
 			pitchMap.selectMarker(pitch);
 		}
+		datePicker.setValue(match.getDate());
+		teamAName.setText(match.getTeamAName());
+		teamBName.setText(match.getTeamBName());
 	}
 
 	private void backClicked(){
@@ -230,6 +239,8 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		backButton.setVisible(false);
 		inProgress = true;
 		laodImg.setVisible(true);
+		match.setTeamAName(teamAName.getText());
+		match.setTeamBName(teamBName.getText());
 		if(modify){
 			cache.updateMatch(match);
 		}else{
