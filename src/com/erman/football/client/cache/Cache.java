@@ -10,7 +10,7 @@ import com.erman.football.client.service.PlayerService;
 import com.erman.football.client.service.PlayerServiceAsync;
 import com.erman.football.client.service.MatchService;
 import com.erman.football.client.service.MatchServiceAsync;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.erman.football.shared.ClientPlayer;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.core.client.GWT;
@@ -115,47 +115,47 @@ public class Cache {
 	
 	//Match methods
 	public void getMatches(Date date,int start ,int stop, boolean attendOnly){
-		matchService.getMatches(date,start,stop,attendOnly,new AsyncCallback<List<ClientMatch>>(){
+		matchService.getMatches(date,start,stop,attendOnly,new AsyncCallback<List<Match>>(){
 
 			public void onFailure(Throwable caught) {
 	
 			}
 
-			public void onSuccess(List<ClientMatch> result) {
+			public void onSuccess(List<Match> result) {
 				notifyMatchAdded(result);
 			}		
 		});
 	}
 	
-	public void addMatch(ClientMatch match){
-		matchService.createMatch(match, new AsyncCallback<ClientMatch>(){
+	public void addMatch(Match match){
+		matchService.createMatch(match, new AsyncCallback<Match>(){
 
 			public void onFailure(Throwable caught) {
 
 			}
 
-			public void onSuccess(ClientMatch result) {
-				ArrayList<ClientMatch> results = new ArrayList<ClientMatch>();
+			public void onSuccess(Match result) {
+				ArrayList<Match> results = new ArrayList<Match>();
 				results.add(result);
 				notifyMatchAdded(results);
 			}
 		});
 	}
 	
-	public void updateMatch(ClientMatch match){
-		matchService.updateMatch(match, new AsyncCallback<ClientMatch>(){
+	public void updateMatch(Match match){
+		matchService.updateMatch(match, new AsyncCallback<Match>(){
 
 			public void onFailure(Throwable caught) {
 
 			}
 
-			public void onSuccess(ClientMatch result) {
+			public void onSuccess(Match result) {
 				notifyMatchUpdated(result);
 			}
 		});
 	}
 	
-	public void removeMatch(ClientMatch match){
+	public void removeMatch(Match match){
 		matchService.deleteMatch(match, new AsyncCallback<Long>(){
 
 			public void onFailure(Throwable caught) {
@@ -258,13 +258,13 @@ public class Cache {
 	
 	//Match notifications
 
-	private void notifyMatchAdded(List<ClientMatch> result){
+	private void notifyMatchAdded(List<Match> result){
 		for(CacheMatchHandler handler:matchHandlers){
 			handler.matchAdded(result);
 		}
 	}
 	
-	private void notifyMatchUpdated(ClientMatch match){
+	private void notifyMatchUpdated(Match match){
 		for(CacheMatchHandler handler:matchHandlers){
 			handler.matchUpdated(match);
 		}

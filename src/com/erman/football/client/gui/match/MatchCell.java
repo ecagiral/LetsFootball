@@ -2,7 +2,7 @@ package com.erman.football.client.gui.match;
 
 import com.erman.football.client.gui.list.DataCell;
 import com.erman.football.client.gui.list.ListPanelListener;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.erman.football.shared.DataObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -55,14 +55,14 @@ public class MatchCell extends DataCell{
 	}
 	
 	protected void update(DataObject data){
-		ClientMatch match = (ClientMatch)data;
+		Match match = (Match)data;
 		this.data = match;
 		summary.setText(dateFormat.format(match.getDate())+" "+match.getLocation());
 		
 	}
 	
-	public ClientMatch getMatch(){
-		return (ClientMatch)data;
+	public Match getMatch(){
+		return (Match)data;
 	}
 	
 }

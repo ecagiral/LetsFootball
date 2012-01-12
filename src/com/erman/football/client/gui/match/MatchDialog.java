@@ -1,7 +1,7 @@
 package com.erman.football.client.gui.match;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -22,7 +22,7 @@ public class MatchDialog{
 	final Label matchTimeText = new Label();
 
 	private MatchDetailPanel detailPanel;
-	private ClientMatch match;	
+	private Match match;	
 	private Cache cache; 
 
 	public MatchDialog(Cache cache){
@@ -53,7 +53,7 @@ public class MatchDialog{
 		matchBoxPanel.setVisible(false);
 	}
 
-	public void render(ClientMatch match,Panel parent){
+	public void render(Match match,Panel parent){
 		detailPanel.render(match);
 		String dateTime[] =  dateTimeFormat.format(match.getDate()).split("\\s+");
 		matchDateText.setText(dateTime[0]);

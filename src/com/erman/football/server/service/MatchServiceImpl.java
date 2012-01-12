@@ -9,13 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import com.erman.football.client.service.MatchService;
 import com.erman.football.server.data.MatchDO;
 import com.erman.football.server.data.Match_JDO_DB;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.ClientPlayer;
+import com.erman.football.shared.Match;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class MatchServiceImpl extends RemoteServiceServlet implements MatchService{
 
-	public ClientMatch createMatch(ClientMatch match) {
+	public Match createMatch(Match match) {
 		HttpServletRequest request = this.getThreadLocalRequest();
 		String strPlayer = (String)request.getSession().getAttribute("player");
 		if(strPlayer == null){
@@ -25,8 +26,8 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 		return Match_JDO_DB.addMatch(match);	
 	}
 
-	public List<ClientMatch> getMatches(Date startDate, int from, int to, boolean attendOnly) {
-		List<ClientMatch> result = new ArrayList<ClientMatch>();
+	public List<Match> getMatches(Date startDate, int from, int to, boolean attendOnly) {
+		List<Match> result = new ArrayList<Match>();
 		HttpServletRequest request = this.getThreadLocalRequest();
 		//By default get all matches
 		String strPlayer = "-1";
@@ -44,14 +45,19 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 	}
 
 	@Override
-	public Long deleteMatch(ClientMatch match) {
+	public Long deleteMatch(Match match) {
 		Match_JDO_DB.deleteMatch(match.getKey());	
 		return match.getKey();
 	}
 
 	@Override
-	public ClientMatch updateMatch(ClientMatch match) {
+	public Match updateMatch(Match match) {
 		return Match_JDO_DB.updateMatch(match);
+	}
+
+	@Override
+	public Match addPlayer(ClientPlayer player, Match match, boolean teamA) {
+		return Match_JDO_DB.addPlayer(player,match,teamA);
 	}
 
 }

@@ -3,7 +3,8 @@ package com.erman.football.client.service;
 import java.util.Date;
 import java.util.List;
 
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.ClientPlayer;
+import com.erman.football.shared.Match;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -12,7 +13,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("match")
 public interface MatchService extends RemoteService{
-	public ClientMatch createMatch(ClientMatch match);
+	
+	public Match createMatch(Match match);
 	
 	/**
 	 * Returns match list starting from start date with from to pagination
@@ -21,7 +23,8 @@ public interface MatchService extends RemoteService{
 	 * @param to
 	 * @return
 	 */
-	public List<ClientMatch> getMatches(Date startDate, int from, int to, boolean attendOnly);
-	public Long deleteMatch(ClientMatch match);
-	public ClientMatch updateMatch(ClientMatch match);
+	public List<Match> getMatches(Date startDate, int from, int to, boolean attendOnly);
+	public Long deleteMatch(Match match);
+	public Match updateMatch(Match match);
+	public Match addPlayer(ClientPlayer player, Match match,boolean teamA);
 }

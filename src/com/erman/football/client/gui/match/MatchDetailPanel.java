@@ -3,7 +3,7 @@ package com.erman.football.client.gui.match;
 import java.util.HashSet;
 
 import com.erman.football.client.cache.Cache;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -65,7 +65,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 	
 	}
 	
-	public void render(ClientMatch match){
+	public void render(Match match){
 		teamAPlayers.clear();
 		teamAPanel.clear();
 		teamAAddButton.setText("Add Me");

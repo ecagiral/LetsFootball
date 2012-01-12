@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 
-public class ClientMatch extends DataObject implements Serializable{
+public class Match extends DataObject implements Serializable{
 
 	/**
 	 * 
@@ -24,7 +24,7 @@ public class ClientMatch extends DataObject implements Serializable{
 	private HashSet<Long> teamA;
 	private HashSet<Long> teamB;
 	
-	public ClientMatch() {
+	public Match() {
 		this.date = new Date();
 		this.location = "0";
 		this.owner = 0;

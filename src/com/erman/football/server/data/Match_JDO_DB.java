@@ -2,18 +2,20 @@ package com.erman.football.server.data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.ClientPlayer;
+import com.erman.football.shared.Match;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class Match_JDO_DB {
 	
-	public static ClientMatch addMatch(ClientMatch match){
+	public static Match addMatch(Match match){
 		
 		MatchDO matchDO = MatchDO.convert(match);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -72,13 +74,48 @@ public class Match_JDO_DB {
 		}
 	}
 	
-	public static ClientMatch updateMatch(ClientMatch match){
+	public static Match updateMatch(Match match){
 		Key key = KeyFactory.createKey(MatchDO.class.getSimpleName(), match.getKey());
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		MatchDO matchDO = null;
 		try {
 			matchDO = pm.getObjectById(MatchDO.class, key);
 			if (matchDO!=null) {
+				matchDO.update(match);
+			}else{
+				//Could not be found
+				throw new Exception("Match to be updated could not be found "+match.getDate());
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			pm.close();
+		}
+		return matchDO.convert();
+	}
+	
+	public static Match addPlayer(ClientPlayer player, Match match, boolean teamA){
+		Key key = KeyFactory.createKey(MatchDO.class.getSimpleName(), match.getKey());
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		MatchDO matchDO = null;
+		try {
+			matchDO = pm.getObjectById(MatchDO.class, key);
+			if (matchDO!=null) {
+				HashSet<Long> teamAList = new HashSet<Long>();
+				HashSet<Long> teamBList = new HashSet<Long>();
+				for(Long playerId:matchDO.getTeamA()){
+					teamAList.add(playerId);
+				}
+				for(Long playerId:matchDO.getTeamB()){
+					teamBList.add(playerId);
+				}
+				if(teamA){
+					teamAList.add(player.getKey());
+					teamBList.remove(player.getKey());
+				}else{
+					teamBList.add(player.getKey());
+					teamAList.remove(player.getKey());
+				}
 				matchDO.update(match);
 			}else{
 				//Could not be found

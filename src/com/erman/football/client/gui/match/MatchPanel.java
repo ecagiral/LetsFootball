@@ -9,7 +9,7 @@ import com.erman.football.client.gui.list.DataCell;
 import com.erman.football.client.gui.list.ListPanel;
 import com.erman.football.client.gui.list.ListPanelListener;
 import com.erman.football.client.gui.pitch.PitchMapPanel;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.erman.football.shared.DataObject;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -65,13 +65,13 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 		this.add(infoPanel);
 	}
 
-	public void matchAdded(List<ClientMatch> matches) {
+	public void matchAdded(List<Match> matches) {
 		ArrayList<DataObject> data = new ArrayList<DataObject>();
 		data.addAll(matches);
 		listMainPanel.dataAdded(data,cache.getLoggedPlayer().getKey());
 	}
 
-	public void matchUpdated(ClientMatch match) {
+	public void matchUpdated(Match match) {
 		ArrayList<DataObject> data = new ArrayList<DataObject>();
 		data.add(match);
 		listMainPanel.dataUpdated(data);
@@ -106,7 +106,7 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	public void modifyClicked(DataCell dataCell) {
 		infoPanel.clear();
 		listMainPanel.setVisible(false);
-		matchAddPanel.load((ClientMatch)dataCell.getData());
+		matchAddPanel.load((Match)dataCell.getData());
 	}
 
 	public void load(){

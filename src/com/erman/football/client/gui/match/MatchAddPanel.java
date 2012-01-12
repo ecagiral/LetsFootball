@@ -7,7 +7,7 @@ import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CacheMatchHandler;
 import com.erman.football.client.gui.pitch.PitchMapPanel;
 import com.erman.football.client.gui.pitch.PitchMapPanelHandler;
-import com.erman.football.shared.ClientMatch;
+import com.erman.football.shared.Match;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -45,7 +45,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	private final DatePicker datePicker = new DatePicker();
 
 	private stage currentStage;
-	private ClientMatch match;
+	private Match match;
 	private boolean inProgress;
 	private boolean modify;
 
@@ -133,7 +133,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		this.add(bottomPanel);
 	}
 	
-	public void load(ClientMatch _match){
+	public void load(Match _match){
 		inProgress = false;
 		successImg.setVisible(false);
 		mapPanel.setVisible(true);
@@ -151,7 +151,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		pitchMap.show(mapPanel, this);
 		if(_match == null){
 			modify = false;
-			match = new ClientMatch();			
+			match = new Match();			
 		}else{
 			modify = true;
 			match = _match;
@@ -257,14 +257,14 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		//Should not be called. Do nothing
 	}
 
-	public void matchAdded(List<ClientMatch> matches) {
+	public void matchAdded(List<Match> matches) {
 		inProgress = false;
 		nextButton.setVisible(false);
 		laodImg.setVisible(false);
 		successImg.setVisible(true);
 	}
 
-	public void matchUpdated(ClientMatch match) {
+	public void matchUpdated(Match match) {
 		inProgress = false;
 		laodImg.setVisible(false);
 		successImg.setVisible(true);

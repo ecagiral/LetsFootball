@@ -74,14 +74,14 @@ public class Login extends VerticalPanel {
 		mainPanel.add(loginPanel);
 		mainPanel.add(nameBox);
 		mainPanel.add(joinButton);
-		
+
 		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
 
 	private void login(String email){
-		loginStatus.setText("&#304&#351leniyor...");
+		loginStatus.setText(new String("&#304&#351leniyor..."));
 		loginService.login(email, new  LoginCallback());
 	}
 	
