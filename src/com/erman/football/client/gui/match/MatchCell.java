@@ -35,7 +35,7 @@ public class MatchCell extends DataCell{
 	private HorizontalPanel generateCard(MatchCell cell){
 		HorizontalPanel result = new HorizontalPanel();
 		result.setWidth("100%");
-		cell.getSummary().setText(dateFormat.format(cell.getMatch().getDate())+" "+cell.getMatch().getLocation());
+		cell.getSummary().setText(dateFormat.format(cell.getMatch().getDate())+" "+cell.getMatch().getLocation().getName());
 		result.add(cell.getSummary());
 		if(cell.isAdmin()){
 			Image edit = new Image("modify.png");
@@ -57,7 +57,7 @@ public class MatchCell extends DataCell{
 	protected void update(DataObject data){
 		Match match = (Match)data;
 		this.data = match;
-		summary.setText(dateFormat.format(match.getDate())+" "+match.getLocation());
+		summary.setText(dateFormat.format(match.getDate())+" "+match.getLocation().getName());
 		
 	}
 	

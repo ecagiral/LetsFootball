@@ -2,6 +2,7 @@ package com.erman.football.shared;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -14,27 +15,27 @@ public class Match extends DataObject implements Serializable{
 	
 	private long key;
 	private Date date;
-	private String location;
+	private Pitch location;
 	private long owner;
 	private boolean paid;
 	private boolean mailSent;
 	private boolean played;
 	private String teamAName;
 	private String teamBName;
-	private HashSet<Long> teamA;
-	private HashSet<Long> teamB;
+	private HashMap<Long,ClientPlayer> teamA;
+	private HashMap<Long,ClientPlayer> teamB;
 	
 	public Match() {
 		this.date = new Date();
-		this.location = "0";
+		this.location = new Pitch();
 		this.owner = 0;
 		this.paid = false;
 		this.mailSent = false;
 		this.played = false;
 		this.teamAName = "Team A";
 		this.teamBName = "Team B";
-		this.teamA = new HashSet<Long>();
-		this.teamB = new HashSet<Long>();
+		this.teamA = new HashMap<Long,ClientPlayer>();
+		this.teamB = new HashMap<Long,ClientPlayer>();
 	}
 	
 	public void setKey(long key) {
@@ -61,27 +62,27 @@ public class Match extends DataObject implements Serializable{
 		this.date = date;
 	}
 	
-	public HashSet<Long> getTeamA() {
+	public HashMap<Long,ClientPlayer> getTeamA() {
 		return teamA;
 	}
 	
-	public void setTeamA(HashSet<Long> teamA) {
+	public void setTeamA(HashMap<Long,ClientPlayer> teamA) {
 		this.teamA = teamA;
 	}
 	
-	public HashSet<Long> getTeamB() {
+	public HashMap<Long,ClientPlayer> getTeamB() {
 		return teamB;
 	}
 	
-	public void setTeamB(HashSet<Long> teamB) {
+	public void setTeamB(HashMap<Long,ClientPlayer> teamB) {
 		this.teamB = teamB;
 	}
 
-	public String getLocation() {
+	public Pitch getLocation() {
 		return location;
 	}
 	
-	public void setLocation(String location) {
+	public void setLocation(Pitch location) {
 		this.location = location;
 	}
 	

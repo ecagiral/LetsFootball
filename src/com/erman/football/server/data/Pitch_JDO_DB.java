@@ -57,6 +57,19 @@ public class Pitch_JDO_DB {
 		return pitchDOs;
 	}
 	
+	public static PitchDO getPitchbyId(Long id){	
+		Key key = KeyFactory.createKey(PitchDO.class.getSimpleName(), id);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			return pm.getObjectById(PitchDO.class, key);
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			pm.close();
+		}
+		return null;
+	}
+	
 	public static void deletePitch(Long id){
 		Key key = KeyFactory.createKey(PitchDO.class.getSimpleName(), id);
 		PersistenceManager pm = PMF.get().getPersistenceManager();

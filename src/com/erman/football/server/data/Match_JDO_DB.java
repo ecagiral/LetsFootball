@@ -101,14 +101,8 @@ public class Match_JDO_DB {
 		try {
 			matchDO = pm.getObjectById(MatchDO.class, key);
 			if (matchDO!=null) {
-				HashSet<Long> teamAList = new HashSet<Long>();
-				HashSet<Long> teamBList = new HashSet<Long>();
-				for(Long playerId:matchDO.getTeamA()){
-					teamAList.add(playerId);
-				}
-				for(Long playerId:matchDO.getTeamB()){
-					teamBList.add(playerId);
-				}
+				HashSet<Long> teamAList = matchDO.getTeamA();
+				HashSet<Long> teamBList = matchDO.getTeamB();
 				if(teamA){
 					teamAList.add(player.getKey());
 					teamBList.remove(player.getKey());
@@ -116,7 +110,7 @@ public class Match_JDO_DB {
 					teamBList.add(player.getKey());
 					teamAList.remove(player.getKey());
 				}
-				matchDO.update(match);
+				matchDO.setTeam(teamAList, teamBList);
 			}else{
 				//Could not be found
 				throw new Exception("Match to be updated could not be found "+match.getDate());

@@ -2,6 +2,7 @@ package com.erman.football.server.data;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +11,9 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.erman.football.shared.ClientPlayer;
 import com.erman.football.shared.Match;
+import com.erman.football.shared.Pitch;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
@@ -181,39 +184,47 @@ public class MatchDO {
 	public static MatchDO convert(Match match){
 		MatchDO matchDO = new MatchDO();
 		matchDO.setDate(match.getDate());
-		matchDO.setLocation(match.getLocation());
+		matchDO.setLocation(Long.toString(match.getLocation().getKey()));
 		matchDO.setPaid(match.isPaid());
 		matchDO.setMailSent(match.isMailSent());
 		matchDO.setOwner(match.getOwner());
 		matchDO.setTeamAName(match.getTeamAName());
 		matchDO.setTeamBName(match.getTeamBName());
-		matchDO.setTeam(match.getTeamA(), match.getTeamA());
+		//matchDO.setTeam(match.getTeamA().keySet(), match.getTeamB().keySet());
 		return matchDO;
 	}
 
 	public void update(Match match){
 		this.setDate(match.getDate());
-		this.setLocation(match.getLocation());
+		this.setLocation(Long.toString(match.getLocation().getKey()));
 		this.setMailSent(match.isMailSent());
 		this.setPaid(match.isPaid());
 		this.setTeamAName(match.getTeamAName());
 		this.setTeamBName(match.getTeamBName());
-		this.setTeam(match.getTeamA(), match.getTeamA());
+		//this.setTeam(match.getTeamA().keySet(), match.getTeamB().keySet());
 	}
 
 	public Match convert(){
 		Match match = new Match();
 		match.setKey(this.getKey());
 		match.setDate(this.getDate());
-		match.setLocation(this.getLocation());
+		Pitch pitch = Pitch_JDO_DB.getPitchbyId(Long.parseLong(this.getLocation())).convert();
+		match.setLocation(pitch);
 		match.setMailSent(this.isMailSent());
 		match.setPaid(this.isPaid());
 		match.setOwner(this.getOwner());
 		match.setTeamAName(this.getTeamAName());
 		match.setTeamBName(this.getTeamBName());
-		match.setTeamA(this.getTeamA());
-		match.setTeamB(this.getTeamA());
+		HashMap<Long,ClientPlayer> teamA = new HashMap<Long,ClientPlayer>();
+		for(Long playerId:this.getTeamA()){
+			teamA.put(playerId,Player_JDO_DB.getUserbyId(playerId).convert());
+		}
+		match.setTeamA(teamA);
+		HashMap<Long,ClientPlayer> teamB = new HashMap<Long,ClientPlayer>();
+		for(Long playerId:this.getTeamB()){
+			teamB.put(playerId,Player_JDO_DB.getUserbyId(playerId).convert());
+		}
+		match.setTeamB(teamB);
 		return match;
 	}
-
 }

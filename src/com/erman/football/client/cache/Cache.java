@@ -169,6 +169,19 @@ public class Cache {
 		});
 	}
 	
+	public void addPlayer(Match match,ClientPlayer player,boolean teamA){
+		matchService.addPlayer(player, match, teamA, new AsyncCallback<Match>(){
+
+			public void onFailure(Throwable caught) {
+
+			}
+
+			public void onSuccess(Match result) {
+				notifyMatchUpdated(result);
+			}
+		});
+	}
+	
 	//Pitch methods
 	public void getPitches(int start ,int stop){
 		pitchService.getPitches(start,stop,

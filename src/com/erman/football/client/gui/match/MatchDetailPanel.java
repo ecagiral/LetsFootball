@@ -1,8 +1,10 @@
 package com.erman.football.client.gui.match;
 
 import java.util.HashSet;
+import java.util.List;
 
 import com.erman.football.client.cache.Cache;
+import com.erman.football.client.cache.CacheMatchHandler;
 import com.erman.football.shared.Match;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -13,26 +15,35 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MatchDetailPanel extends HorizontalPanel{
+public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandler{
 	
-	private VerticalPanel teamAPanel = new VerticalPanel();
-	private VerticalPanel teamBPanel = new VerticalPanel();
-	private HashSet<Long> teamAPlayers = new HashSet<Long>();
-	private HashSet<Long> teamBPlayers = new HashSet<Long>();
-	private VerticalPanel teamAContainer = new VerticalPanel();
-	private VerticalPanel teamBContainer = new VerticalPanel();
+	private final VerticalPanel teamAPanel = new VerticalPanel();
+	private final VerticalPanel teamBPanel = new VerticalPanel();
+	private final HashSet<Long> teamAPlayers = new HashSet<Long>();
+	private final HashSet<Long> teamBPlayers = new HashSet<Long>();
+	private final VerticalPanel teamAContainer = new VerticalPanel();
+	private final VerticalPanel teamBContainer = new VerticalPanel();
+	private final Label teamALabel = new Label("Team A");
+	private final Label teamBLabel = new Label("Team B");
+	
+	
 	private Button teamAAddButton;
 	private Button teamBAddButton;
 	private ClientPlayer loggedPlayer;
 	private PlayerInfoCell infoCell;
 	
-	public MatchDetailPanel(Cache cache){
+	private final Cache cache;
+	private Match match;
+	
+	public MatchDetailPanel(Cache _cache){
+		cache = _cache;
+		cache.regiserMatch(this);
 		loggedPlayer = cache.getLoggedPlayer();
 		
 		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 
 		teamAContainer.setHorizontalAlignment(ALIGN_CENTER);
-		Label teamALabel = new Label("Team A");
+		
 		teamAContainer.add(teamALabel); 
 		HorizontalPanel teamAaddPanel = new HorizontalPanel();
 		teamAAddButton = new Button("Add Me");
@@ -48,7 +59,7 @@ public class MatchDetailPanel extends HorizontalPanel{
 		this.add(teamAContainer);
 		
 		teamBContainer.setHorizontalAlignment(ALIGN_CENTER);
-		Label teamBLabel = new Label("Team B");
+		
 		teamBContainer.add(teamBLabel);
 		HorizontalPanel teamBaddPanel = new HorizontalPanel();
 		teamBAddButton = new Button("Add Me");
@@ -65,18 +76,17 @@ public class MatchDetailPanel extends HorizontalPanel{
 	
 	}
 	
-	public void render(Match match){
+	public void render(Match _match){
+		match = _match;
 		teamAPlayers.clear();
 		teamAPanel.clear();
 		teamAAddButton.setText("Add Me");
 		teamAAddButton.setVisible(true);
 		teamBAddButton.setText("Add Me");
 		teamBAddButton.setVisible(true);
-		for(Long playerId:match.getTeamA()){
-			if(playerId==null){
-				continue;
-			}
-			String name = Long.toString(playerId);
+		teamALabel.setText(match.getTeamAName());
+		for(Long playerId:match.getTeamA().keySet()){
+			String name = match.getTeamA().get(playerId).getName();
 			teamAPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
 				teamAAddButton.setText("Remove Me");
@@ -91,8 +101,9 @@ public class MatchDetailPanel extends HorizontalPanel{
 		}
 		teamBPlayers.clear();
 		teamBPanel.clear();
-		for(Long playerId:match.getTeamB()){
-			String name = Long.toString(playerId);
+		teamBLabel.setText(match.getTeamBName());
+		for(Long playerId:match.getTeamB().keySet()){
+			String name = match.getTeamB().get(playerId).getName();
 			teamBPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
 				teamBAddButton.setText("Remove Me");
@@ -140,70 +151,32 @@ public class MatchDetailPanel extends HorizontalPanel{
 	class AddPlayerHandler implements ClickHandler{
 
 		private boolean teamA;
+		
 		public AddPlayerHandler(boolean teamA){
 			this.teamA = teamA;
 		}
+		
 		public void onClick(ClickEvent event) {
-			if(teamA){
-				if(teamBPlayers.contains(loggedPlayer.getKey())){
-					teamBPlayers.remove(loggedPlayer.getKey());
-					infoCell.removeFromParent();
-					infoCell = null;
-				}
-				if(teamAPlayers.contains(loggedPlayer.getKey())){
-					teamAPlayers.remove(loggedPlayer.getKey());
-					infoCell.removeFromParent();
-					infoCell = null;
-					teamAAddButton.setText("Add Me");
-					teamAAddButton.setVisible(true);
-					teamBAddButton.setText("Add Me");
-					teamBAddButton.setVisible(true);
-				}else{
-					teamAPlayers.add(loggedPlayer.getKey());
-					infoCell = new PlayerInfoCell(loggedPlayer.getName(),true);
-					teamAPanel.add(infoCell);
-					teamAAddButton.setText("Remove Me");
-					teamAAddButton.setVisible(true);
-					teamBAddButton.setText("Add Me");
-					teamBAddButton.setVisible(true);
-				}
-			}else{
-				if(teamAPlayers.contains(loggedPlayer.getKey())){
-					teamAPlayers.remove(loggedPlayer.getKey());
-					infoCell.removeFromParent();
-					infoCell = null;
-				}
-				if(teamBPlayers.contains(loggedPlayer.getKey())){
-					teamBPlayers.remove(loggedPlayer.getKey());
-					infoCell.removeFromParent();
-					infoCell = null;
-					teamBAddButton.setText("Add Me");
-					teamBAddButton.setVisible(true);
-					teamAAddButton.setText("Add Me");
-					teamAAddButton.setVisible(true);
-				}else{
-					teamBPlayers.add(loggedPlayer.getKey());
-					infoCell = new PlayerInfoCell(loggedPlayer.getName(),true);
-					teamBPanel.add(infoCell);
-					teamBAddButton.setText("Remove Me");
-					teamBAddButton.setVisible(true);
-					teamAAddButton.setText("Add Me");
-					teamAAddButton.setVisible(true);
-				}
-			}	 		
+			cache.addPlayer(match, cache.getLoggedPlayer(), teamA);		
 		}		
 	}
-	
-	public HashSet<Long> getTeamA(){
-		HashSet<Long> tmpTeam = new HashSet<Long>();
-		tmpTeam.addAll(teamAPlayers);
-		return tmpTeam;
+
+	@Override
+	public void matchAdded(List<Match> matches) {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public HashSet<Long> getTeamB(){
-		HashSet<Long> tmpTeam = new HashSet<Long>();
-		tmpTeam.addAll(teamBPlayers);
-		return tmpTeam;
+	@Override
+	public void matchUpdated(Match match) {
+		if(match.getKey()==this.match.getKey())
+			render(match);
+	}
+
+	@Override
+	public void matchRemoved(Long match) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

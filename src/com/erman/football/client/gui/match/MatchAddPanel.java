@@ -156,7 +156,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			modify = true;
 			match = _match;
 			Pitch pitch = new Pitch();
-			pitch.setKey(Long.parseLong(match.getLocation()));
+			pitch.setKey(match.getLocation().getKey());
 			pitchMap.selectMarker(pitch);
 		}
 		datePicker.setValue(match.getDate());
@@ -249,8 +249,8 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	}
 
 	public void markerClicked(Pitch pitch, Marker marker) {
-		match.setLocation(Long.toString(pitch.getKey()));
-		pitchName.setText(Long.toString(pitch.getKey()));
+		match.setLocation(pitch);
+		pitchName.setText(pitch.getName());
 	}
 
 	public void markerAdded(Pitch pitch, Marker marker) {

@@ -57,6 +57,9 @@ public class MatchServiceImpl extends RemoteServiceServlet implements MatchServi
 
 	@Override
 	public Match addPlayer(ClientPlayer player, Match match, boolean teamA) {
+		if(player.getKey()<1){
+			return match;
+		}
 		return Match_JDO_DB.addPlayer(player,match,teamA);
 	}
 
