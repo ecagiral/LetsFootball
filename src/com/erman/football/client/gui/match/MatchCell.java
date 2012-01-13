@@ -9,10 +9,15 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MatchCell extends DataCell{
 	
-	private Label summary = new Label();
+	private Label teamA = new Label();
+	private Label teamB = new Label();
+	private Label score = new Label();
+	private Label date = new Label();
+	private Label location = new Label();
 	
 	final private DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy - HH:mm");
 
@@ -33,11 +38,26 @@ public class MatchCell extends DataCell{
 	}
 
 	private HorizontalPanel generateCard(MatchCell cell){
+		cell.teamA.setStyleName("matchAName");
+		cell.teamB.setStyleName("matchBName");
+		cell.teamA.setText(cell.getMatch().getTeamAName());
+		cell.teamB.setText(cell.getMatch().getTeamBName());
+		if(cell.getMatch().isPlayed()){
+			cell.score.setText(cell.getMatch().getTeamAScore()+" - "+cell.getMatch().getTeamBScore());
+		}else{
+			cell.score.setText("vs");
+		}
+		cell.date.setText(dateFormat.format(cell.getMatch().getDate()));
+		cell.location.setText(cell.getMatch().getLocation().getName());
 		HorizontalPanel result = new HorizontalPanel();
+		result.setVerticalAlignment(ALIGN_BOTTOM);
 		result.setWidth("100%");
-		cell.getSummary().setText(dateFormat.format(cell.getMatch().getDate())+" "+cell.getMatch().getLocation().getName());
-		result.add(cell.getSummary());
+		result.add(cell.getSummary(cell));
 		if(cell.isAdmin()){
+			Image end = new Image("ball.png");
+			end.addClickHandler(new CellEndHandler(cell));
+			result.setHorizontalAlignment(ALIGN_RIGHT);
+			result.add(end);
 			Image edit = new Image("modify.png");
 			edit.addClickHandler(new CellModifyHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
@@ -46,19 +66,42 @@ public class MatchCell extends DataCell{
 			delete.addClickHandler(new CellDeleteHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
 			result.add(delete);
+			
 		}
 		return result;
 	}
 	
-	public Label getSummary(){
-		return summary;
+	public VerticalPanel getSummary(MatchCell cell){
+		VerticalPanel result = new VerticalPanel();
+		HorizontalPanel headerPanel = new HorizontalPanel();
+		headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
+		headerPanel.add(teamA);
+		headerPanel.add(score);
+		headerPanel.add(teamB);
+		result.add(headerPanel);
+		HorizontalPanel datePanel = new HorizontalPanel();
+		datePanel.add(new Label("Tarih: "));
+		datePanel.add(date);
+		result.add(datePanel);
+		HorizontalPanel locationPanel = new HorizontalPanel();
+		locationPanel.add(new Label("Saha: "));
+		locationPanel.add(location);
+		result.add(locationPanel);
+		return result;
 	}
 	
 	protected void update(DataObject data){
 		Match match = (Match)data;
 		this.data = match;
-		summary.setText(dateFormat.format(match.getDate())+" "+match.getLocation().getName());
-		
+		teamA.setText(match.getTeamAName());
+		teamB.setText(match.getTeamBName());
+		if(match.isPlayed()){
+			score.setText(match.getTeamAScore()+" - "+match.getTeamBScore());
+		}else{
+			score.setText("vs");
+		}
+		date.setText(dateFormat.format(match.getDate()));
+		location.setText(match.getLocation().getName());
 	}
 	
 	public Match getMatch(){

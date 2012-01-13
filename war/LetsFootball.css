@@ -187,3 +187,24 @@ h1 {
 .nextButton:hover{
 	cursor:pointer;
 }
+
+.matchAName{
+	font-size:18px;
+	color:red;	
+	margin-left:7px;
+  	margin-right:10px;
+}
+
+.matchBName{
+	font-size:18px;
+	color:green;	
+	margin-left:7px;
+  	margin-right:10px;
+}
+
+.summaryLabel{
+	margin-left:10px;
+	margin-right:5px;
+	margin-top:20px;
+	font-style:italic;
+}

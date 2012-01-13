@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MainTab extends SimplePanel{
 	
-	private final SimplePanel listPanel = new SimplePanel();
+	private final HorizontalPanel listPanel = new HorizontalPanel();
 	
 	private final PlayerPanel playerPanel;
 	private final MatchPanel matchPanel;
@@ -26,7 +26,7 @@ public class MainTab extends SimplePanel{
 		PitchMapPanel mapPanel = new PitchMapPanel(cache);
 		pitchPanel = new PitchPanel(cache,mapPanel);
 		matchPanel = new MatchPanel(cache,mapPanel);
-		VerticalPanel mainPanel = new VerticalPanel();
+		
 		SimplePanel topPanel = new SimplePanel();
 		topPanel.setStyleName("topPanel");
 		HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -36,9 +36,10 @@ public class MainTab extends SimplePanel{
 		matchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
-				listPanel.clear();
+				playerPanel.setVisible(false);
+				pitchPanel.setVisible(false);
 				matchPanel.load();
-				listPanel.add(matchPanel);
+				matchPanel.setVisible(true);
 			}
 			
 		});
@@ -48,8 +49,9 @@ public class MainTab extends SimplePanel{
 		playerButton.addClickHandler(new ClickHandler(){
 		
 			public void onClick(ClickEvent event) {
-				listPanel.clear();
-				listPanel.add(playerPanel);
+				matchPanel.setVisible(false);
+				pitchPanel.setVisible(false);
+				playerPanel.setVisible(true);
 			}
 			
 		});
@@ -59,18 +61,30 @@ public class MainTab extends SimplePanel{
 		pitchButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
-				listPanel.clear();
-				listPanel.add(pitchPanel);
+				matchPanel.setVisible(false);
+				playerPanel.setVisible(false);
+				pitchPanel.setVisible(true);
 				pitchPanel.load();
+				
 			}
 			
 		});
 		buttonPanel.add(pitchButton);
 		topPanel.add(buttonPanel);
-		mainPanel.add(topPanel);
-		HorizontalPanel centerPanel = new HorizontalPanel();
+		
 		listPanel.add(matchPanel);
+		listPanel.add(pitchPanel);
+		listPanel.add(playerPanel);
+		
+		playerPanel.setVisible(false);
+		pitchPanel.setVisible(false);
+		matchPanel.setVisible(true);
+		
+		HorizontalPanel centerPanel = new HorizontalPanel();
 		centerPanel.add(listPanel);
+		
+		VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.add(topPanel);
 		mainPanel.add(centerPanel);
 		mainPanel.setWidth("100%");
 		this.add(mainPanel);

@@ -52,6 +52,15 @@ public class MatchDO {
 	
 	@Persistent
 	Long[] team;
+	
+	@Persistent
+	boolean played;
+	
+	@Persistent
+	int teamAScore;
+	
+	@Persistent
+	int teamBScore;
 
 	public long getKey() {
 		return key.getId();
@@ -181,6 +190,30 @@ public class MatchDO {
 		this.teamBName = teamBName;
 	}
 
+	public boolean isPlayed() {
+		return played;
+	}
+
+	public void setPlayed(boolean played) {
+		this.played = played;
+	}
+
+	public int getTeamAScore() {
+		return teamAScore;
+	}
+
+	public void setTeamAScore(int teamAScore) {
+		this.teamAScore = teamAScore;
+	}
+
+	public int getTeamBScore() {
+		return teamBScore;
+	}
+
+	public void setTeamBScore(int teamBScore) {
+		this.teamBScore = teamBScore;
+	}
+
 	public static MatchDO convert(Match match){
 		MatchDO matchDO = new MatchDO();
 		matchDO.setDate(match.getDate());
@@ -190,7 +223,9 @@ public class MatchDO {
 		matchDO.setOwner(match.getOwner());
 		matchDO.setTeamAName(match.getTeamAName());
 		matchDO.setTeamBName(match.getTeamBName());
-		//matchDO.setTeam(match.getTeamA().keySet(), match.getTeamB().keySet());
+		matchDO.setTeamAScore(match.getTeamAScore());
+		matchDO.setTeamBScore(match.getTeamBScore());
+		matchDO.setPlayed(match.isPlayed());
 		return matchDO;
 	}
 
@@ -201,7 +236,9 @@ public class MatchDO {
 		this.setPaid(match.isPaid());
 		this.setTeamAName(match.getTeamAName());
 		this.setTeamBName(match.getTeamBName());
-		//this.setTeam(match.getTeamA().keySet(), match.getTeamB().keySet());
+		this.setTeamAScore(match.getTeamAScore());
+		this.setTeamBScore(match.getTeamBScore());
+		this.setPlayed(match.isPlayed());
 	}
 
 	public Match convert(){
@@ -215,6 +252,9 @@ public class MatchDO {
 		match.setOwner(this.getOwner());
 		match.setTeamAName(this.getTeamAName());
 		match.setTeamBName(this.getTeamBName());
+		match.setPlayed(this.isPlayed());
+		match.setTeamAScore(this.getTeamAScore());
+		match.setTeamBScore(this.getTeamBScore());
 		HashMap<Long,ClientPlayer> teamA = new HashMap<Long,ClientPlayer>();
 		for(Long playerId:this.getTeamA()){
 			teamA.put(playerId,Player_JDO_DB.getUserbyId(playerId).convert());

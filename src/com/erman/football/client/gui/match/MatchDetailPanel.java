@@ -46,7 +46,7 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 		
 		teamAContainer.add(teamALabel); 
 		HorizontalPanel teamAaddPanel = new HorizontalPanel();
-		teamAAddButton = new Button("Add Me");
+		teamAAddButton = new Button("Beni Ekle");
 		teamAAddButton.addClickHandler(new AddPlayerHandler(true));
 		teamAaddPanel.add(teamAAddButton);
 		teamAContainer.add(teamAaddPanel);
@@ -62,7 +62,7 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 		
 		teamBContainer.add(teamBLabel);
 		HorizontalPanel teamBaddPanel = new HorizontalPanel();
-		teamBAddButton = new Button("Add Me");
+		teamBAddButton = new Button("Beni Ekle");
 		teamBAddButton.addClickHandler(new AddPlayerHandler(false));
 		teamBaddPanel.add(teamBAddButton);
 		teamBContainer.add(teamBaddPanel);
@@ -80,18 +80,18 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 		match = _match;
 		teamAPlayers.clear();
 		teamAPanel.clear();
-		teamAAddButton.setText("Add Me");
+		teamAAddButton.setText("Beni Ekle");
 		teamAAddButton.setVisible(true);
-		teamBAddButton.setText("Add Me");
+		teamBAddButton.setText("Beni Ekle");
 		teamBAddButton.setVisible(true);
 		teamALabel.setText(match.getTeamAName());
 		for(Long playerId:match.getTeamA().keySet()){
 			String name = match.getTeamA().get(playerId).getName();
 			teamAPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
-				teamAAddButton.setText("Remove Me");
+				teamAAddButton.setText("Beni Cikar");
 				teamAAddButton.setVisible(true);
-				teamBAddButton.setText("Add Me");
+				teamBAddButton.setText("Beni Ekle");
 				teamBAddButton.setVisible(true);
 				infoCell = new PlayerInfoCell(name,true);
 				teamAPanel.insert(infoCell,0);
@@ -106,9 +106,9 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 			String name = match.getTeamB().get(playerId).getName();
 			teamBPlayers.add(playerId);
 			if(playerId.equals(loggedPlayer.getKey())){
-				teamBAddButton.setText("Remove Me");
+				teamBAddButton.setText("Beni Cikar");
 				teamBAddButton.setVisible(true);
-				teamAAddButton.setText("Add Me");
+				teamAAddButton.setText("Beni Ekle");
 				teamAAddButton.setVisible(true);
 				infoCell = new PlayerInfoCell(name,false);
 				teamBPanel.insert(infoCell,0);
@@ -169,7 +169,7 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 
 	@Override
 	public void matchUpdated(Match match) {
-		if(match.getKey()==this.match.getKey())
+		if(this.match!=null && match.getKey()==this.match.getKey()  )
 			render(match);
 	}
 

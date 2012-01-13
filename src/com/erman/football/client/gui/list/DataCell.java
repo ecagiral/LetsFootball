@@ -52,6 +52,20 @@ public abstract class DataCell extends VerticalPanel{
 		}
 	}
 	
+	protected class CellEndHandler implements ClickHandler{
+
+		private DataCell cell;
+		
+		public CellEndHandler(DataCell _cell){
+			this.cell = _cell;
+		}
+
+		public void onClick(ClickEvent event) {
+			listener.endClicked(cell,event.getClientX(),event.getClientY());
+			event.stopPropagation();
+		}
+	}
+	
 	protected class CellModifyHandler implements ClickHandler{
 
 		private DataCell cell;

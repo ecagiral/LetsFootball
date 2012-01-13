@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -24,15 +25,17 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 
 public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,PitchMapPanelHandler{
 
-	private static enum stage {pitch,date,player};
+	private static enum stage {pitch,date,player,summary};
 
 	private final PitchMapPanel pitchMap;
 	private final VerticalPanel mapPanel = new VerticalPanel();
 	private final VerticalPanel datePanel = new VerticalPanel();
 	private final SimplePanel playerPanel = new SimplePanel();
+	private final SummaryPanel summaryPanel = new SummaryPanel();
 	private final Label selectPitch = new Label("Saha");
 	private final Label selectDate = new Label("Tarih");
 	private final Label selectPlayer = new Label("Takimlar");
+	private final Label matchSummary = new Label("Onay");
 	private final Image nextButton = new Image("arrow_right.png");
 	private final Image backButton = new Image("arrow_left.png");
 	private final Label applyButton = new Label("Ekle");
@@ -43,6 +46,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	private final Image laodImg = new Image("loader.gif");
 	private final Image successImg = new Image("success.jpg");
 	private final DatePicker datePicker = new DatePicker();
+	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy:HH.mm");
 
 	private stage currentStage;
 	private Match match;
@@ -54,13 +58,12 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		pitchMap = _pitchMap;
 		cache.regiserMatch(this);
 
-
-
 		HorizontalPanel stepPanel = new HorizontalPanel();
 
 		selectPitch.setStylePrimaryName("addStage");
 		selectDate.setStylePrimaryName("addStage");
 		selectPlayer.setStylePrimaryName("addStage");
+		matchSummary.setStylePrimaryName("addStage");
 
 		backButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
@@ -78,6 +81,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		stepPanel.add(selectPitch);
 		stepPanel.add(selectDate);
 		stepPanel.add(selectPlayer);
+		stepPanel.add(matchSummary);
 		stepPanel.add(nextButton);
 
 		HorizontalPanel pitchNamePanel = new HorizontalPanel();
@@ -105,7 +109,8 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		mainPanel.add(mapPanel);
 		mainPanel.add(datePanel);
 		mainPanel.add(playerPanel);
-
+		mainPanel.add(summaryPanel);
+		
 		VerticalPanel bottomPanel = new VerticalPanel();
 		bottomPanel.setWidth("100%");
 		bottomPanel.setHorizontalAlignment(ALIGN_CENTER);
@@ -131,6 +136,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		this.add(stepPanel);
 		this.add(mainPanel);
 		this.add(bottomPanel);
+	
 	}
 	
 	public void load(Match _match){
@@ -140,6 +146,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		backButton.setVisible(false);
 		playerPanel.setVisible(false);
 		datePanel.setVisible(false);
+		summaryPanel.setVisible(false);
 		selectPitch.setStyleDependentName("selected", true);
 		selectDate.setStyleDependentName("selected", false);
 		selectPlayer.setStyleDependentName("selected", false);
@@ -174,9 +181,11 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			mapPanel.setVisible(true);
 			playerPanel.setVisible(false);
 			datePanel.setVisible(false);
+			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", true);
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", false);
+			matchSummary.setStyleDependentName("selected", false);
 			nextButton.setVisible(true);
 			backButton.setVisible(false);
 			currentStage = stage.pitch;
@@ -185,13 +194,28 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(false);
 			datePanel.setVisible(true);
+			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", false);
 			selectDate.setStyleDependentName("selected", true);
 			selectPlayer.setStyleDependentName("selected", false);
+			matchSummary.setStyleDependentName("selected", false);
+			nextButton.setVisible(true);
+			backButton.setVisible(true);
+			currentStage = stage.date;
+			break;
+		case summary:
+			mapPanel.setVisible(false);
+			playerPanel.setVisible(true);
+			datePanel.setVisible(false);
+			summaryPanel.setVisible(false);
+			selectPitch.setStyleDependentName("selected", false);
+			selectDate.setStyleDependentName("selected", false);
+			selectPlayer.setStyleDependentName("selected", true);
+			matchSummary.setStyleDependentName("selected", false);
 			nextButton.setVisible(true);
 			backButton.setVisible(true);
 			applyButton.setVisible(false);
-			currentStage = stage.date;
+			currentStage = stage.player;
 			break;
 		}
 	}
@@ -202,9 +226,11 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(false);
 			datePanel.setVisible(true);
+			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", false);
 			selectDate.setStyleDependentName("selected", true);
 			selectPlayer.setStyleDependentName("selected", false);
+			matchSummary.setStyleDependentName("selected", false);
 			nextButton.setVisible(true);
 			backButton.setVisible(true);
 			currentStage = stage.date;
@@ -213,9 +239,26 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(true);
 			datePanel.setVisible(false);
+			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", false);
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", true);
+			matchSummary.setStyleDependentName("selected", false);
+			applyButton.setVisible(false);
+			backButton.setVisible(true);
+			nextButton.setVisible(true);
+			currentStage = stage.player;
+			break;
+		case player:
+			mapPanel.setVisible(false);
+			playerPanel.setVisible(false);
+			datePanel.setVisible(false);
+			summaryPanel.update();
+			summaryPanel.setVisible(true);
+			selectPitch.setStyleDependentName("selected", false);
+			selectDate.setStyleDependentName("selected", false);
+			selectPlayer.setStyleDependentName("selected", false);
+			matchSummary.setStyleDependentName("selected", true);
 			if(modify){
 				applyButton.setText("Guncelle");
 			}else{
@@ -224,9 +267,9 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			applyButton.setVisible(true);
 			backButton.setVisible(true);
 			nextButton.setVisible(false);
-			currentStage = stage.player;
+			currentStage = stage.summary;
 			break;
-		case player:
+		case summary:
 			//should not be here
 			nextButton.setVisible(false);
 			break;
@@ -272,6 +315,48 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 
 	public void matchRemoved(Long match) {
 		//Not interested
+	}
+	
+	private class SummaryPanel extends VerticalPanel{
+		Label date = new Label();
+		Label time = new Label();
+		Label location = new Label();
+		Label teamA = new Label();
+		Label teamB = new Label();
+		
+		public SummaryPanel(){
+			this.setHorizontalAlignment(ALIGN_CENTER);
+			HorizontalPanel headerPanel = new HorizontalPanel();
+			headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
+			teamA.setStyleName("matchAName");
+			headerPanel.add(teamA);
+			headerPanel.add(new Label("vs"));
+			teamB.setStyleName("matchBName");
+			headerPanel.add(teamB);
+			this.add(headerPanel);
+			HorizontalPanel datePanel = new HorizontalPanel();
+			datePanel.add(new Label("Tarih: "));
+			datePanel.add(date);
+			this.add(datePanel);
+			HorizontalPanel timePanel = new HorizontalPanel();
+			timePanel.add(new Label("Saat: "));
+			timePanel.add(time);
+			this.add(timePanel);
+			HorizontalPanel locationPanel = new HorizontalPanel();
+			locationPanel.add(new Label("Saha: "));
+			locationPanel.add(location);
+			this.add(locationPanel);
+		}
+		
+		public void update(){
+			teamA.setText(teamAName.getText());
+			teamB.setText(teamBName.getText());
+			String dateTime[] = dateFormat.format(match.getDate()).split(":");
+			date.setText(dateTime[0]);
+			time.setText(dateTime[1]);
+			location.setText(pitchName.getText());
+		}
+		
 	}
 
 }

@@ -40,7 +40,12 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 			}
 		});
 		buttonPanel.add(searchMatch);
-		buttonPanel.setWidth("100px");
+		SimplePanel summaryPanel = new SimplePanel();
+		Label summaryLabel = new Label("Bu paneli kullanarak halisaha arayabilirsiniz.");
+		summaryPanel.add(summaryLabel);
+		summaryPanel.setStyleName("summaryLabel");
+		buttonPanel.add(summaryPanel);
+		buttonPanel.setWidth("120px");
 
 
 		this.add(buttonPanel);

@@ -3,8 +3,6 @@ package com.erman.football.shared;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-
 
 public class Match extends DataObject implements Serializable{
 
@@ -20,6 +18,8 @@ public class Match extends DataObject implements Serializable{
 	private boolean paid;
 	private boolean mailSent;
 	private boolean played;
+	private int teamAScore;
+	private int teamBScore;
 	private String teamAName;
 	private String teamBName;
 	private HashMap<Long,ClientPlayer> teamA;
@@ -32,6 +32,8 @@ public class Match extends DataObject implements Serializable{
 		this.paid = false;
 		this.mailSent = false;
 		this.played = false;
+		this.teamAScore = 0;
+		this.teamBScore = 0;
 		this.teamAName = "Team A";
 		this.teamBName = "Team B";
 		this.teamA = new HashMap<Long,ClientPlayer>();
@@ -124,6 +126,22 @@ public class Match extends DataObject implements Serializable{
 
 	public void setTeamBName(String teamBName) {
 		this.teamBName = teamBName;
+	}
+
+	public int getTeamAScore() {
+		return teamAScore;
+	}
+
+	public void setTeamAScore(int teamAScore) {
+		this.teamAScore = teamAScore;
+	}
+
+	public int getTeamBScore() {
+		return teamBScore;
+	}
+
+	public void setTeamBScore(int teamBScore) {
+		this.teamBScore = teamBScore;
 	}
 	
 }

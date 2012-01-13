@@ -30,7 +30,7 @@ public class MatchDialog{
 		matchInfos.setWidget(2,0,new Label("Saha: "));
 		matchInfos.setWidget(2,1,matchLocationText);
 
-		matchBoxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+		matchBoxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		matchBoxPanel.add(matchInfos);
 		matchBoxPanel.add(detailPanel);
 	}

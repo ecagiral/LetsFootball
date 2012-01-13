@@ -51,7 +51,13 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 			}
 		});
 		buttonPanel.add(searchMatch);
-		buttonPanel.setWidth("100px");
+		SimplePanel summaryPanel = new SimplePanel();
+		Label summaryLabel = new Label("Bu paneli kullanarak oyuncu listesini gorebilir, kendi bilgilerinizi guncelleyebilirsiniz.");
+		summaryPanel.add(summaryLabel);
+		summaryPanel.setStyleName("summaryLabel");
+		buttonPanel.add(summaryPanel);
+		buttonPanel.setWidth("120px");
+
 		this.add(buttonPanel);
 		this.add(listMainPanel);
 		this.add(infoPanel);
@@ -100,6 +106,12 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 
 	@Override
 	public void modifyClicked(DataCell dataCell) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endClicked(DataCell dataCell, int x, int y) {
 		// TODO Auto-generated method stub
 		
 	}
