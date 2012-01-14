@@ -123,8 +123,7 @@ h1 {
 
 .listPanel{
   	height: 500px;
-  	width: 270px;
-
+  	width: 350px;
 }
 
 .topButton{
@@ -173,7 +172,8 @@ h1 {
 }
 
 .addStage{
-  	width: 100px;
+  	width: 80px;
+  	font-size:16px;
   	margin-top:7px;
   	margin-bottom:10px;
   	text-align:center;
@@ -197,9 +197,20 @@ h1 {
 
 .matchBName{
 	font-size:18px;
-	color:green;	
+	color:#009900;	
 	margin-left:7px;
   	margin-right:10px;
+}
+
+.playedScore{
+	font-size:18px;
+	color:black;	
+	font-style:bold;
+}
+
+.score{
+	font-size:10px;
+	color:black;	
 }
 
 .summaryLabel{

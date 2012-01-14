@@ -150,6 +150,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		selectPitch.setStyleDependentName("selected", true);
 		selectDate.setStyleDependentName("selected", false);
 		selectPlayer.setStyleDependentName("selected", false);
+		matchSummary.setStyleDependentName("selected", false);
 		currentStage = stage.pitch;
 		nextButton.setVisible(true);
 		applyButton.setVisible(false);

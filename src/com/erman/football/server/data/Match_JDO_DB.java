@@ -104,11 +104,19 @@ public class Match_JDO_DB {
 				HashSet<Long> teamAList = matchDO.getTeamA();
 				HashSet<Long> teamBList = matchDO.getTeamB();
 				if(teamA){
-					teamAList.add(player.getKey());
-					teamBList.remove(player.getKey());
+					if(teamAList.contains(player.getKey())){
+						teamAList.remove(player.getKey());
+					}else{
+						teamAList.add(player.getKey());
+						teamBList.remove(player.getKey());
+					}
 				}else{
-					teamBList.add(player.getKey());
-					teamAList.remove(player.getKey());
+					if(teamBList.contains(player.getKey())){
+						teamBList.remove(player.getKey());
+					}else{
+						teamBList.add(player.getKey());
+						teamAList.remove(player.getKey());
+					}
 				}
 				matchDO.setTeam(teamAList, teamBList);
 			}else{

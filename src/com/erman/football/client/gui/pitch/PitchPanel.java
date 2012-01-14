@@ -30,16 +30,17 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 				}
 			});
 			buttonPanel.add(addMatch);
+
+			Label searchMatch = new Label("Saha Ara");
+			searchMatch.setStyleName("leftButton");
+			searchMatch.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					infoPanel.clear();
+					pitchMap.removeIdle();
+				}
+			});
+			buttonPanel.add(searchMatch);
 		}
-		Label searchMatch = new Label("Saha Ara");
-		searchMatch.setStyleName("leftButton");
-		searchMatch.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				infoPanel.clear();
-				pitchMap.removeIdle();
-			}
-		});
-		buttonPanel.add(searchMatch);
 		SimplePanel summaryPanel = new SimplePanel();
 		Label summaryLabel = new Label("Bu paneli kullanarak halisaha arayabilirsiniz.");
 		summaryPanel.add(summaryLabel);
@@ -62,7 +63,7 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 		pitchDialog.render(true,pitch,infoPanel,marker);
 		infoPanel.setVisible(true);
 	}
-	
+
 	public void load(){
 		pitchMap.show(mapPanel, this);
 	}

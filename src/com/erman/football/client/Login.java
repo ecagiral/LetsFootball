@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -24,8 +25,10 @@ public class Login extends VerticalPanel {
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
 	private final TextBox emailBox = new TextBox();
+	private final TextBox newEmailBox = new TextBox();
 	private final TextBox nameBox = new TextBox();
 	private final Label loginStatus = new Label();
+	private final Label joinStatus = new Label();
 	private final LoginHandler handler;	
 	private boolean notFirst = false;
 	
@@ -38,7 +41,7 @@ public class Login extends VerticalPanel {
 			public void onKeyPress(KeyPressEvent event) {
 				loginStatus.setText("");
 				int key = new Integer(event.getCharCode());
-				if(key==13||key==0){
+				if(key==13){
 					login(emailBox.getText());
 				}
 			}
@@ -50,7 +53,7 @@ public class Login extends VerticalPanel {
 			
 		});
 		nameBox.setText("Isim");
-		
+		newEmailBox.setText("Email");
 		Button loginButton = new Button("Giri&#351");
 		loginButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
@@ -65,23 +68,37 @@ public class Login extends VerticalPanel {
 			}		
 		});
 		
-		VerticalPanel mainPanel = new VerticalPanel();
-		HorizontalPanel loginPanel = new HorizontalPanel();
+		VerticalPanel loginPanel = new VerticalPanel();
+		loginPanel.add(new Label("kayitli oyuncu"));
 		loginPanel.add(emailBox);
 		loginPanel.add(loginButton);
 		loginStatus.setText("");
 		loginPanel.add(loginStatus);
+		
+		VerticalPanel signupPanel = new VerticalPanel();
+		signupPanel.add(new Label("yeni oyuncu"));
+		signupPanel.add(nameBox);
+		signupPanel.add(newEmailBox);
+		signupPanel.add(joinButton);
+		joinStatus.setText("");
+		signupPanel.add(joinStatus);
+		
+		SimplePanel space = new SimplePanel();
+		space.setWidth("50px");
+		
+		HorizontalPanel mainPanel = new HorizontalPanel();
+		mainPanel.add(signupPanel);
+		mainPanel.add(space);
 		mainPanel.add(loginPanel);
-		mainPanel.add(nameBox);
-		mainPanel.add(joinButton);
 
+		
 		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
 
 	private void login(String email){
-		loginStatus.setText(new String("&#304&#351leniyor..."));
+		loginStatus.setText(new String("Isleniyor..."));
 		loginService.login(email, new  LoginCallback());
 	}
 	
@@ -91,8 +108,9 @@ public class Login extends VerticalPanel {
 	
 	public void join(){
 		ClientPlayer newPlayer = new ClientPlayer();
-		newPlayer.setEmail(emailBox.getText());
+		newPlayer.setEmail(newEmailBox.getText());
 		newPlayer.setName(nameBox.getText());
+		joinStatus.setText("Oyuncu ekleniyor...");
 		playerService.addPlayer(newPlayer, new AddCallback());
 	}
 	
@@ -143,6 +161,7 @@ public class Login extends VerticalPanel {
 		}
 
 		public void onSuccess(ClientPlayer result) {
+			joinStatus.setText("Oyuncu eklendi");
 			login(result.getEmail());
 		}
 		

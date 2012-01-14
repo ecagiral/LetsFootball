@@ -42,9 +42,12 @@ public class MatchCell extends DataCell{
 		cell.teamB.setStyleName("matchBName");
 		cell.teamA.setText(cell.getMatch().getTeamAName());
 		cell.teamB.setText(cell.getMatch().getTeamBName());
+		
 		if(cell.getMatch().isPlayed()){
+			cell.score.setStyleName("playedScore");
 			cell.score.setText(cell.getMatch().getTeamAScore()+" - "+cell.getMatch().getTeamBScore());
 		}else{
+			cell.score.setStyleName("score");
 			cell.score.setText("vs");
 		}
 		cell.date.setText(dateFormat.format(cell.getMatch().getDate()));

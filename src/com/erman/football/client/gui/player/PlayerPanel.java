@@ -18,14 +18,14 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,ListPanelListener{
-	
+
 	final private PlayerDialog playerDialog;	
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
 	final private Cache cache;
-	
+
 	private PlayerCell currentPlayer;
-	
+
 	public PlayerPanel(Cache _cache){
 		this.cache = _cache;
 		cache.regiserPlayer(this);
@@ -34,23 +34,26 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 		listMainPanel = new ListPanel(filter, new PlayerCell(this));
 		filter.setHandler(listMainPanel);
 		VerticalPanel buttonPanel = new VerticalPanel();
-		Label addMatch = new Label("Oyuncu Ekle");
-		addMatch.setStyleName("leftButton");
-		addMatch.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				displayPlayer(null);
-			}
-		});
-		buttonPanel.add(addMatch);
-		Label searchMatch = new Label("Oyuncu Ara");
-		searchMatch.setStyleName("leftButton");
-		searchMatch.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				infoPanel.clear();
-				listMainPanel.setVisible(true);
-			}
-		});
-		buttonPanel.add(searchMatch);
+		if(_cache.getLoggedPlayer().isAdmin()){
+			Label addMatch = new Label("Oyuncu Ekle");
+			addMatch.setStyleName("leftButton");
+			addMatch.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					displayPlayer(null);
+				}
+			});
+			buttonPanel.add(addMatch);
+
+			Label searchMatch = new Label("Oyuncu Ara");
+			searchMatch.setStyleName("leftButton");
+			searchMatch.addClickHandler(new ClickHandler(){
+				public void onClick(ClickEvent event) {
+					infoPanel.clear();
+					listMainPanel.setVisible(true);
+				}
+			});
+			buttonPanel.add(searchMatch);
+		}
 		SimplePanel summaryPanel = new SimplePanel();
 		Label summaryLabel = new Label("Bu paneli kullanarak oyuncu listesini gorebilir, kendi bilgilerinizi guncelleyebilirsiniz.");
 		summaryPanel.add(summaryLabel);
@@ -62,7 +65,7 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 		this.add(listMainPanel);
 		this.add(infoPanel);
 	}
-	
+
 	private void displayPlayer(PlayerCell cell){
 		if(cell == null){
 			listMainPanel.setVisible(false);
@@ -75,7 +78,7 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 			currentPlayer = cell;
 			playerDialog.render(false,cell.getPlayer(),infoPanel);	
 		}
-		
+
 	}
 
 	public void CellClicked(DataCell dataCell) {
@@ -107,13 +110,13 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 	@Override
 	public void modifyClicked(DataCell dataCell) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void endClicked(DataCell dataCell, int x, int y) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
