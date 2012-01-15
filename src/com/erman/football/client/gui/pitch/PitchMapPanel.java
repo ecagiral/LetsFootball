@@ -19,7 +19,7 @@ import com.google.gwt.maps.client.overlay.MarkerImage;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
+public class PitchMapPanel extends SimplePanel implements CachePitchHandler, PitchEditDialogHandler{
 	
 	private final HashMap<Long,Marker> markers = new HashMap<Long,Marker>();
 	private final MarkerImage.Builder greenFieldBuild = new MarkerImage.Builder("greenfield.png"); 
@@ -41,9 +41,9 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 		
 	    final MapOptions options = new MapOptions();
 	    // Zoom level. Required
-	    options.setZoom(13);
+	    options.setZoom(11);
 	    // Open a map centered on Istanbul. Required
-	    LatLng cor = new LatLng(41.010,28.970);
+	    LatLng cor = new LatLng(41.0,29.0);
 	    options.setCenter(cor);
 	    // Map type. Required.
 	    options.setMapTypeId(new MapTypeId().getSatellite());
@@ -70,6 +70,8 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 			marker.setPosition(pitch.getLocation());
 			
 			marker.setIcon(greenField);
+			marker.setDraggable(false);
+			
 		    Event.addListener(marker, "click", new MarkerClick(pitch));
 		    markers.put(pitch.getKey(),marker);
 		}
@@ -77,6 +79,8 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 
 	public void pitchUpdated(Pitch pitch) {
 		markers.get(pitch.getKey()).setPosition(pitch.getLocation());
+		markers.get(pitch.getKey()).setDraggable(false);
+		markers.get(pitch.getKey()).setIcon(greenField);
 	}
 
 	public void pitchRemoved(Long pitch) {
@@ -85,6 +89,9 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 	
 	public void show(Panel panel, PitchMapPanelHandler _handler){
 		restoreCurrent();
+		removeIdle();	
+		this.mapWidget.getMap().setCenter(new LatLng(41.0,29.0));
+		this.mapWidget.getMap().setZoom(11);
 		this.removeFromParent();
 		panel.add(this);
 		this.handler = _handler;
@@ -122,17 +129,19 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 		idleMarker = marker;
 		marker.setPosition(getMap().getCenter());
 		marker.setIcon(yellowField);
+		marker.setDraggable(true);
 		marker.setMap(getMap());
 		Pitch pitch = new Pitch();
-		handler.markerAdded(pitch,marker);
+		handler.markerAdded(pitch);
 	}
 	
 	public void selectMarker(Pitch pitch){
 		restoreCurrent();
 		currentMarker =markers.get(pitch.getKey());
 		currentMarker.setIcon(yellowField);
+		currentMarker.setDraggable(true);
 		getMap().setCenter(currentMarker.getPosition());
-		handler.markerClicked(pitch,currentMarker);
+		handler.markerClicked(pitch);
 	}
 	
 	private class MarkerClick extends MouseEventCallback{
@@ -147,5 +156,17 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler{
 			selectMarker(pitch);
 		}
 		
+	}
+
+	@Override
+	public void handleModify(Pitch pitch) {
+		if(pitch.getKey()==0){
+			pitch.setLocation(idleMarker.getPosition());
+			cache.addPitch(pitch);
+			removeIdle();
+		}else{
+			pitch.setLocation(currentMarker.getPosition());
+			cache.updatePitch(pitch);
+		}
 	}
 }

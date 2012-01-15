@@ -292,12 +292,12 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		}
 	}
 
-	public void markerClicked(Pitch pitch, Marker marker) {
+	public void markerClicked(Pitch pitch) {
 		match.setLocation(pitch);
 		pitchName.setText(pitch.getName());
 	}
 
-	public void markerAdded(Pitch pitch, Marker marker) {
+	public void markerAdded(Pitch pitch) {
 		//Should not be called. Do nothing
 	}
 

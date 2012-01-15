@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.erman.football.client.service.PlayerException;
 import com.erman.football.shared.ClientPlayer;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -31,7 +32,10 @@ public class Player_JDO_DB {
 		return playerDOs;
 	}
 
-	public static ClientPlayer addUser(ClientPlayer clientPlayer){
+	public static ClientPlayer addUser(ClientPlayer clientPlayer) throws PlayerException{
+		if(getUser(clientPlayer.getEmail())!=null){
+			throw new PlayerException("Email kullaniliyor");
+		}
 		Player playerDO = Player.convert(clientPlayer);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {

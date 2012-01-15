@@ -2,6 +2,7 @@ package com.erman.football.client;
 
 import com.erman.football.client.service.LoginService;
 import com.erman.football.client.service.LoginServiceAsync;
+import com.erman.football.client.service.PlayerException;
 import com.erman.football.client.service.PlayerService;
 import com.erman.football.client.service.PlayerServiceAsync;
 import com.erman.football.shared.ClientPlayer;
@@ -14,6 +15,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -29,12 +31,16 @@ public class Login extends VerticalPanel {
 	private final TextBox nameBox = new TextBox();
 	private final Label loginStatus = new Label();
 	private final Label joinStatus = new Label();
+	private final DialogBox warningBox = new DialogBox();
 	private final LoginHandler handler;	
 	private boolean notFirst = false;
 	
 	public Login(LoginHandler _handler){
 		handler = _handler;
 		login(null);
+		
+		warningBox.setAutoHideEnabled(true);
+		warningBox.setText("Uyari");
 		
 		emailBox.setText("Email");
 		emailBox.addKeyPressHandler(new KeyPressHandler(){
@@ -69,14 +75,14 @@ public class Login extends VerticalPanel {
 		});
 		
 		VerticalPanel loginPanel = new VerticalPanel();
-		loginPanel.add(new Label("kayitli oyuncu"));
+		loginPanel.add(new Label("Kayitli Oyuncu"));
 		loginPanel.add(emailBox);
 		loginPanel.add(loginButton);
 		loginStatus.setText("");
 		loginPanel.add(loginStatus);
 		
 		VerticalPanel signupPanel = new VerticalPanel();
-		signupPanel.add(new Label("yeni oyuncu"));
+		signupPanel.add(new Label("Yeni Oyuncu"));
 		signupPanel.add(nameBox);
 		signupPanel.add(newEmailBox);
 		signupPanel.add(joinButton);
@@ -157,7 +163,12 @@ public class Login extends VerticalPanel {
 	private class AddCallback implements AsyncCallback<ClientPlayer>{
 
 		public void onFailure(Throwable caught) {
-	
+			if(caught instanceof PlayerException){
+				Label error = new Label(((PlayerException)caught).getMessage());
+				warningBox.add(error);
+				warningBox.center();
+				joinStatus.setText("");
+			}
 		}
 
 		public void onSuccess(ClientPlayer result) {

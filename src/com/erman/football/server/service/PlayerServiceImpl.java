@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.erman.football.client.service.PlayerException;
 import com.erman.football.client.service.PlayerService;
 import com.erman.football.server.data.Player;
 import com.erman.football.server.data.Player_JDO_DB;
@@ -18,7 +19,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class PlayerServiceImpl extends RemoteServiceServlet implements
 PlayerService {
 
-	public ClientPlayer addPlayer(ClientPlayer player) {
+	public ClientPlayer addPlayer(ClientPlayer player) throws PlayerException{
 		return Player_JDO_DB.addUser(player);
 	}
 

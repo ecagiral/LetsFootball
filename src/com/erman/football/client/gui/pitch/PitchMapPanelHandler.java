@@ -5,7 +5,7 @@ import com.google.gwt.maps.client.overlay.Marker;
 
 public interface PitchMapPanelHandler {
 	
-	public void markerClicked(Pitch pitch,Marker marker);
-	public void markerAdded(Pitch pitch,Marker marker);
+	public void markerClicked(Pitch pitch);
+	public void markerAdded(Pitch pitch);
 
 }

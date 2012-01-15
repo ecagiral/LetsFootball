@@ -4,7 +4,6 @@ import com.erman.football.client.cache.Cache;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -12,14 +11,18 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 
-	private final PitchDialog pitchDialog;	
+	private final DialogIf pitchDialog;	
 	private final SimplePanel mapPanel = new SimplePanel();
 	private final SimplePanel infoPanel = new SimplePanel();
 	private final PitchMapPanel pitchMap;
 
 	public PitchPanel(Cache _cache, PitchMapPanel _pitchMap){
 		pitchMap = _pitchMap;
-		pitchDialog = new PitchDialog(_cache,pitchMap.getGreen());
+		if(_cache.getLoggedPlayer().isAdmin()){
+			pitchDialog = new PitchEditDialog(_cache,pitchMap);
+		}else{
+			pitchDialog = new PitchDialog(_cache,pitchMap);
+		}
 		VerticalPanel buttonPanel = new VerticalPanel();
 		if(_cache.getLoggedPlayer().isAdmin()){
 			Label addMatch = new Label("Saha Ekle");
@@ -54,13 +57,13 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 		this.add(infoPanel);
 	}
 
-	public void markerClicked(Pitch pitch,Marker marker) {
-		pitchDialog.render(false,pitch,infoPanel,marker);
+	public void markerClicked(Pitch pitch) {
+		pitchDialog.render(pitch,infoPanel);
 		infoPanel.setVisible(true);
 	}
 
-	public void markerAdded(Pitch pitch, Marker marker) {
-		pitchDialog.render(true,pitch,infoPanel,marker);
+	public void markerAdded(Pitch pitch) {
+		pitchDialog.render(pitch,infoPanel);
 		infoPanel.setVisible(true);
 	}
 
