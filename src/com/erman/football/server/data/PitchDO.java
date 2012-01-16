@@ -25,6 +25,12 @@ public class PitchDO {
 	private int capacity;
 	
 	@Persistent
+	private String city;
+	
+	@Persistent
+	private String town;
+	
+	@Persistent
 	private double longitude;
 	
 	@Persistent
@@ -74,6 +80,26 @@ public class PitchDO {
 		return key.getId();
 	}
 	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+	public void setKey(Key key) {
+		this.key = key;
+	}
+
 	public static PitchDO generate(Pitch pitch){
 		PitchDO pitchDO = new PitchDO();
 		pitchDO.setCapacity(pitch.getCapacity());
@@ -81,6 +107,8 @@ public class PitchDO {
 		pitchDO.setLongitude(pitch.getLongitude());
 		pitchDO.setName(pitch.getName());
 		pitchDO.setPhone(pitch.getPhone());
+		pitchDO.setTown(pitch.getTown());
+		pitchDO.setCity(pitch.getCity());
 		return pitchDO;
 	}
 	
@@ -92,6 +120,8 @@ public class PitchDO {
 		pitch.setLongitude(getLongitude());
 		pitch.setPhone(getPhone());
 		pitch.setName(getName());
+		pitch.setCity(getCity());
+		pitch.setTown(getTown());
 		return pitch;
 	}
 	
@@ -101,5 +131,7 @@ public class PitchDO {
 		this.setLongitude(pitch.getLongitude());
 		this.setPhone(pitch.getPhone());
 		this.setName(pitch.getName());
+		this.setTown(pitch.getTown());
+		this.setCity(pitch.getCity());
 	}
 }

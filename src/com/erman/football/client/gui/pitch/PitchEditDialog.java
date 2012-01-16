@@ -23,6 +23,7 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 	private final TextInput pitchNameText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
 	private final TextInput pitchPhoneText = new TextInput(this);
+	private final Label pitchLocation = new Label();
 	private final Button updateButton = new Button("Guncelle");
 	private final Button deleteButton = new Button("Sil");
 	private final Image laodImg = new Image("loader.gif");
@@ -38,17 +39,19 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		this.handler = _handler;
 		cache.regiserPitch(this);
 		
-		Grid infoGrid = new Grid(4,2);
+		Grid infoGrid = new Grid(5,2);
 		infoGrid.setWidget(0, 0,new Label("Isim:"));
 		infoGrid.setWidget(0, 1,pitchNameText.getTextBox());
 		pitchNameText.getTextBox().setWidth("194px");
 		pitchNameText.getTextBox().setMaxLength(24);
-		infoGrid.setWidget(1, 0,new Label("Kapasite:"));
-		infoGrid.setWidget(1, 1,pitchCapacityText.getTextBox());
+		infoGrid.setWidget(1, 0,new Label("Lokasyon"));
+		infoGrid.setWidget(1, 1,pitchLocation);
+		infoGrid.setWidget(2, 0,new Label("Kapasite:"));
+		infoGrid.setWidget(2, 1,pitchCapacityText.getTextBox());
 		pitchCapacityText.getTextBox().setWidth("16px");
 		pitchCapacityText.getTextBox().setMaxLength(2);
-		infoGrid.setWidget(2, 0,new Label("Telefon"));
-		infoGrid.setWidget(2, 1,pitchPhoneText.getTextBox());
+		infoGrid.setWidget(3, 0,new Label("Telefon"));
+		infoGrid.setWidget(3, 1,pitchPhoneText.getTextBox());
 		pitchPhoneText.getTextBox().setWidth("80px");
 		pitchPhoneText.getTextBox().setMaxLength(10);
 		updateButton.addClickHandler(new ClickHandler(){
@@ -70,7 +73,7 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		buttonPanel.add(deleteButton);
 		buttonPanel.add(laodImg);
 		buttonPanel.add(successImg);		
-		infoGrid.setWidget(3,1,buttonPanel);
+		infoGrid.setWidget(4,1,buttonPanel);
 		laodImg.setVisible(false);
 		successImg.setVisible(false);
 		
@@ -97,6 +100,7 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		pitchNameText.setText(pitch.getName(),add );
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
 		pitchPhoneText.setText(pitch.getPhone(),add);
+		pitchLocation.setText(pitch.getTown()+", "+pitch.getCity());
 		inProgress = false;
 		if(basePanel!=null){
 			basePanel.clear();

@@ -16,6 +16,8 @@ public class Pitch extends DataObject implements Serializable {
 	private long key;
 	private String name;
 	private String phone;
+	private String city;
+	private String town;
 	private double latitude;
 	private double longitude;
 	private int capacity;
@@ -82,6 +84,24 @@ public class Pitch extends DataObject implements Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}	
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getTown() {
+		return town;
+	}
+
+	public void setTown(String town) {
+		this.town = town;
+	}
+
+	
 	
 }

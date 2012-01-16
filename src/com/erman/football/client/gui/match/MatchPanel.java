@@ -8,6 +8,7 @@ import com.erman.football.client.cache.CacheMatchHandler;
 import com.erman.football.client.gui.list.DataCell;
 import com.erman.football.client.gui.list.ListPanel;
 import com.erman.football.client.gui.list.ListPanelListener;
+import com.erman.football.client.gui.pitch.DialogIf;
 import com.erman.football.client.gui.pitch.PitchMapPanel;
 import com.erman.football.shared.Match;
 import com.erman.football.shared.DataObject;
@@ -23,7 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,ListPanelListener{
 
-	final private MatchDialog matchDialog;	
+	final private DialogIf matchDialog;	
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
 	final private EndMatchDialog endMatchDialog = new EndMatchDialog();

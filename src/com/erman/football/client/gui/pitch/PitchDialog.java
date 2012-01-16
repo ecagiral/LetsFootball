@@ -16,6 +16,7 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 	private final Label pitchNameText = new Label();
 	private final Label pitchCapacityText = new Label();
 	private final Label pitchPhoneText = new Label();
+	private final Label pitchLocationText = new Label();
 
 	private Pitch pitch;
 	 
@@ -31,12 +32,18 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 		capacityPanel.add(pitchCapacityText);
 		pitchCapacityText.setWidth("10px");
 		
+		HorizontalPanel locationPanel = new HorizontalPanel();
+		locationPanel.add(new Label("Lokasyon:"));
+		locationPanel.add(pitchLocationText);
+		pitchLocationText.setWidth("10px");
+		
 		HorizontalPanel phonePanel = new HorizontalPanel();
 		phonePanel.add(new Label("Telefon:"));
 		phonePanel.add(pitchPhoneText);
 		pitchPhoneText.setWidth("30px");
 		
 		this.add(namePanel);
+		this.add(locationPanel);
 		this.add(capacityPanel);
 		this.add(phonePanel);
   		
@@ -47,10 +54,12 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 		pitchNameText.setText(pitch.getName());
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()));
 		pitchPhoneText.setText(pitch.getPhone());
+		pitchLocationText.setText(pitch.getTown()+", "+pitch.getCity());
 		if(basePanel!=null){
 			basePanel.clear();
 			basePanel.add(this);
 		}
+		
 	}
 	
 	public void pitchAdded(List<Pitch> pitch) {

@@ -14,6 +14,11 @@ import com.google.gwt.maps.client.base.LatLng;
 import com.google.gwt.maps.client.event.Event;
 import com.google.gwt.maps.client.event.HasMouseEvent;
 import com.google.gwt.maps.client.event.MouseEventCallback;
+import com.google.gwt.maps.client.geocoder.Geocoder;
+import com.google.gwt.maps.client.geocoder.GeocoderCallback;
+import com.google.gwt.maps.client.geocoder.GeocoderRequest;
+import com.google.gwt.maps.client.geocoder.HasAddressComponent;
+import com.google.gwt.maps.client.geocoder.HasGeocoderResult;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerImage;
 import com.google.gwt.user.client.ui.Panel;
@@ -24,6 +29,8 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler, Pit
 	private final HashMap<Long,Marker> markers = new HashMap<Long,Marker>();
 	private final MarkerImage.Builder greenFieldBuild = new MarkerImage.Builder("greenfield.png"); 
 	private final MarkerImage.Builder yellowFieldBuild = new MarkerImage.Builder("yellowfield.png");
+	private final Geocoder geocoder = new Geocoder();
+	private final GeocodeHandler geoHandler = new GeocodeHandler();
 	
 	private Marker currentMarker;	
 	private Marker idleMarker;	
@@ -155,18 +162,53 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler, Pit
 		public void callback(HasMouseEvent event) {
 			selectMarker(pitch);
 		}
-		
 	}
 
 	@Override
 	public void handleModify(Pitch pitch) {
 		if(pitch.getKey()==0){
 			pitch.setLocation(idleMarker.getPosition());
-			cache.addPitch(pitch);
+			geoHandler.retrieveGeocode(pitch);
 			removeIdle();
 		}else{
-			pitch.setLocation(currentMarker.getPosition());
-			cache.updatePitch(pitch);
+			if(currentMarker.getPosition().equalsTo(pitch.getLocation())){
+				cache.updatePitch(pitch);
+			}else{
+				pitch.setLocation(currentMarker.getPosition());
+				geoHandler.retrieveGeocode(pitch);
+			}	
 		}
 	}
+	
+	private class GeocodeHandler extends GeocoderCallback{
+		
+		private Pitch pitch;
+		
+		void retrieveGeocode(Pitch _pitch){
+			this.pitch = _pitch;
+			GeocoderRequest request = new GeocoderRequest();
+			request.setLatLng(pitch.getLocation());
+			geocoder.geocode(request,this);
+		}
+ 
+		public void callback(List<HasGeocoderResult> responses, String status) {
+			for(HasAddressComponent addr:responses.get(0).getAddressComponents()){
+				for(String type:addr.getTypes()){
+					if(type.equals("administrative_area_level_1")){
+						pitch.setCity(addr.getShortName());
+					}else if(type.equals("sublocality")){
+						pitch.setTown(addr.getShortName());
+					}
+				}
+			}
+			if(pitch.getKey()==0){
+				cache.addPitch(pitch);
+			}else{
+				cache.updatePitch(pitch);
+			}
+			
+		}
+		
+	}
+	
 }
