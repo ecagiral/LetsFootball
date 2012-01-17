@@ -20,6 +20,7 @@ public class PlayerCell extends DataCell{
 	protected DataCell generateCell(DataObject _data,boolean isAdmin){
 		PlayerCell result = new PlayerCell(listener);
 		result.setData(_data);
+		result.setAdmin(isAdmin);
 		result.setListener(listener);
 		HorizontalPanel dateDel = generateCard(result);
 		result.add(dateDel);
@@ -33,8 +34,7 @@ public class PlayerCell extends DataCell{
 		result.setWidth("100%");
 		cell.getName().setText(cell.getPlayer().getName());
 		result.add(cell.getName());
-		boolean admin = true;
-		if(admin){
+		if(cell.isAdmin()){
 			Image delete = new Image("delete.png");
 			delete.addClickHandler(new CellDeleteHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);

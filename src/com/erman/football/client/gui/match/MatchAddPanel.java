@@ -14,6 +14,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -22,7 +24,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
-public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,PitchMapPanelHandler{
+public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchMapPanelHandler{
 
 	private static enum stage {pitch,date,player,summary};
 
@@ -94,7 +96,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			}
 
 		});
-		datePanel.setHorizontalAlignment(ALIGN_CENTER);
+		datePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		datePanel.add(datePicker);
 		datePanel.setVisible(false);
 
@@ -112,7 +114,7 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		
 		VerticalPanel bottomPanel = new VerticalPanel();
 		bottomPanel.setWidth("100%");
-		bottomPanel.setHorizontalAlignment(ALIGN_CENTER);
+		bottomPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		HorizontalPanel nextPanel = new HorizontalPanel();
 		
 		applyButton.addClickHandler(new ClickHandler(){
@@ -130,19 +132,22 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		nextPanel.add(successImg);
 		bottomPanel.add(nextPanel);
 
-		this.setStyleName("listMainPanel");
-		this.setHorizontalAlignment(ALIGN_CENTER);
-		this.add(stepPanel);
-		this.add(mainPanel);
-		this.add(bottomPanel);
-	
+		VerticalPanel dialogPanel = new VerticalPanel();
+		dialogPanel.setHeight("470px");
+		dialogPanel.add(stepPanel);
+		dialogPanel.add(mainPanel);
+		dialogPanel.add(bottomPanel);
+		this.setPopupPosition(190, 150);
+		this.setGlassEnabled(true);
+		this.add(dialogPanel);
+		this.setAutoHideEnabled(true);
+		
 	}
 	
 	public void load(Match _match){
 		inProgress = false;
 		successImg.setVisible(false);
 		mapPanel.setVisible(true);
-		backButton.setVisible(false);
 		playerPanel.setVisible(false);
 		datePanel.setVisible(false);
 		summaryPanel.setVisible(false);
@@ -151,15 +156,18 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 		selectPlayer.setStyleDependentName("selected", false);
 		matchSummary.setStyleDependentName("selected", false);
 		currentStage = stage.pitch;
-		nextButton.setVisible(true);
 		applyButton.setVisible(false);
 		pitchName.setText("Haritadan seciniz");
+		
 		this.setVisible(true);
+		this.show();
 		pitchMap.show(mapPanel, this);
 		if(_match == null){
+			this.setText("Mac Ekle");
 			modify = false;
 			match = new Match();			
 		}else{
+			this.setText("Mac Duzenle");
 			modify = true;
 			match = _match;
 			Pitch pitch = new Pitch();
@@ -176,8 +184,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	private void backClicked(){
 		switch(currentStage){
 		case pitch:
-			//should not be here
-			backButton.setVisible(false);
 			break;
 		case date:
 			mapPanel.setVisible(true);
@@ -188,8 +194,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", false);
 			matchSummary.setStyleDependentName("selected", false);
-			nextButton.setVisible(true);
-			backButton.setVisible(false);
 			currentStage = stage.pitch;
 			break;
 		case player:
@@ -201,8 +205,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			selectDate.setStyleDependentName("selected", true);
 			selectPlayer.setStyleDependentName("selected", false);
 			matchSummary.setStyleDependentName("selected", false);
-			nextButton.setVisible(true);
-			backButton.setVisible(true);
 			currentStage = stage.date;
 			break;
 		case summary:
@@ -214,8 +216,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", true);
 			matchSummary.setStyleDependentName("selected", false);
-			nextButton.setVisible(true);
-			backButton.setVisible(true);
 			applyButton.setVisible(false);
 			currentStage = stage.player;
 			break;
@@ -233,8 +233,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			selectDate.setStyleDependentName("selected", true);
 			selectPlayer.setStyleDependentName("selected", false);
 			matchSummary.setStyleDependentName("selected", false);
-			nextButton.setVisible(true);
-			backButton.setVisible(true);
 			currentStage = stage.date;
 			break;
 		case date:
@@ -247,8 +245,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			selectPlayer.setStyleDependentName("selected", true);
 			matchSummary.setStyleDependentName("selected", false);
 			applyButton.setVisible(false);
-			backButton.setVisible(true);
-			nextButton.setVisible(true);
 			currentStage = stage.player;
 			break;
 		case player:
@@ -267,13 +263,9 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 				applyButton.setText("Ekle");
 			}
 			applyButton.setVisible(true);
-			backButton.setVisible(true);
-			nextButton.setVisible(false);
 			currentStage = stage.summary;
 			break;
 		case summary:
-			//should not be here
-			nextButton.setVisible(false);
 			break;
 		}
 	};
@@ -281,7 +273,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 	
 
 	private void applyClicked(){
-		backButton.setVisible(false);
 		inProgress = true;
 		laodImg.setVisible(true);
 		match.setTeamAName(teamAName.getText());
@@ -304,7 +295,6 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 
 	public void matchAdded(List<Match> matches) {
 		inProgress = false;
-		nextButton.setVisible(false);
 		laodImg.setVisible(false);
 		successImg.setVisible(true);
 	}

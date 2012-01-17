@@ -72,4 +72,11 @@ public class ClientPlayer extends DataObject implements Serializable {
 	public void setNotify(boolean notify) {
 		this.notify = notify;
 	}
+
+	@Override
+	public long getOwner() {
+		return key;
+	}
+	
+	
 }

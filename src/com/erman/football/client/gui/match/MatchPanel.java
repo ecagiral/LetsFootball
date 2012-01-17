@@ -29,7 +29,6 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	final private SimplePanel infoPanel = new SimplePanel();
 	final private EndMatchDialog endMatchDialog = new EndMatchDialog();
 	final private Button addMatch = new Button("Mac Ekle");
-	final private Button searchMatch = new Button("Mac Ara");
 	final private Cache cache;
 	final private MatchAddPanel matchAddPanel;
 
@@ -50,26 +49,12 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 		addMatch.setStyleName("leftButton");
 		addMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				infoPanel.clear();
-				listMainPanel.setVisible(false);
-				searchMatch.setStyleDependentName("selected", false);
 				matchAddPanel.load(null);
 				addMatch.setStyleDependentName("selected", true);
 			}
 		});
 		buttonPanel.add(addMatch);
-		
-		searchMatch.setStyleName("leftButton");
-		searchMatch.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				infoPanel.clear();
-				matchAddPanel.setVisible(false);
-				addMatch.setStyleDependentName("selected", false);
-				listMainPanel.setVisible(true);
-				searchMatch.setStyleDependentName("selected", true);
-			}
-		});
-		buttonPanel.add(searchMatch);
+
 		SimplePanel summaryPanel = new SimplePanel();
 		Label summaryLabel = new Label("Bu paneli kullanarak mac ekleyebilir ya da istediginiz bir maca katilabilirsiniz.");
 		summaryPanel.add(summaryLabel);
@@ -78,10 +63,7 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 		
 		
 		this.add(buttonPanel);
-		matchAddPanel.setVisible(false);
 		addMatch.setStyleDependentName("selected", false);
-		searchMatch.setStyleDependentName("selected", true);
-		this.add(matchAddPanel);
 		this.add(listMainPanel);
 		this.add(infoPanel);
 	}
@@ -125,8 +107,6 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	}
 
 	public void modifyClicked(DataCell dataCell) {
-		infoPanel.clear();
-		listMainPanel.setVisible(false);
 		matchAddPanel.load((Match)dataCell.getData());
 	}
 	
@@ -140,7 +120,6 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	public void load(){
 		matchAddPanel.setVisible(false);
 		infoPanel.clear();
-		listMainPanel.setVisible(true);
 	}
 
 	private class EndMatchDialog extends DialogBox{
