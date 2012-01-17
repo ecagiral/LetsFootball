@@ -80,10 +80,15 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 		match = _match;
 		teamAPlayers.clear();
 		teamAPanel.clear();
-		teamAAddButton.setText("Beni Ekle");
-		teamAAddButton.setVisible(true);
+		teamAAddButton.setText("Beni Ekle");		
 		teamBAddButton.setText("Beni Ekle");
-		teamBAddButton.setVisible(true);
+		if(match.isPlayed()){
+			teamAAddButton.setVisible(false);
+			teamBAddButton.setVisible(false);
+		}else{
+			teamAAddButton.setVisible(true);
+			teamBAddButton.setVisible(true);
+		}
 		teamALabel.setText(match.getTeamAName());
 		for(Long playerId:match.getTeamA().keySet()){
 			String name = match.getTeamA().get(playerId).getName();

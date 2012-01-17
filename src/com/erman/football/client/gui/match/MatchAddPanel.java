@@ -164,7 +164,9 @@ public class MatchAddPanel extends VerticalPanel implements CacheMatchHandler,Pi
 			match = _match;
 			Pitch pitch = new Pitch();
 			pitch.setKey(match.getLocation().getKey());
-			pitchMap.selectMarker(pitch);
+			if(pitch.getKey()!=0){
+				pitchMap.selectMarker(pitch);
+			}
 		}
 		datePicker.setValue(match.getDate());
 		teamAName.setText(match.getTeamAName());

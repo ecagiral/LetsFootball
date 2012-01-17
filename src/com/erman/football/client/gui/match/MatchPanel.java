@@ -28,6 +28,8 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
 	final private EndMatchDialog endMatchDialog = new EndMatchDialog();
+	final private Button addMatch = new Button("Mac Ekle");
+	final private Button searchMatch = new Button("Mac Ara");
 	final private Cache cache;
 	final private MatchAddPanel matchAddPanel;
 
@@ -42,25 +44,29 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 		listMainPanel = new ListPanel(filter,new MatchCell(this));
 		filter.setHandler(listMainPanel);
 		VerticalPanel buttonPanel = new VerticalPanel();
+		buttonPanel.setStyleName("leftPanel");
 		
 		
-		Label addMatch = new Label("Mac Ekle");
 		addMatch.setStyleName("leftButton");
 		addMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				infoPanel.clear();
 				listMainPanel.setVisible(false);
+				searchMatch.setStyleDependentName("selected", false);
 				matchAddPanel.load(null);
+				addMatch.setStyleDependentName("selected", true);
 			}
 		});
 		buttonPanel.add(addMatch);
-		Label searchMatch = new Label("Mac Ara");
+		
 		searchMatch.setStyleName("leftButton");
 		searchMatch.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				infoPanel.clear();
 				matchAddPanel.setVisible(false);
+				addMatch.setStyleDependentName("selected", false);
 				listMainPanel.setVisible(true);
+				searchMatch.setStyleDependentName("selected", true);
 			}
 		});
 		buttonPanel.add(searchMatch);
@@ -69,10 +75,12 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 		summaryPanel.add(summaryLabel);
 		summaryPanel.setStyleName("summaryLabel");
 		buttonPanel.add(summaryPanel);
-		buttonPanel.setWidth("120px");
+		
 		
 		this.add(buttonPanel);
 		matchAddPanel.setVisible(false);
+		addMatch.setStyleDependentName("selected", false);
+		searchMatch.setStyleDependentName("selected", true);
 		this.add(matchAddPanel);
 		this.add(listMainPanel);
 		this.add(infoPanel);

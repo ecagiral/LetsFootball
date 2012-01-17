@@ -48,28 +48,30 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		});
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setWidth("100%");
-		welcome = new Label("");
-		welcome.setStyleName("welcome");
-		headerPanel.add(welcome);
-		Label logo = new Label("Test!");
+		Label logo = new Label("TEST");
 		logo.setStyleName("logo");
 		headerPanel.add(logo);
-		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
-		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		
+				
 		logout.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				loginPanel.logout();
 			}
 			
 		});
+		headerPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+		headerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		HorizontalPanel userPanel = new HorizontalPanel();
+		welcome = new Label("");
+		welcome.setStyleName("welcome");
+		userPanel.add(welcome);
 		logout.setVisible(false);
-		headerPanel.add(logout);
+		userPanel.add(logout);
+		headerPanel.add(userPanel);
 		headerPanel.setStyleName("header");
-		mainLayout.addNorth(headerPanel, 50);
+		mainLayout.addNorth(headerPanel, 30);
 		mainLayout.add(loginPanel);
 		mainLayout.setVisible(false);
-		mainLayout.setStyleName("mainLayout");
+		//mainLayout.setStyleName("mainLayout");
 		RootLayoutPanel.get().add(mainLayout);
 	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand () {
 	        public void execute () {

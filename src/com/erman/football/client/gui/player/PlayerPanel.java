@@ -34,6 +34,7 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 		listMainPanel = new ListPanel(filter, new PlayerCell(this));
 		filter.setHandler(listMainPanel);
 		VerticalPanel buttonPanel = new VerticalPanel();
+		buttonPanel.setStyleName("leftPanel");
 		if(_cache.getLoggedPlayer().isAdmin()){
 			Label addMatch = new Label("Oyuncu Ekle");
 			addMatch.setStyleName("leftButton");
@@ -59,7 +60,6 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 		summaryPanel.add(summaryLabel);
 		summaryPanel.setStyleName("summaryLabel");
 		buttonPanel.add(summaryPanel);
-		buttonPanel.setWidth("120px");
 
 		this.add(buttonPanel);
 		this.add(listMainPanel);

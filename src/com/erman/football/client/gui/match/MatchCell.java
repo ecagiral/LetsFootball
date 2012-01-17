@@ -57,18 +57,18 @@ public class MatchCell extends DataCell{
 		result.setWidth("100%");
 		result.add(cell.getSummary(cell));
 		if(cell.isAdmin()){
+			HorizontalPanel buttonPanel = new HorizontalPanel();
 			Image end = new Image("ball.png");
 			end.addClickHandler(new CellEndHandler(cell));
-			result.setHorizontalAlignment(ALIGN_RIGHT);
-			result.add(end);
+			buttonPanel.add(end);
 			Image edit = new Image("modify.png");
 			edit.addClickHandler(new CellModifyHandler(cell));
-			result.setHorizontalAlignment(ALIGN_RIGHT);
-			result.add(edit);
+			buttonPanel.add(edit);
 			Image delete = new Image("delete.png");
 			delete.addClickHandler(new CellDeleteHandler(cell));
+			buttonPanel.add(delete);
 			result.setHorizontalAlignment(ALIGN_RIGHT);
-			result.add(delete);
+			result.add(buttonPanel);
 			
 		}
 		return result;
@@ -99,8 +99,10 @@ public class MatchCell extends DataCell{
 		teamA.setText(match.getTeamAName());
 		teamB.setText(match.getTeamBName());
 		if(match.isPlayed()){
+			score.setStyleName("playedScore");
 			score.setText(match.getTeamAScore()+" - "+match.getTeamBScore());
 		}else{
+			score.setStyleName("score");
 			score.setText("vs");
 		}
 		date.setText(dateFormat.format(match.getDate()));

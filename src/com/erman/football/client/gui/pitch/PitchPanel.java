@@ -24,6 +24,8 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 			pitchDialog = new PitchDialog(_cache,pitchMap);
 		}
 		VerticalPanel buttonPanel = new VerticalPanel();
+		buttonPanel.setStyleName("leftPanel");
+		
 		if(_cache.getLoggedPlayer().isAdmin()){
 			Label addMatch = new Label("Saha Ekle");
 			addMatch.setStyleName("leftButton");
@@ -49,8 +51,6 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 		summaryPanel.add(summaryLabel);
 		summaryPanel.setStyleName("summaryLabel");
 		buttonPanel.add(summaryPanel);
-		buttonPanel.setWidth("120px");
-
 
 		this.add(buttonPanel);
 		this.add(mapPanel);

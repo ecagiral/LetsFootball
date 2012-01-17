@@ -77,7 +77,12 @@ public class PitchDO {
 	}
 	
 	public long getKey() {
-		return key.getId();
+		if(key==null){
+			return 0;
+		}else{
+			return key.getId();
+		}
+		
 	}
 	
 	public String getCity() {

@@ -60,14 +60,16 @@ h1 {
 
 .logo{
 	font-family: "Times New Roman";
-    font-size: 38px;
+    font-size: 26px;
     color: #fff;
+    margin-left:190px;
 }
 
 .welcome{
 	font-family: "Times New Roman";
     font-size: 18px;
     color: #fff;
+    margin-right:20px;
 }
 
 .matchCard{
@@ -127,17 +129,31 @@ h1 {
 }
 
 .topButton{
-	margin-left:20px;
-	margin-right:20px;
+  padding: 3px 20px;
+  text-decoration: none;
+  font-size: small;
+  cursor: pointer;
+  cursor: hand;
+  background: url("LetsFootball/gwt/standard/images/hborder.png") repeat-x 0px -27px;
+  border: 1px outset #ccc;
+  border-bottom-width:3px;
 }
 
-.topButton:hover{
-	cursor:pointer;
+.topButton:hover {
+  border-bottom-color: blue;
+}
+
+.topButton-selected{
+  border-bottom-color:red;
+}
+
+.topButton-selected:hover {
+  border-bottom-color: blue;
 }
 
 .topPanel{
 	padding-top:30px;
-	padding-left:120px;
+	padding-left:190px;
   	border-bottom:solid;
 	border-bottom-color: #000;
 	border-bottom-width: 1px;
@@ -145,15 +161,36 @@ h1 {
 	width:100%;
 }
 
-.leftButton{
-	padding-left:10px;
-	margin-top:5px;
-	cursor:pointer;
+.leftPanel{
+	padding-left:20px;
+	margin-right:50px;
+	width:120px;
+
 }
 
-.leftButton:hover{
-	cursor:pointer;
+.leftButton{
+  width: 120px;
+  text-decoration: none;
+  font-size: small;
+  cursor: pointer;
+  cursor: hand;
+  background: url("LetsFootball/gwt/standard/images/hborder.png") repeat-x 0px -27px;
+  border: 1px outset #ccc;
+  border-right-width:3px;
 }
+
+.leftButton:hover {
+  border-right-color: blue;
+}
+
+.leftButton-selected{
+  border-right-color:red;
+}
+
+.leftButton-selected:hover{
+  border-right-color:blue;
+}
+
 
 .dateCell:hover{
 	cursor:pointer;
@@ -214,8 +251,5 @@ h1 {
 }
 
 .summaryLabel{
-	margin-left:10px;
-	margin-right:5px;
-	margin-top:20px;
-	font-style:italic;
+
 }

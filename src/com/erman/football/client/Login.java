@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -29,10 +30,13 @@ public class Login extends VerticalPanel {
 	private final TextBox emailBox = new TextBox();
 	private final TextBox newEmailBox = new TextBox();
 	private final TextBox nameBox = new TextBox();
-	private final Label loginStatus = new Label();
-	private final Label joinStatus = new Label();
 	private final DialogBox warningBox = new DialogBox();
+	private final Label loginResult = new Label();
+	private final Label joinResult = new Label();
+	private final Image loginStatus = new Image("loader.gif");
+	private final Image joinStatus = new Image("loader.gif");
 	private final LoginHandler handler;	
+	
 	private boolean notFirst = false;
 	
 	public Login(LoginHandler _handler){
@@ -45,7 +49,6 @@ public class Login extends VerticalPanel {
 		emailBox.setText("Email");
 		emailBox.addKeyPressHandler(new KeyPressHandler(){
 			public void onKeyPress(KeyPressEvent event) {
-				loginStatus.setText("");
 				int key = new Integer(event.getCharCode());
 				if(key==13){
 					login(emailBox.getText());
@@ -77,34 +80,41 @@ public class Login extends VerticalPanel {
 		VerticalPanel loginPanel = new VerticalPanel();
 		loginPanel.add(new Label("Kayitli Oyuncu"));
 		loginPanel.add(emailBox);
-		loginPanel.add(loginButton);
-		loginStatus.setText("");
-		loginPanel.add(loginStatus);
+		HorizontalPanel loginButtonPanel = new HorizontalPanel();
+		loginButtonPanel.add(loginButton);
+		loginStatus.setVisible(false);
+		loginButtonPanel.add(loginStatus);
+		loginPanel.add(loginButtonPanel);
+		loginPanel.add(loginResult);
 		
 		VerticalPanel signupPanel = new VerticalPanel();
 		signupPanel.add(new Label("Yeni Oyuncu"));
 		signupPanel.add(nameBox);
 		signupPanel.add(newEmailBox);
-		signupPanel.add(joinButton);
-		joinStatus.setText("");
-		signupPanel.add(joinStatus);
+		HorizontalPanel signButtonPanel = new HorizontalPanel();
+		signButtonPanel.add(joinButton);
+		joinStatus.setVisible(false);
+		signButtonPanel.add(joinStatus);
+		signupPanel.add(signButtonPanel);
+		signupPanel.add(joinResult);
 		
-		SimplePanel space = new SimplePanel();
-		space.setWidth("50px");
+		SimplePanel space1 = new SimplePanel();
+		space1.setWidth("190px");
+		SimplePanel space2 = new SimplePanel();
+		space2.setWidth("50px");
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
+		mainPanel.add(space1);
 		mainPanel.add(signupPanel);
-		mainPanel.add(space);
+		mainPanel.add(space2);
 		mainPanel.add(loginPanel);
 
-		
-		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
 
 	private void login(String email){
-		loginStatus.setText(new String("Isleniyor..."));
+		loginStatus.setVisible(true);
 		loginService.login(email, new  LoginCallback());
 	}
 	
@@ -116,7 +126,7 @@ public class Login extends VerticalPanel {
 		ClientPlayer newPlayer = new ClientPlayer();
 		newPlayer.setEmail(newEmailBox.getText());
 		newPlayer.setName(nameBox.getText());
-		joinStatus.setText("Oyuncu ekleniyor...");
+		joinStatus.setVisible(true);
 		playerService.addPlayer(newPlayer, new AddCallback());
 	}
 	
@@ -137,8 +147,9 @@ public class Login extends VerticalPanel {
 	private class LoginCallback implements AsyncCallback<ClientPlayer>{
 
 		public void onFailure(Throwable caught) {
+			loginStatus.setVisible(false);
 			if(notFirst){
-				loginStatus.setText("Unknown user");
+				loginResult.setText("Bilinmeyen kullanici");
 			}else{
 				handler.init();
 			}
@@ -146,9 +157,10 @@ public class Login extends VerticalPanel {
 		}
 
 		public void onSuccess(ClientPlayer result) {
+			loginStatus.setVisible(false);
 			if(result == null){
 				if(notFirst){
-					loginStatus.setText("Unknown user");
+					loginResult.setText("Bilinmeyen kullanici");
 				}else{
 					handler.init();
 				}
@@ -163,16 +175,19 @@ public class Login extends VerticalPanel {
 	private class AddCallback implements AsyncCallback<ClientPlayer>{
 
 		public void onFailure(Throwable caught) {
+			joinStatus.setVisible(false);
 			if(caught instanceof PlayerException){
 				Label error = new Label(((PlayerException)caught).getMessage());
 				warningBox.add(error);
 				warningBox.center();
-				joinStatus.setText("");
+				joinResult.setText("");
+				
 			}
 		}
 
 		public void onSuccess(ClientPlayer result) {
-			joinStatus.setText("Oyuncu eklendi");
+			joinStatus.setVisible(false);
+			joinResult.setText("Oyuncu eklendi");
 			login(result.getEmail());
 		}
 		

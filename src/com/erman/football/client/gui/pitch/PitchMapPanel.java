@@ -146,7 +146,9 @@ public class PitchMapPanel extends SimplePanel implements CachePitchHandler, Pit
 		restoreCurrent();
 		currentMarker =markers.get(pitch.getKey());
 		currentMarker.setIcon(yellowField);
-		currentMarker.setDraggable(true);
+		if(cache.getLoggedPlayer().isAdmin()){
+			currentMarker.setDraggable(true);
+		}
 		getMap().setCenter(currentMarker.getPosition());
 		handler.markerClicked(pitch);
 	}
