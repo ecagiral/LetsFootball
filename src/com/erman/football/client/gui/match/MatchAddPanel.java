@@ -1,6 +1,5 @@
 package com.erman.football.client.gui.match;
 
-import java.util.Date;
 import java.util.List;
 
 import com.erman.football.client.cache.Cache;
@@ -11,8 +10,6 @@ import com.erman.football.shared.Match;
 import com.erman.football.shared.Pitch;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -21,6 +18,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -32,7 +30,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 
 	private final PitchMapPanel pitchMap;
 	private final VerticalPanel mapPanel = new VerticalPanel();
-	private final VerticalPanel datePanel = new VerticalPanel();
+	private final Panel datePanel;
 	private final SimplePanel playerPanel = new SimplePanel();
 	private final SummaryPanel summaryPanel = new SummaryPanel();
 	private final Label selectPitch = new Label("Saha");
@@ -92,16 +90,20 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		pitchNamePanel.add(pitchName);
 		mapPanel.add(pitchNamePanel);
 
+		/*
+		datePanel = new VerticalPanel();
 		datePicker.addValueChangeHandler(new ValueChangeHandler<Date>(){
 			public void onValueChange(ValueChangeEvent<Date> event) {
 				match.setDate(event.getValue());
 			}
 
 		});
-		datePanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		datePanel.add(datePicker);
 		datePanel.setVisible(false);
-
+		*/
+		WeekPanel week = new WeekPanel();
+		datePanel = week.getPanel();
+		
 		VerticalPanel teamPanel = new VerticalPanel();
 		teamPanel.add(new Label("Takim Isimleri"));
 		teamPanel.add(teamAName);
