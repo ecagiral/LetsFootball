@@ -14,8 +14,10 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -39,7 +41,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final Label matchSummary = new Label("Onay");
 	private final Image nextButton = new Image("arrow_right.png");
 	private final Image backButton = new Image("arrow_left.png");
-	private final Label applyButton = new Label("Ekle");
+	private final Button applyButton = new Button("Gonder");
 	private final Label pitchName = new Label("Haritadan seciniz");
 	private final TextBox teamAName = new TextBox();
 	private final TextBox teamBName = new TextBox();
@@ -125,7 +127,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 				}
 			}
 		});
-		applyButton.setStyleName("filterButton");
+
 		laodImg.setVisible(false);
 		nextPanel.add(applyButton);
 		nextPanel.add(laodImg);
@@ -133,11 +135,13 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		bottomPanel.add(nextPanel);
 
 		VerticalPanel dialogPanel = new VerticalPanel();
-		dialogPanel.setHeight("470px");
+		dialogPanel.setHeight("500px");
 		dialogPanel.add(stepPanel);
 		dialogPanel.add(mainPanel);
 		dialogPanel.add(bottomPanel);
-		this.setPopupPosition(190, 150);
+		dialogPanel.setCellVerticalAlignment(bottomPanel, HasVerticalAlignment.ALIGN_BOTTOM);
+		dialogPanel.setCellHorizontalAlignment(bottomPanel, HasHorizontalAlignment.ALIGN_CENTER);
+		this.setPopupPosition(400, 150);
 		this.setGlassEnabled(true);
 		this.add(dialogPanel);
 		this.setAutoHideEnabled(true);
@@ -156,7 +160,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		selectPlayer.setStyleDependentName("selected", false);
 		matchSummary.setStyleDependentName("selected", false);
 		currentStage = stage.pitch;
-		applyButton.setVisible(false);
+		applyButton.setEnabled(false);
 		pitchName.setText("Haritadan seciniz");
 		
 		this.setVisible(true);
@@ -176,6 +180,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 				pitchMap.selectMarker(pitch);
 			}
 		}
+		
 		datePicker.setValue(match.getDate());
 		teamAName.setText(match.getTeamAName());
 		teamBName.setText(match.getTeamBName());
@@ -216,7 +221,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", true);
 			matchSummary.setStyleDependentName("selected", false);
-			applyButton.setVisible(false);
+			applyButton.setEnabled(false);
 			currentStage = stage.player;
 			break;
 		}
@@ -244,7 +249,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", true);
 			matchSummary.setStyleDependentName("selected", false);
-			applyButton.setVisible(false);
 			currentStage = stage.player;
 			break;
 		case player:
@@ -257,12 +261,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 			selectDate.setStyleDependentName("selected", false);
 			selectPlayer.setStyleDependentName("selected", false);
 			matchSummary.setStyleDependentName("selected", true);
-			if(modify){
-				applyButton.setText("Guncelle");
-			}else{
-				applyButton.setText("Ekle");
-			}
-			applyButton.setVisible(true);
+			applyButton.setEnabled(true);
 			currentStage = stage.summary;
 			break;
 		case summary:

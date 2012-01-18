@@ -88,7 +88,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		mainLayout.setVisible(true);
 		Cache cache = new Cache();
 		cache.setLoggedPlayer(player);
-		welcome.setText("Merhaba "+player.getName());
+		welcome.setText(player.getName());
 		logout.setVisible(true);
 		loginPanel.removeFromParent();
 		playerTab = new MainTab(cache);
