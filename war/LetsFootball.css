@@ -267,17 +267,23 @@ h1 {
 .hourTable{
 	border-style:solid;
 	border-width:1px;
-	border-color:#000;
+	border-color:#fff;
 	background-color:#fff;
 	text-align:center;	
 	width:100px;
 }
 
 .hourTable:hover{
+	border-color:#000;
+	cursor:pointer;
+}
+
+.hourTableSelected{
 	border-style:solid;
 	border-width:1px;
-	border-color:#000;
-	background-color:#feeecd;
+	border-color:#fff;
+	background-color:#555;
 	text-align:center;	
 	width:100px;
+	cursor:pointer;
 }

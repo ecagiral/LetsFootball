@@ -48,6 +48,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final Image successImg = new Image("success.jpg");
 	private final DatePicker datePicker = new DatePicker();
 	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy:HH.mm");
+	private final WeekPanel week = new WeekPanel();
 
 	private stage currentStage;
 	private Match match;
@@ -101,7 +102,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		datePanel.add(datePicker);
 		datePanel.setVisible(false);
 		*/
-		WeekPanel week = new WeekPanel();
+		
 		datePanel = week.getPanel();
 		
 		VerticalPanel teamPanel = new VerticalPanel();
@@ -137,13 +138,15 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		bottomPanel.add(nextPanel);
 
 		VerticalPanel dialogPanel = new VerticalPanel();
+		dialogPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		dialogPanel.setHeight("500px");
+		dialogPanel.setWidth("500px");
 		dialogPanel.add(stepPanel);
 		dialogPanel.add(mainPanel);
 		dialogPanel.add(bottomPanel);
 		dialogPanel.setCellVerticalAlignment(bottomPanel, HasVerticalAlignment.ALIGN_BOTTOM);
-		dialogPanel.setCellHorizontalAlignment(bottomPanel, HasHorizontalAlignment.ALIGN_CENTER);
-		this.setPopupPosition(400, 150);
+		
+		this.setPopupPosition(400, 50);
 		this.setGlassEnabled(true);
 		this.add(dialogPanel);
 		this.setAutoHideEnabled(true);
@@ -276,6 +279,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private void applyClicked(){
 		inProgress = true;
 		laodImg.setVisible(true);
+		match.setDate(week.getSelectedDate());
 		match.setTeamAName(teamAName.getText());
 		match.setTeamBName(teamBName.getText());
 		if(modify){

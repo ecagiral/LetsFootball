@@ -33,7 +33,7 @@ public class MainTab extends SimplePanel{
 		SimplePanel topPanel = new SimplePanel();
 		topPanel.setStyleName("topPanel");
 		HorizontalPanel buttonPanel = new HorizontalPanel();
-		//buttonPanel.setStyleName("topButtonPanel");
+		buttonPanel.setSpacing(0);
 		
 		matchButton.setStyleName("topButton");
 		matchButton.addClickHandler(new ClickHandler(){
