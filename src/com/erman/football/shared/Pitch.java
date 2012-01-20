@@ -20,6 +20,9 @@ public class Pitch extends DataObject implements Serializable {
 	private String town;
 	private double latitude;
 	private double longitude;
+	private String openTime;
+	private String closeTime;
+	private long matchTime;
 	private int capacity;
 	
 	public Pitch(){
@@ -27,6 +30,9 @@ public class Pitch extends DataObject implements Serializable {
 		longitude = 41.010d;
 		latitude = 28.970d;
 		capacity = 10;
+		openTime = "10:00";
+		closeTime = "23:00";
+		matchTime = 75;
 	}
 
 	public long getKey() {
@@ -102,6 +108,27 @@ public class Pitch extends DataObject implements Serializable {
 		this.town = town;
 	}
 
-	
-	
+	public String getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(String openTime) {
+		this.openTime = openTime;
+	}
+
+	public String getCloseTime() {
+		return closeTime;
+	}
+
+	public void setCloseTime(String closeTime) {
+		this.closeTime = closeTime;
+	}
+
+	public long getMatchTime() {
+		return matchTime;
+	}
+
+	public void setMatchTime(long matchTime) {
+		this.matchTime = matchTime;
+	}
 }

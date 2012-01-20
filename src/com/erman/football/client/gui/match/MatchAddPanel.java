@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -30,7 +29,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 
 	private final PitchMapPanel pitchMap;
 	private final VerticalPanel mapPanel = new VerticalPanel();
-	private final Panel datePanel;
 	private final SimplePanel playerPanel = new SimplePanel();
 	private final SummaryPanel summaryPanel = new SummaryPanel();
 	private final Label selectPitch = new Label("Saha");
@@ -48,7 +46,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final Image successImg = new Image("success.jpg");
 	private final DatePicker datePicker = new DatePicker();
 	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy:HH.mm");
-	private final WeekPanel week = new WeekPanel();
+	private final WeekPanel datePanel = new WeekPanel();
 
 	private stage currentStage;
 	private Match match;
@@ -90,20 +88,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		pitchNamePanel.add(new Label("Secilen Saha: "));
 		pitchNamePanel.add(pitchName);
 		mapPanel.add(pitchNamePanel);
-
-		/*
-		datePanel = new VerticalPanel();
-		datePicker.addValueChangeHandler(new ValueChangeHandler<Date>(){
-			public void onValueChange(ValueChangeEvent<Date> event) {
-				match.setDate(event.getValue());
-			}
-
-		});
-		datePanel.add(datePicker);
-		datePanel.setVisible(false);
-		*/
-		
-		datePanel = week.getPanel();
 		
 		VerticalPanel teamPanel = new VerticalPanel();
 		teamPanel.add(new Label("Takim Isimleri"));
@@ -237,7 +221,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		case pitch:
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(false);
-			datePanel.setVisible(true);
+			datePanel.load(match.getLocation());
 			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", false);
 			selectDate.setStyleDependentName("selected", true);
@@ -246,6 +230,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 			currentStage = stage.date;
 			break;
 		case date:
+			match.setDate(datePanel.getSelectedDate());
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(true);
 			datePanel.setVisible(false);
@@ -279,7 +264,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private void applyClicked(){
 		inProgress = true;
 		laodImg.setVisible(true);
-		match.setDate(week.getSelectedDate());
 		match.setTeamAName(teamAName.getText());
 		match.setTeamBName(teamBName.getText());
 		if(modify){
