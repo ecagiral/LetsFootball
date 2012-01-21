@@ -25,8 +25,11 @@ public class WeekPanel extends HorizontalPanel{
 	final private VerticalPanel hourList= new VerticalPanel();
 	private Grid hourTable;
 	private Cell selectedCell;
+	private Date startDate;
+	private Pitch pitch;
 	
-	public void load(Pitch pitch){
+	public void load(Pitch _pitch,Date _startDate){
+		pitch = _pitch;
 		this.clear();
 		if(pitch==null){
 			this.add(new Label("Lutfen bir mac secin"));
@@ -34,9 +37,13 @@ public class WeekPanel extends HorizontalPanel{
 		}
 
 		long matchTime = pitch.getMatchTime()*60*1000; 
-		Date startDate = timeFormat.parse(dateFormat.format(new Date())+" "+pitch.getOpenTime());
+		if(_startDate == null){
+			startDate = timeFormat.parse(dateFormat.format(new Date())+" "+pitch.getOpenTime());
+		}else{
+			startDate = _startDate;
+		}
 		Date time = (Date)startDate.clone();
-		Date closeDate = timeFormat.parse(dateFormat.format(new Date())+" "+pitch.getCloseTime());
+		Date closeDate = timeFormat.parse(dateFormat.format(startDate)+" "+pitch.getCloseTime());
 		if(closeDate.before(startDate)){
 			CalendarUtil.addDaysToDate(closeDate,1);
 		}
@@ -67,14 +74,24 @@ public class WeekPanel extends HorizontalPanel{
 				time = (Date)startDate.clone();
 			}			
 		}
-		hourTable = new Grid(dateList.get(0).size(),dateList.size()+1);
+		hourTable = new Grid(dateList.get(0).size(),dateList.size()+2);
 		int column = 1;
 		for(ArrayList<Date> columnList:dateList){
 			int row = 0;
 			for(Date cellDate:columnList){
 				if(column == 1){
 					if(row!=0){
-						hourTable.setText(row, 0, hourFormat.format(cellDate));
+						hourTable.setWidget(row, 0, new Label(hourFormat.format(cellDate)));
+						hourTable.getCellFormatter().setStyleName(row, 0, "hourTableHoursLeft");
+						hourTable.setWidget(row, 5, new Label(hourFormat.format(cellDate)));
+						hourTable.getCellFormatter().setStyleName(row, 5, "hourTableHoursRight");
+					}else{
+						Label nextLabel = new Label("<");
+						hourTable.setWidget(row, 0,nextLabel );
+						nextLabel.setStyleName("hourTableNext");
+						Label rNextLabel = new Label(">");
+						hourTable.setWidget(row, 5, rNextLabel);
+						rNextLabel.setStyleName("hourTableNext");
 					}
 				}
 				if(row==0){
@@ -99,10 +116,20 @@ public class WeekPanel extends HorizontalPanel{
 	private class TimeClickHandler implements ClickHandler{
 
 		public void onClick(ClickEvent event) {
+			Cell clickedCell = hourTable.getCellForEvent(event);
+			if(clickedCell.getCellIndex()==0 && clickedCell.getRowIndex()==0){
+				CalendarUtil.addDaysToDate(startDate,-7);
+				load(pitch,startDate);
+				return;
+			}
+			if(clickedCell.getCellIndex()==5 && clickedCell.getRowIndex()==0){
+				load(pitch,startDate);
+				return;
+			}
 			if(selectedCell!=null){
 				hourTable.getCellFormatter().setStyleName(selectedCell.getRowIndex(), selectedCell.getCellIndex(),"hourTable");
 			}
-			selectedCell = hourTable.getCellForEvent(event);
+			selectedCell = clickedCell;
 			hourTable.getCellFormatter().setStyleName(selectedCell.getRowIndex(), selectedCell.getCellIndex(),"hourTableSelected");
 			//System.out.println(timeFormat.format(dateTable[selectedCell.getRowIndex()][selectedCell.getCellIndex()]));
 		}
@@ -111,7 +138,7 @@ public class WeekPanel extends HorizontalPanel{
 	
 	public Date getSelectedDate(){
 		if(selectedCell!=null){
-			return dateList.get(selectedCell.getCellIndex()).get(selectedCell.getRowIndex());
+			return dateList.get(selectedCell.getCellIndex()-1).get(selectedCell.getRowIndex());
 		}else
 			return new Date();
 	}

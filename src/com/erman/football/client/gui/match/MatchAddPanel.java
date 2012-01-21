@@ -221,7 +221,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		case pitch:
 			mapPanel.setVisible(false);
 			playerPanel.setVisible(false);
-			datePanel.load(match.getLocation());
+			datePanel.load(match.getLocation(),null);
 			summaryPanel.setVisible(false);
 			selectPitch.setStyleDependentName("selected", false);
 			selectDate.setStyleDependentName("selected", true);

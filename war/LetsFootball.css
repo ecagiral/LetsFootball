@@ -265,25 +265,62 @@ h1 {
 }
 
 .hourTable{
-	border-style:solid;
-	border-width:1px;
-	border-color:#000;
+	border-top-style:solid;
+	border-top-width:1px;
+	border-top-color:#000;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-left-color:#000;
 	background-color:#fff;
 	text-align:center;	
 	width:100px;
+	height:30px;
 }
 
 .hourTable:hover{
-	border-color:#red;
 	cursor:pointer;
 }
 
 .hourTableSelected{
-	border-style:solid;
-	border-width:1px;
-	border-color:#fff;
-	background-color:#555;
+	border-top-style:solid;
+	border-top-width:1px;
+	border-top-color:#000;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-left-color:#000;
+	background-color:green;
 	text-align:center;	
 	width:100px;
+	height:30px;
+}
+
+.hourTableHoursLeft{
+	border-top-style:solid;
+	border-top-width:1px;
+	border-top-color:#000;
+	vertical-align:top;
+	font-size:10px;
+}
+
+.hourTableHoursRight{
+	border-top-style:solid;
+	border-top-width:1px;
+	border-top-color:#000;
+	border-left-style:solid;
+	border-left-width:1px;
+	border-left-color:#000;
+	vertical-align:top;
+	font-size:10px;
+}
+
+.hourTableNext{
+	vertical-align:top;
+	font-size:16px;
+	fony-style:bold;
 	cursor:pointer;
+	margin-left:8px;
+}
+
+.hourTableNext:hover{
+	color:red;
 }
