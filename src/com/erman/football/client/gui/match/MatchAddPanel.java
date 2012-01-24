@@ -25,8 +25,6 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 
 public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchMapPanelHandler{
 
-	private static enum stage {pitch,date,player,summary};
-
 	private final PitchMapPanel pitchMap;
 	private final VerticalPanel mapPanel = new VerticalPanel();
 	private final SimplePanel playerPanel = new SimplePanel();
@@ -35,8 +33,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final Label selectDate = new Label("Tarih");
 	private final Label selectPlayer = new Label("Takimlar");
 	private final Label matchSummary = new Label("Onay");
-	private final Image nextButton = new Image("arrow_right.png");
-	private final Image backButton = new Image("arrow_left.png");
 	private final Button applyButton = new Button("Gonder");
 	private final Label pitchName = new Label("Haritadan seciniz");
 	private final TextBox teamAName = new TextBox();
@@ -48,7 +44,6 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy:HH.mm");
 	private final WeekPanel datePanel = new WeekPanel();
 
-	private stage currentStage;
 	private Match match;
 	private boolean inProgress;
 	private boolean modify;
@@ -61,28 +56,38 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		HorizontalPanel stepPanel = new HorizontalPanel();
 
 		selectPitch.setStylePrimaryName("addStage");
+		selectPitch.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				pitchStageClicked();
+			}
+			
+		});
 		selectDate.setStylePrimaryName("addStage");
+		selectDate.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				dateStageClicked();
+			}
+			
+		});
 		selectPlayer.setStylePrimaryName("addStage");
+		selectPlayer.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				playerStageClicked();
+			}
+			
+		});
 		matchSummary.setStylePrimaryName("addStage");
+		matchSummary.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				summaryStageClicked();
+			}
+			
+		});
 
-		backButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				backClicked();
-			}
-		});
-		backButton.setStyleName("nextButton");
-		nextButton.addClickHandler(new ClickHandler(){
-			public void onClick(ClickEvent event) {
-				nextClicked();
-			}
-		});
-		nextButton.setStyleName("nextButton");
-		stepPanel.add(backButton);
 		stepPanel.add(selectPitch);
 		stepPanel.add(selectDate);
 		stepPanel.add(selectPlayer);
 		stepPanel.add(matchSummary);
-		stepPanel.add(nextButton);
 
 		HorizontalPanel pitchNamePanel = new HorizontalPanel();
 		pitchNamePanel.add(new Label("Secilen Saha: "));
@@ -148,8 +153,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		selectDate.setStyleDependentName("selected", false);
 		selectPlayer.setStyleDependentName("selected", false);
 		matchSummary.setStyleDependentName("selected", false);
-		currentStage = stage.pitch;
-		applyButton.setEnabled(false);
+		applyButton.setVisible(false);
 		pitchName.setText("Haritadan seciniz");
 		
 		this.setVisible(true);
@@ -174,93 +178,60 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		teamAName.setText(match.getTeamAName());
 		teamBName.setText(match.getTeamBName());
 	}
-
-	private void backClicked(){
-		switch(currentStage){
-		case pitch:
-			break;
-		case date:
-			mapPanel.setVisible(true);
-			playerPanel.setVisible(false);
-			datePanel.setVisible(false);
-			summaryPanel.setVisible(false);
-			selectPitch.setStyleDependentName("selected", true);
-			selectDate.setStyleDependentName("selected", false);
-			selectPlayer.setStyleDependentName("selected", false);
-			matchSummary.setStyleDependentName("selected", false);
-			currentStage = stage.pitch;
-			break;
-		case player:
-			mapPanel.setVisible(false);
-			playerPanel.setVisible(false);
-			datePanel.setVisible(true);
-			summaryPanel.setVisible(false);
-			selectPitch.setStyleDependentName("selected", false);
-			selectDate.setStyleDependentName("selected", true);
-			selectPlayer.setStyleDependentName("selected", false);
-			matchSummary.setStyleDependentName("selected", false);
-			currentStage = stage.date;
-			break;
-		case summary:
-			mapPanel.setVisible(false);
-			playerPanel.setVisible(true);
-			datePanel.setVisible(false);
-			summaryPanel.setVisible(false);
-			selectPitch.setStyleDependentName("selected", false);
-			selectDate.setStyleDependentName("selected", false);
-			selectPlayer.setStyleDependentName("selected", true);
-			matchSummary.setStyleDependentName("selected", false);
+	
+	private void pitchStageClicked(){
+		mapPanel.setVisible(true);
+		playerPanel.setVisible(false);
+		datePanel.setVisible(false);
+		summaryPanel.setVisible(false);
+		selectPitch.setStyleDependentName("selected", true);
+		selectDate.setStyleDependentName("selected", false);
+		selectPlayer.setStyleDependentName("selected", false);
+		matchSummary.setStyleDependentName("selected", false);
+		applyButton.setVisible(false);
+	}
+	
+	private void dateStageClicked(){
+		mapPanel.setVisible(false);
+		playerPanel.setVisible(false);
+		datePanel.load(match,null);
+		summaryPanel.setVisible(false);
+		selectPitch.setStyleDependentName("selected", false);
+		selectDate.setStyleDependentName("selected", true);
+		selectPlayer.setStyleDependentName("selected", false);
+		matchSummary.setStyleDependentName("selected", false);
+		applyButton.setVisible(false);
+	}
+	
+	private void playerStageClicked(){
+		mapPanel.setVisible(false);
+		playerPanel.setVisible(true);
+		datePanel.setVisible(false);
+		summaryPanel.setVisible(false);
+		selectPitch.setStyleDependentName("selected", false);
+		selectDate.setStyleDependentName("selected", false);
+		selectPlayer.setStyleDependentName("selected", true);
+		matchSummary.setStyleDependentName("selected", false);
+		applyButton.setVisible(false);
+	}
+	
+	private void summaryStageClicked(){
+		mapPanel.setVisible(false);
+		playerPanel.setVisible(false);
+		datePanel.setVisible(false);
+		summaryPanel.update();
+		selectPitch.setStyleDependentName("selected", false);
+		selectDate.setStyleDependentName("selected", false);
+		selectPlayer.setStyleDependentName("selected", false);
+		matchSummary.setStyleDependentName("selected", true);
+		applyButton.setVisible(true);
+		if(match.getDate().getTime() == 0 && match.getLocation().getKey()==0){
 			applyButton.setEnabled(false);
-			currentStage = stage.player;
-			break;
+		}else{
+			applyButton.setEnabled(true);
 		}
 	}
-
-	private void nextClicked(){
-		switch(currentStage){
-		case pitch:
-			mapPanel.setVisible(false);
-			playerPanel.setVisible(false);
-			datePanel.load(match.getLocation(),null);
-			summaryPanel.setVisible(false);
-			selectPitch.setStyleDependentName("selected", false);
-			selectDate.setStyleDependentName("selected", true);
-			selectPlayer.setStyleDependentName("selected", false);
-			matchSummary.setStyleDependentName("selected", false);
-			currentStage = stage.date;
-			break;
-		case date:
-			match.setDate(datePanel.getSelectedDate());
-			mapPanel.setVisible(false);
-			playerPanel.setVisible(true);
-			datePanel.setVisible(false);
-			summaryPanel.setVisible(false);
-			selectPitch.setStyleDependentName("selected", false);
-			selectDate.setStyleDependentName("selected", false);
-			selectPlayer.setStyleDependentName("selected", true);
-			matchSummary.setStyleDependentName("selected", false);
-			currentStage = stage.player;
-			break;
-		case player:
-			mapPanel.setVisible(false);
-			playerPanel.setVisible(false);
-			datePanel.setVisible(false);
-			summaryPanel.update();
-			summaryPanel.setVisible(true);
-			selectPitch.setStyleDependentName("selected", false);
-			selectDate.setStyleDependentName("selected", false);
-			selectPlayer.setStyleDependentName("selected", false);
-			matchSummary.setStyleDependentName("selected", true);
-			applyButton.setEnabled(true);
-			currentStage = stage.summary;
-			break;
-		case summary:
-			break;
-		}
-	};
 	
-	
-
 	private void applyClicked(){
 		inProgress = true;
 		laodImg.setVisible(true);
@@ -332,10 +303,21 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		public void update(){
 			teamA.setText(teamAName.getText());
 			teamB.setText(teamBName.getText());
-			String dateTime[] = dateFormat.format(match.getDate()).split(":");
-			date.setText(dateTime[0]);
-			time.setText(dateTime[1]);
-			location.setText(pitchName.getText());
+			if(match.getDate().getTime() == 0){
+				date.setText("Secilmedi");
+				time.setText("Secilmedi");
+			}else{
+				String dateTime[] = dateFormat.format(match.getDate()).split(":");
+				date.setText(dateTime[0]);
+				time.setText(dateTime[1]);
+			}
+			if(match.getLocation().getKey()==0){
+				location.setText("Secilmedi");
+			}else{
+				location.setText(pitchName.getText());
+			}
+			this.setVisible(true);
+			
 		}
 		
 	}

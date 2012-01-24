@@ -26,7 +26,7 @@ public class Match extends DataObject implements Serializable{
 	private HashMap<Long,ClientPlayer> teamB;
 	
 	public Match() {
-		this.date = new Date();
+		this.date = new Date(0);
 		this.location = new Pitch();
 		this.owner = 0;
 		this.paid = false;

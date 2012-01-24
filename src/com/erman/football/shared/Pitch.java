@@ -31,7 +31,7 @@ public class Pitch extends DataObject implements Serializable {
 		latitude = 28.970d;
 		capacity = 10;
 		openTime = "10:00";
-		closeTime = "23:00";
+		closeTime = "02:00";
 		matchTime = 75;
 	}
 
