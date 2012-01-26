@@ -66,6 +66,7 @@ public class Match_JDO_DB {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			MatchDO m = pm.getObjectById(MatchDO.class, key);
+			pm.deletePersistent(m.getSchedule());
 			pm.deletePersistent(m);
 		}catch(Exception e){
 			System.out.println(e.getMessage());

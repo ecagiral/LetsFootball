@@ -26,6 +26,11 @@
     <servlet-class>com.erman.football.server.service.PitchServiceImpl</servlet-class>
   </servlet>
   
+  <servlet>
+    <servlet-name>scheduleServlet</servlet-name>
+    <servlet-class>com.erman.football.server.service.ScheduleServiceImpl</servlet-class>
+  </servlet>
+  
   <servlet-mapping>
     <servlet-name>loginServlet</servlet-name>
     <url-pattern>/LetsFootball/login</url-pattern>
@@ -44,6 +49,11 @@
   <servlet-mapping>
     <servlet-name>pitchServlet</servlet-name>
     <url-pattern>/LetsFootball/pitch</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>scheduleServlet</servlet-name>
+    <url-pattern>/LetsFootball/schedule</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->

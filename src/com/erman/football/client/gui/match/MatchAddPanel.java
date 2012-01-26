@@ -42,7 +42,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 	private final Image successImg = new Image("success.jpg");
 	private final DatePicker datePicker = new DatePicker();
 	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd MMM yyyy:HH.mm");
-	private final WeekPanel datePanel = new WeekPanel();
+	private final WeekPanel datePanel;
 
 	private Match match;
 	private boolean inProgress;
@@ -52,7 +52,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		cache = _cache;
 		pitchMap = _pitchMap;
 		cache.regiserMatch(this);
-
+		datePanel = new WeekPanel(cache);
 		HorizontalPanel stepPanel = new HorizontalPanel();
 
 		selectPitch.setStylePrimaryName("addStage");

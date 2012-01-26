@@ -24,10 +24,10 @@ public class MatchDO {
 	private Key key;
 
 	@Persistent
-	Date date;
-
+	ScheduleDO schedule;
+	
 	@Persistent
-	String location;
+	Date date;
 	
 	@Persistent
 	long owner;
@@ -64,6 +64,14 @@ public class MatchDO {
 
 	public long getKey() {
 		return key.getId();
+	}
+
+	public ScheduleDO getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(ScheduleDO schedule) {
+		this.schedule = schedule;
 	}
 
 	public Date getDate() {
@@ -141,14 +149,6 @@ public class MatchDO {
 		return result;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public boolean isMailSent() {
 		return mailSent;
 	}
@@ -217,7 +217,10 @@ public class MatchDO {
 	public static MatchDO convert(Match match){
 		MatchDO matchDO = new MatchDO();
 		matchDO.setDate(match.getDate());
-		matchDO.setLocation(Long.toString(match.getLocation().getKey()));
+		ScheduleDO schedule = new ScheduleDO();
+		schedule.setTime(match.getDate().getTime());
+		schedule.setPitchId(match.getLocation().getKey());
+		matchDO.setSchedule(schedule);
 		matchDO.setPaid(match.isPaid());
 		matchDO.setMailSent(match.isMailSent());
 		matchDO.setOwner(match.getOwner());
@@ -231,7 +234,8 @@ public class MatchDO {
 
 	public void update(Match match){
 		this.setDate(match.getDate());
-		this.setLocation(Long.toString(match.getLocation().getKey()));
+		this.getSchedule().setTime(match.getDate().getTime());
+		this.getSchedule().setPitchId(match.getLocation().getKey());
 		this.setMailSent(match.isMailSent());
 		this.setPaid(match.isPaid());
 		this.setTeamAName(match.getTeamAName());
@@ -244,8 +248,8 @@ public class MatchDO {
 	public Match convert(){
 		Match match = new Match();
 		match.setKey(this.getKey());
-		match.setDate(this.getDate());
-		Pitch pitch = Pitch_JDO_DB.getPitchbyId(Long.parseLong(this.getLocation())).convert();
+		match.setDate(new Date(this.getSchedule().getTime()));
+		Pitch pitch = Pitch_JDO_DB.getPitchbyId(this.getSchedule().getPitchId()).convert();
 		match.setLocation(pitch);
 		match.setMailSent(this.isMailSent());
 		match.setPaid(this.isPaid());

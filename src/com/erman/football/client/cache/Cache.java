@@ -10,9 +10,12 @@ import com.erman.football.client.service.PlayerService;
 import com.erman.football.client.service.PlayerServiceAsync;
 import com.erman.football.client.service.MatchService;
 import com.erman.football.client.service.MatchServiceAsync;
+import com.erman.football.client.service.ScheduleService;
+import com.erman.football.client.service.ScheduleServiceAsync;
 import com.erman.football.shared.Match;
 import com.erman.football.shared.ClientPlayer;
 import com.erman.football.shared.Pitch;
+import com.erman.football.shared.Schedule;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -22,10 +25,12 @@ public class Cache {
 	private final MatchServiceAsync matchService;
 	private final PlayerServiceAsync playerService;
 	private final PitchServiceAsync pitchService;
+	private final ScheduleServiceAsync scheduleService;
 	
 	private ArrayList<CacheMatchHandler> matchHandlers;
 	private ArrayList<CachePlayerHandler> playerHandlers;
 	private ArrayList<CachePitchHandler> pitchHandlers;
+	private ArrayList<CacheScheduleHandler> scheduleHandlers;
  
 	private ClientPlayer player;
 	
@@ -33,10 +38,12 @@ public class Cache {
 		matchService = GWT.create(MatchService.class);
 		playerService = GWT.create(PlayerService.class);
 		pitchService = GWT.create(PitchService.class);
+		scheduleService = GWT.create(ScheduleService.class);
 		
 		matchHandlers = new ArrayList<CacheMatchHandler>();
 		playerHandlers = new ArrayList<CachePlayerHandler>();
 		pitchHandlers = new ArrayList<CachePitchHandler>();
+		scheduleHandlers = new ArrayList<CacheScheduleHandler>();
 	}
 	
 	public void load(){
@@ -55,6 +62,10 @@ public class Cache {
 	
 	public void regiserPitch(CachePitchHandler handler){
 		pitchHandlers.add(handler);
+	}
+	
+	public void registerSchedule(CacheScheduleHandler handler){
+		scheduleHandlers.add(handler);
 	}
 	
 	//Player methods
@@ -249,6 +260,22 @@ public class Cache {
 			}
 		});
 	}
+		
+	// Schedule methods
+	public void getSchedules(Pitch pitch, Date date){
+		scheduleService.getSchedules(pitch.getKey(), date.getTime(), new AsyncCallback<List<Schedule>>(){
+
+			public void onFailure(Throwable caught) {
+		
+			}
+
+			public void onSuccess(List<Schedule> result) {
+				notifyScheduleRetrieved(result);
+			}
+			
+		});
+	}
+	
 	
 	//Player notifications	
 	private void notifyPlayerAdded(List<ClientPlayer> result){
@@ -304,6 +331,12 @@ public class Cache {
 	private void notifyPitchRemoved(Long pitch){
 		for(CachePitchHandler handler:pitchHandlers){
 			handler.pitchRemoved(pitch);
+		}
+	}
+	
+	private void notifyScheduleRetrieved(List<Schedule> schedules){
+		for(CacheScheduleHandler handler:scheduleHandlers){
+			handler.ScheduleRetrieved(schedules);
 		}
 	}
 	
