@@ -83,6 +83,7 @@ public class MainTab extends SimplePanel{
 			
 		});
 		buttonPanel.add(pitchButton);
+		buttonPanel.setStyleName("topButtonPanel");
 		topPanel.add(buttonPanel);
 		
 		listPanel.add(matchPanel);

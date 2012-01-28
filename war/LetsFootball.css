@@ -3,16 +3,7 @@
 
 /** Example rules used by the template application (remove for your app) */
 .mainLayout{
-background: white url('bg.gif') repeat-x top left;
-background-image: url('bg.gif');
-background-repeat-x: repeat;
-background-repeat-y: no-repeat;
-background-attachment: initial;
-background-position-x: 0%;
-background-position-y: 0%;
-background-origin: initial;
-background-clip: initial;
-background-color: #ccc;
+	width: 100%;
 }
 
 h1 {
@@ -23,6 +14,10 @@ h1 {
   text-align: center;
 }
 
+div.soccer{
+	width : 100%;	
+}
+	
 .sendButton {
   display: block;
   font-size: 16pt;
@@ -52,6 +47,7 @@ h1 {
 
 .header{
 	background-color: #010101;
+	width: 100%;
 }
 
 .footer{
@@ -151,9 +147,12 @@ h1 {
   border-bottom-color: blue;
 }
 
+.topButtonPanel{
+	padding-left:190px;	
+}
+	
 .topPanel{
 	padding-top:30px;
-	padding-left:190px;
   	border-bottom:solid;
 	border-bottom-color: #000;
 	border-bottom-width: 1px;

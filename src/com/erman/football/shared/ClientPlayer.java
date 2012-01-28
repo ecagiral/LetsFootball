@@ -11,6 +11,7 @@ public class ClientPlayer extends DataObject implements Serializable {
 	private static final long serialVersionUID = 6486401923712917968L;
 	
 	private long key;
+	private long facebookId;
 	private String email;
 	private String name;
 	private boolean admin;
@@ -76,6 +77,14 @@ public class ClientPlayer extends DataObject implements Serializable {
 	@Override
 	public long getOwner() {
 		return key;
+	}
+
+	public long getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(long facebookId) {
+		this.facebookId = facebookId;
 	}
 	
 	

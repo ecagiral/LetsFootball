@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -41,7 +42,10 @@ public class Login extends VerticalPanel {
 	
 	public Login(LoginHandler _handler){
 		handler = _handler;
-		login(null);
+		
+		//check if user is already has logged in
+		//at the same time facebook checks login status
+		//login(null);
 		
 		warningBox.setAutoHideEnabled(true);
 		warningBox.setText("Uyari");
@@ -98,24 +102,35 @@ public class Login extends VerticalPanel {
 		signupPanel.add(signButtonPanel);
 		signupPanel.add(joinResult);
 		
+		HTML facebookLogin = new HTML();
+		facebookLogin.setHTML("<fb:login-button></fb:login-button>");
+		HTML facebookLogout = new HTML();
+		facebookLogout.setHTML("<fb:logout-button></fb:logout-button>");
+		
 		SimplePanel space1 = new SimplePanel();
 		space1.setWidth("190px");
 		SimplePanel space2 = new SimplePanel();
-		space2.setWidth("50px");
+		space2.setWidth("50px");	
+		SimplePanel space3 = new SimplePanel();
+		space3.setWidth("50px");
 		
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		mainPanel.add(space1);
 		mainPanel.add(signupPanel);
 		mainPanel.add(space2);
 		mainPanel.add(loginPanel);
+		mainPanel.add(space3);
+		mainPanel.add(facebookLogin);
+		mainPanel.add(facebookLogout);
 
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
 
 	private void login(String email){
-		loginStatus.setVisible(true);
-		loginService.login(email, new  LoginCallback());
+		//loginStatus.setVisible(true);
+		//loginService.login(email, new  LoginCallback());
+		handler.loggedIn(null);
 	}
 	
 	public void setFocus(){
