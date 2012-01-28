@@ -16,7 +16,6 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -44,8 +43,7 @@ public class Login extends VerticalPanel {
 		handler = _handler;
 		
 		//check if user is already has logged in
-		//at the same time facebook checks login status
-		//login(null);
+		login(null);
 		
 		warningBox.setAutoHideEnabled(true);
 		warningBox.setText("Uyari");
@@ -131,7 +129,7 @@ public class Login extends VerticalPanel {
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
-
+	
 	public void login(ClientPlayer player){
 		loginStatus.setVisible(true);
 		loginService.login(player, new  LoginCallback());
@@ -150,13 +148,19 @@ public class Login extends VerticalPanel {
 	}
 	
 	public void logout(){
-		loginService.logout(new  AsyncCallback<Boolean>(){
+		loginService.logout(new  AsyncCallback<ClientPlayer>(){
 
 			public void onFailure(Throwable caught) {
 				handler.loggedOut();
 			}
 
-			public void onSuccess(Boolean result) {
+			public void onSuccess(ClientPlayer result) {
+				System.out.println("logout result received "+result.getFacebookId());
+				if(result != null && result.getFacebookId() != 0){
+					System.out.println("for facebook");
+					//facebook user. logout from facebook
+					FacebookUtil.logout();
+				}
 				handler.loggedOut();
 			}
 			

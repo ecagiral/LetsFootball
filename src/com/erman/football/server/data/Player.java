@@ -24,6 +24,9 @@ public class Player {
     }
     
     @Persistent
+    private long facebookId;
+    
+    @Persistent
     private String email;
 
     @Persistent
@@ -66,6 +69,14 @@ public class Player {
 	public void setNotify(boolean notify) {
 		this.notify = notify;
 	} 
+	
+	public long getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(long facebookId) {
+		this.facebookId = facebookId;
+	}
 
 	public static Player convert(ClientPlayer player){
 		Player playerDO = new Player();
@@ -73,6 +84,7 @@ public class Player {
 		playerDO.setName(player.getName());
 		playerDO.setAdmin(player.isAdmin());
 		playerDO.setNotify(player.isNotify());
+		playerDO.setFacebookId(player.getFacebookId());
 		return playerDO;
 	}
 	
@@ -89,6 +101,7 @@ public class Player {
 		player.setName(this.getName());
 		player.setAdmin(this.isAdmin());
 		player.setNotify(this.isNotify());
+		player.setFacebookId(this.getFacebookId());
 		return player;
 	}
 }

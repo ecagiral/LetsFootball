@@ -15,8 +15,8 @@ public class FacebookUtil {
 		this.login = _login;
 		this.exportMethods(this);
 		this.initFacebookAPI();
-		this.subscribeLogin();
-		this.subscribeLogout();
+		//this.subscribeLogin();
+		//this.subscribeLogout();
 	}
 	
 	public void setLogin(Login _login){
@@ -27,22 +27,22 @@ public class FacebookUtil {
 	/*-{
 		$wnd.FB.init({appId: "334533903236590", status: true, cookie: true, xfbml: true});
 		
-		$wnd.FB.getLoginStatus(function(response) {
-			
-		  	if (response.status === "connected") {
-		  		$doc.getElementById("info").innerHTML = "connected";
-		    	$wnd.onLogin(); 
-		  	} else if (response.status === 'not_authorized') {
-		    	// the user is logged in to Facebook, 
-		    	//but not connected to the app
-		    	$doc.getElementById("info").innerHTML = "not auth";
-		  	} else {
-		    	// the user isn't even logged in to Facebook.
-		    	$doc.getElementById("info").innerHTML = "not login";
-		    	$wnd.onLogout(); 
-			}
-		});
-		$doc.getElementById("info").innerHTML = "subscribed";
+		//$wnd.FB.getLoginStatus(function(response) {
+		//	
+		// 	if (response.status === "connected") {
+		//  		$doc.getElementById("info").innerHTML = "connected";
+		//    	$wnd.onLogin(); 
+		//  	} else if (response.status === 'not_authorized') {
+		//    	// the user is logged in to Facebook, 
+		//    	//but not connected to the app
+		//    	$doc.getElementById("info").innerHTML = "not auth";
+		//    	$wnd.initLogin(); 
+		//  	} else {
+		//    	// the user isn't even logged in to Facebook.
+		//    	$doc.getElementById("info").innerHTML = "not login__";
+		//   	$wnd.initLogin(); 
+		//	}
+		//});
 		
 	}-*/;
 	
@@ -52,11 +52,13 @@ public class FacebookUtil {
 	
 	private native void exportMethods(FacebookUtil instance) /*-{
 		$wnd.onLogin = function() {
-			$doc.getElementById("info").innerHTML = "call login";
 			return instance.@com.erman.football.client.FacebookUtil::onLogin()();
 		}
 		$wnd.onLogout = function() {
 			return instance.@com.erman.football.client.FacebookUtil::onLogout()();
+		}
+		$wnd.initLogin = function() {
+			return instance.@com.erman.football.client.FacebookUtil::initLogin()();
 		}
 		$wnd.onAPICall = function(callback, response, exception) {
 			return instance.@com.erman.football.client.FacebookUtil::onAPICall(Lcom/google/gwt/user/client/rpc/AsyncCallback;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(callback, response, exception);
@@ -74,6 +76,10 @@ public class FacebookUtil {
 		}
 	}
 
+	private void initLogin(){
+		login.login(null);
+	}
+	
 	public void onLogin() {
 		//this.subscribeLogout();
 		getMe();
@@ -111,13 +117,11 @@ public class FacebookUtil {
 	
 	public void getMe() {
 		callAPI("/me", new AsyncCallback<JavaScriptObject>() {
-		
-			@Override
+
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
 			}
 
-			@Override
 			public void onSuccess(JavaScriptObject result) {
 				UserJso fbUser = (UserJso) result;
 				ClientPlayer player = new ClientPlayer();
@@ -125,7 +129,6 @@ public class FacebookUtil {
 				player.setFacebookId(Long.parseLong(fbUser.getId()));
 				//User is logged in from facebook
 				login.login(player);
-				System.out.println("http://graph.facebook.com/" + fbUser.getId() + "/picture");
 			}
 		});
 	}
@@ -133,13 +136,12 @@ public class FacebookUtil {
 	public static native void login() /*-{
 		 $wnd.FB.login(function(response) {
    			if (response.authResponse) {
-   				$doc.getElementById("info").innerHTML = "logged in";
 		    	$wnd.onLogin(); 
    			}
 		 });
 	}-*/;
 	
-	public native void logout() /*-{
+	public static native void logout() /*-{
 		$wnd.FB.logout(function(response) {
   			// user is now logged out
 		});

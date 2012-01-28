@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PlayerCell extends DataCell{
 	
@@ -30,17 +31,28 @@ public class PlayerCell extends DataCell{
 	}
 
 	private HorizontalPanel generateCard(PlayerCell cell){
-		HorizontalPanel result = new HorizontalPanel();
-		result.setWidth("100%");
+		//HorizontalPanel result = new HorizontalPanel();
+		//result.setVerticalAlignment(ALIGN_MIDDLE);
+		//result.setWidth("100%");
+		HorizontalPanel namePhoto = new HorizontalPanel();
 		cell.getName().setText(cell.getPlayer().getName());
-		result.add(cell.getName());
+		namePhoto.setVerticalAlignment(ALIGN_MIDDLE);
+		if(cell.getPlayer().getFacebookId()!=0){
+			namePhoto.add(new Image("http://graph.facebook.com/" + cell.getPlayer().getFacebookId() + "/picture"));
+		}	
+		namePhoto.add(cell.getName());
+		/*result.add(namePhoto);
+		
 		if(cell.isAdmin()){
 			Image delete = new Image("delete.png");
 			delete.addClickHandler(new CellDeleteHandler(cell));
 			result.setHorizontalAlignment(ALIGN_RIGHT);
 			result.add(delete);
 		}
+		
 		return result;
+		*/
+		return namePhoto;
 	}
 	
 	public Label getName(){

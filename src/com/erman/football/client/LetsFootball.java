@@ -52,7 +52,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 				
 		logout.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				face.logout();
+				loginPanel.logout();
 			}
 			
 		});
@@ -62,7 +62,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		welcome = new Label("");
 		welcome.setStyleName("welcome");
 		userPanel.add(welcome);
-		logout.setVisible(true);
+		logout.setVisible(false);
 		userPanel.add(logout);
 		headerPanel.add(userPanel);
 		headerPanel.setStyleName("header");
@@ -86,24 +86,21 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		cache.setLoggedPlayer(player);
 		welcome.setText(player.getName());
 		logout.setVisible(true);
-		if(loginPanel!=null){
-			loginPanel.removeFromParent();
-			loginPanel = null;
-		}
+		loginPanel.removeFromParent();
 		mainTab = new MainTab(cache);
 		mainLayout.add(mainTab);
 		cache.load();
+
 	}
 	
 	public void loggedOut() {
+		System.out.println("letsfootball.loggedout()");
 		welcome.setText("");
-		logout.setVisible(true);
+		logout.setVisible(false);
 		if(mainTab!=null){
 			mainTab.removeFromParent();
 			mainTab = null;
 		}
-		loginPanel = new Login(this);
-		face.setLogin(loginPanel);
 		mainLayout.add(loginPanel);
 		loginPanel.setFocus();
 	}

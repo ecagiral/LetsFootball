@@ -74,6 +74,27 @@ public class Player_JDO_DB {
 		return null;
 	}
 	
+	public static Player getFacebookPlayer(Long id){
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Query query = pm.newQuery(Player.class);
+	    query.setFilter("facebookId == idParam");
+	    query.declareParameters("Long idParam");
+		try {
+			@SuppressWarnings("unchecked")
+			List<Player> results = (List<Player>) query.execute(id);
+	        if (!results.isEmpty()) {
+	            return results.get(0);
+	        } else {
+	            return null;
+	        }
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally {
+			pm.close();
+		}
+		return null;
+	}
+	
 	public static Player getUser(String email){
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		Query query = pm.newQuery(Player.class);

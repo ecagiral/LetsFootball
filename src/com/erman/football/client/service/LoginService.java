@@ -12,6 +12,6 @@ public interface LoginService extends RemoteService{
 
 	ClientPlayer login(ClientPlayer player);
 
-	boolean logout();
+	ClientPlayer logout();
 
 }

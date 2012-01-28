@@ -6,5 +6,5 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LoginServiceAsync {
 	
 	void login(ClientPlayer player, AsyncCallback<ClientPlayer> callback);
-	void logout(AsyncCallback<Boolean> callback);
+	void logout(AsyncCallback<ClientPlayer> callback);
 }
