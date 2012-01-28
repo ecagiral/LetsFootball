@@ -38,9 +38,7 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	 */
 	public void onModuleLoad() {
 		loginPanel = new Login(this);
-	    face = new FacebookUtil(this,loginPanel);
-		
-		
+
 		Window.addResizeHandler(new ResizeHandler(){
 			public void onResize(ResizeEvent event) {
 
@@ -69,8 +67,6 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 		headerPanel.add(userPanel);
 		headerPanel.setStyleName("header");
 		mainLayout.add(headerPanel);
-		mainLayout.add(loginPanel);
-		mainLayout.setVisible(false);
 		mainLayout.setStyleName("mainLayout");
 		RootPanel.get("soccer").add(mainLayout);
 	    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand () {
@@ -78,24 +74,22 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	            loginPanel.setFocus();
 	        }
 	    });
-	    mainLayout.setVisible(true);
+	    face = new FacebookUtil(loginPanel);
 	}
 	
 	public void init(){
-		mainLayout.setVisible(true);
+		mainLayout.add(loginPanel);
 	}
 
 	public void loggedIn(ClientPlayer player) {
-		if(player == null){
-			face.getMe();
-			return;
-		}
-		mainLayout.setVisible(true);
 		Cache cache = new Cache();
 		cache.setLoggedPlayer(player);
 		welcome.setText(player.getName());
 		logout.setVisible(true);
-		loginPanel.setVisible(false);
+		if(loginPanel!=null){
+			loginPanel.removeFromParent();
+			loginPanel = null;
+		}
 		mainTab = new MainTab(cache);
 		mainLayout.add(mainTab);
 		cache.load();
@@ -104,9 +98,12 @@ public class LetsFootball implements EntryPoint,LoginHandler{
 	public void loggedOut() {
 		welcome.setText("");
 		logout.setVisible(true);
-		mainTab.removeFromParent();
-		mainTab = null;
+		if(mainTab!=null){
+			mainTab.removeFromParent();
+			mainTab = null;
+		}
 		loginPanel = new Login(this);
+		face.setLogin(loginPanel);
 		mainLayout.add(loginPanel);
 		loginPanel.setFocus();
 	}

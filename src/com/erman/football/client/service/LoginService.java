@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("login")
 public interface LoginService extends RemoteService{
 
-	ClientPlayer login(String email);
+	ClientPlayer login(ClientPlayer player);
 
 	boolean logout();
 

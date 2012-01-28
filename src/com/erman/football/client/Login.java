@@ -55,7 +55,9 @@ public class Login extends VerticalPanel {
 			public void onKeyPress(KeyPressEvent event) {
 				int key = new Integer(event.getCharCode());
 				if(key==13){
-					login(emailBox.getText());
+					ClientPlayer player = new ClientPlayer();
+					player.setEmail(emailBox.getText());
+					login(player);
 				}
 			}
 		});
@@ -70,7 +72,9 @@ public class Login extends VerticalPanel {
 		Button loginButton = new Button("Giri&#351");
 		loginButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
-				login(emailBox.getText());
+				ClientPlayer player = new ClientPlayer();
+				player.setEmail(emailBox.getText());
+				login(player);
 			}		
 		});
 		
@@ -102,10 +106,12 @@ public class Login extends VerticalPanel {
 		signupPanel.add(signButtonPanel);
 		signupPanel.add(joinResult);
 		
-		HTML facebookLogin = new HTML();
-		facebookLogin.setHTML("<fb:login-button></fb:login-button>");
-		HTML facebookLogout = new HTML();
-		facebookLogout.setHTML("<fb:logout-button></fb:logout-button>");
+		Button facebookLogin = new Button("facebook");
+		facebookLogin.addClickHandler(new ClickHandler(){
+			public void onClick(ClickEvent event) {
+				FacebookUtil.login();
+			}	
+		});
 		
 		SimplePanel space1 = new SimplePanel();
 		space1.setWidth("190px");
@@ -121,16 +127,14 @@ public class Login extends VerticalPanel {
 		mainPanel.add(loginPanel);
 		mainPanel.add(space3);
 		mainPanel.add(facebookLogin);
-		mainPanel.add(facebookLogout);
 
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
 
-	private void login(String email){
-		//loginStatus.setVisible(true);
-		//loginService.login(email, new  LoginCallback());
-		handler.loggedIn(null);
+	public void login(ClientPlayer player){
+		loginStatus.setVisible(true);
+		loginService.login(player, new  LoginCallback());
 	}
 	
 	public void setFocus(){
@@ -138,11 +142,11 @@ public class Login extends VerticalPanel {
 	}
 	
 	public void join(){
-		ClientPlayer newPlayer = new ClientPlayer();
-		newPlayer.setEmail(newEmailBox.getText());
-		newPlayer.setName(nameBox.getText());
+		ClientPlayer player = new ClientPlayer();
+		player.setEmail(newEmailBox.getText());
+		player.setName(nameBox.getText());
 		joinStatus.setVisible(true);
-		playerService.addPlayer(newPlayer, new AddCallback());
+		playerService.addPlayer(player, new AddCallback());
 	}
 	
 	public void logout(){
@@ -203,7 +207,7 @@ public class Login extends VerticalPanel {
 		public void onSuccess(ClientPlayer result) {
 			joinStatus.setVisible(false);
 			joinResult.setText("Oyuncu eklendi");
-			login(result.getEmail());
+			login(result);
 		}
 		
 	}

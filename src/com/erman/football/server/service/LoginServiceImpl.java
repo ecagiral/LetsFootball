@@ -11,10 +11,16 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
 
-	public ClientPlayer login(String email) {
+	public ClientPlayer login(ClientPlayer player) {
 		ClientPlayer result = null;
+		if(player.getFacebookId()!=0){
+			//facebook user. Add and return if not in db, return user if in db
+			player.setKey(99999);
+			player.setEmail("xxxx");
+			return player;
+		}
 		HttpServletRequest request = this.getThreadLocalRequest();
-		if(email==null){
+		if(player.getEmail()==null){
 			//Check if already logged in
 			String playerId = (String)request.getSession().getAttribute("player");
 			if(playerId == null){
@@ -36,7 +42,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 				}
 			}
 		}else{
-			if(email.equals("admin")){
+			if(player.getEmail().equals("admin")){
 				result = new ClientPlayer();
 				result.setAdmin(true);
 				result.setEmail("admin@main");
@@ -46,7 +52,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 				return result;
 			}
 			//email supplied. Check user is valid
-			Player playerDO = Player_JDO_DB.getUser(email);
+			Player playerDO = Player_JDO_DB.getUser(player.getEmail());
 			if(playerDO==null){
 				return result;
 			}else{

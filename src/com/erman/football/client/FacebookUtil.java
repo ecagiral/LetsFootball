@@ -9,16 +9,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class FacebookUtil {
 
-	private LoginHandler handler;
 	private Login login;
 	
-	public FacebookUtil(LoginHandler _handler, Login _login){
-		this.handler = _handler;
+	public FacebookUtil(Login _login){
 		this.login = _login;
 		this.exportMethods(this);
 		this.initFacebookAPI();
 		this.subscribeLogin();
 		this.subscribeLogout();
+	}
+	
+	public void setLogin(Login _login){
+		this.login = _login;
 	}
 
 	private native String initFacebookAPI()
@@ -86,7 +88,7 @@ public class FacebookUtil {
 
 	public void onLogout() {
 		//this.subscribeLogin();
-		handler.loggedOut();
+		login.logout();
 	}
 	
 	
@@ -122,11 +124,20 @@ public class FacebookUtil {
 				player.setName(fbUser.getFullName());
 				player.setFacebookId(Long.parseLong(fbUser.getId()));
 				//User is logged in from facebook
-				
+				login.login(player);
 				System.out.println("http://graph.facebook.com/" + fbUser.getId() + "/picture");
 			}
 		});
 	}
+	
+	public static native void login() /*-{
+		 $wnd.FB.login(function(response) {
+   			if (response.authResponse) {
+   				$doc.getElementById("info").innerHTML = "logged in";
+		    	$wnd.onLogin(); 
+   			}
+		 });
+	}-*/;
 	
 	public native void logout() /*-{
 		$wnd.FB.logout(function(response) {
