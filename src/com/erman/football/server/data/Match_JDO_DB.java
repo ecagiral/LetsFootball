@@ -101,6 +101,7 @@ public class Match_JDO_DB {
 		MatchDO matchDO = null;
 		try {
 			matchDO = pm.getObjectById(MatchDO.class, key);
+			matchDO.getSchedule();
 			if (matchDO!=null) {
 				HashSet<Long> teamAList = matchDO.getTeamA();
 				HashSet<Long> teamBList = matchDO.getTeamB();

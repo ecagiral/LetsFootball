@@ -14,7 +14,7 @@ public class FacebookUtil {
 	public FacebookUtil(Login _login){
 		this.login = _login;
 		this.exportMethods(this);
-		this.initFacebookAPI();
+		//this.initFacebookAPI();
 		//this.subscribeLogin();
 		//this.subscribeLogout();
 	}
@@ -25,7 +25,7 @@ public class FacebookUtil {
 
 	private native String initFacebookAPI()
 	/*-{
-		$wnd.FB.init({appId: "334533903236590", status: true, cookie: true, xfbml: true});
+		//$wnd.FB.init({appId: "334533903236590", status: true, cookie: true, xfbml: true});
 		
 		//$wnd.FB.getLoginStatus(function(response) {
 		//	

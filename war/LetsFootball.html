@@ -42,6 +42,10 @@
 	
 	<div id="fb-root"></div>
 	<script>
+	  	window.fbAsyncInit = function() {
+	  		FB.init({appId: "334533903236590", status: true, cookie: true, xfbml: true});
+		 };
+
 		(function() {
 			var e = document.createElement('script'); 
 			e.async = true;
