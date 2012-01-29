@@ -100,9 +100,9 @@ public class Match_JDO_DB {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		MatchDO matchDO = null;
 		try {
-			matchDO = pm.getObjectById(MatchDO.class, key);
-			matchDO.getSchedule();
+			matchDO = pm.getObjectById(MatchDO.class, key);		
 			if (matchDO!=null) {
+				matchDO.getSchedule();
 				HashSet<Long> teamAList = matchDO.getTeamA();
 				HashSet<Long> teamBList = matchDO.getTeamB();
 				if(teamA){

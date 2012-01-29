@@ -3,8 +3,6 @@ package com.erman.football.client;
 import com.erman.football.client.service.LoginService;
 import com.erman.football.client.service.LoginServiceAsync;
 import com.erman.football.client.service.PlayerException;
-import com.erman.football.client.service.PlayerService;
-import com.erman.football.client.service.PlayerServiceAsync;
 import com.erman.football.shared.ClientPlayer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,7 +24,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class Login extends VerticalPanel {
 
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
-	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
+	private final VerticalPanel signupDataPanel = new VerticalPanel();
+	private final VerticalPanel loginDataPanel = new VerticalPanel();
 	private final TextBox emailBox = new TextBox();
 	private final TextBox newEmailBox = new TextBox();
 	private final TextBox nameBox = new TextBox();
@@ -84,46 +83,64 @@ public class Login extends VerticalPanel {
 		});
 		
 		VerticalPanel loginPanel = new VerticalPanel();
-		loginPanel.add(new Label("Kayitli Oyuncu"));
-		loginPanel.add(emailBox);
+		Label loginPanelBtn = new Label("Gir");
+		loginPanelBtn.setStyleName("loginPanelButton");
+		loginPanelBtn.addClickHandler(new ClickHandler(){
+
+			public void onClick(ClickEvent event) {
+				signupDataPanel.setVisible(false);
+				loginDataPanel.setVisible(true);
+			}
+			
+		});
+		loginPanel.add(loginPanelBtn);		
+		loginDataPanel.add(emailBox);
 		HorizontalPanel loginButtonPanel = new HorizontalPanel();
 		loginButtonPanel.add(loginButton);
 		loginStatus.setVisible(false);
 		loginButtonPanel.add(loginStatus);
-		loginPanel.add(loginButtonPanel);
-		loginPanel.add(loginResult);
+		loginDataPanel.add(loginButtonPanel);
+		loginDataPanel.add(loginResult);
+		loginDataPanel.setVisible(false);
+		loginPanel.add(loginDataPanel);
 		
 		VerticalPanel signupPanel = new VerticalPanel();
-		signupPanel.add(new Label("Yeni Oyuncu"));
-		signupPanel.add(nameBox);
-		signupPanel.add(newEmailBox);
+		Label joinPanelBtn = new Label("Kaydol");
+		joinPanelBtn.setStyleName("loginPanelButton");
+		joinPanelBtn.addClickHandler(new ClickHandler(){
+
+			public void onClick(ClickEvent event) {
+				loginDataPanel.setVisible(false);
+				signupDataPanel.setVisible(true);
+			}
+			
+		});
+		signupPanel.add(joinPanelBtn);
+		signupDataPanel.add(nameBox);
+		signupDataPanel.add(newEmailBox);
 		HorizontalPanel signButtonPanel = new HorizontalPanel();
 		signButtonPanel.add(joinButton);
 		joinStatus.setVisible(false);
 		signButtonPanel.add(joinStatus);
-		signupPanel.add(signButtonPanel);
-		signupPanel.add(joinResult);
+		signupDataPanel.add(signButtonPanel);
+		signupDataPanel.add(joinResult);
+		signupDataPanel.setVisible(false);
+		signupPanel.add(signupDataPanel);
 		
-		Button facebookLogin = new Button("facebook");
+		Label facebookLogin = new Label("facebook");
+		facebookLogin.setStyleName("loginPanelButton");
 		facebookLogin.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				FacebookUtil.login();
+				loginDataPanel.setVisible(false);
+				signupDataPanel.setVisible(false);
 			}	
 		});
 		
-		SimplePanel space1 = new SimplePanel();
-		space1.setWidth("190px");
-		SimplePanel space2 = new SimplePanel();
-		space2.setWidth("50px");	
-		SimplePanel space3 = new SimplePanel();
-		space3.setWidth("50px");
-		
 		HorizontalPanel mainPanel = new HorizontalPanel();
-		mainPanel.add(space1);
+		mainPanel.setStyleName("loginPanel");
 		mainPanel.add(signupPanel);
-		mainPanel.add(space2);
 		mainPanel.add(loginPanel);
-		mainPanel.add(space3);
 		mainPanel.add(facebookLogin);
 
 		this.setWidth("100%");
@@ -144,7 +161,7 @@ public class Login extends VerticalPanel {
 		player.setEmail(newEmailBox.getText());
 		player.setName(nameBox.getText());
 		joinStatus.setVisible(true);
-		playerService.addPlayer(player, new AddCallback());
+		login(player);
 	}
 	
 	public void logout(){
@@ -161,6 +178,8 @@ public class Login extends VerticalPanel {
 					//facebook user. logout from facebook
 					FacebookUtil.logout();
 				}
+				loginDataPanel.setVisible(false);
+				signupDataPanel.setVisible(false);
 				handler.loggedOut();
 			}
 			
@@ -171,6 +190,14 @@ public class Login extends VerticalPanel {
 
 		public void onFailure(Throwable caught) {
 			loginStatus.setVisible(false);
+			joinStatus.setVisible(false);
+			if(caught instanceof PlayerException){
+				Label error = new Label(((PlayerException)caught).getMessage());
+				warningBox.add(error);
+				warningBox.center();
+				joinResult.setText("");
+				return;
+			}
 			if(notFirst){
 				loginResult.setText("Bilinmeyen kullanici");
 			}else{
@@ -181,6 +208,9 @@ public class Login extends VerticalPanel {
 
 		public void onSuccess(ClientPlayer result) {
 			loginStatus.setVisible(false);
+			joinStatus.setVisible(false);
+			loginDataPanel.setVisible(false);
+			signupDataPanel.setVisible(false);
 			if(result == null){
 				if(notFirst){
 					loginResult.setText("Bilinmeyen kullanici");
@@ -195,24 +225,4 @@ public class Login extends VerticalPanel {
 		
 	}
 	
-	private class AddCallback implements AsyncCallback<ClientPlayer>{
-
-		public void onFailure(Throwable caught) {
-			joinStatus.setVisible(false);
-			if(caught instanceof PlayerException){
-				Label error = new Label(((PlayerException)caught).getMessage());
-				warningBox.add(error);
-				warningBox.center();
-				joinResult.setText("");
-				
-			}
-		}
-
-		public void onSuccess(ClientPlayer result) {
-			joinStatus.setVisible(false);
-			joinResult.setText("Oyuncu eklendi");
-			login(result);
-		}
-		
-	}
 }
