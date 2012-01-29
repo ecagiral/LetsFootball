@@ -17,7 +17,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -34,19 +33,21 @@ public class Login extends VerticalPanel {
 	private final Label joinResult = new Label();
 	private final Image loginStatus = new Image("loader.gif");
 	private final Image joinStatus = new Image("loader.gif");
+	private final Image facebookStatus = new Image("loader.gif");
 	private final LoginHandler handler;	
-	
+
 	private boolean notFirst = false;
-	
+
 	public Login(LoginHandler _handler){
 		handler = _handler;
-		
+
 		//check if user is already has logged in
 		login(null);
-		
+
 		warningBox.setAutoHideEnabled(true);
+		warningBox.setGlassEnabled(true);
 		warningBox.setText("Uyari");
-		
+
 		emailBox.setText("Email");
 		emailBox.addKeyPressHandler(new KeyPressHandler(){
 			public void onKeyPress(KeyPressEvent event) {
@@ -62,7 +63,7 @@ public class Login extends VerticalPanel {
 			public void onFocus(FocusEvent event) {
 				emailBox.selectAll();
 			}
-			
+
 		});
 		nameBox.setText("Isim");
 		newEmailBox.setText("Email");
@@ -74,14 +75,14 @@ public class Login extends VerticalPanel {
 				login(player);
 			}		
 		});
-		
+
 		Button joinButton = new Button("Kat&#305l");
 		joinButton.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
 				join();
 			}		
 		});
-		
+
 		VerticalPanel loginPanel = new VerticalPanel();
 		Label loginPanelBtn = new Label("Gir");
 		loginPanelBtn.setStyleName("loginPanelButton");
@@ -91,7 +92,7 @@ public class Login extends VerticalPanel {
 				signupDataPanel.setVisible(false);
 				loginDataPanel.setVisible(true);
 			}
-			
+
 		});
 		loginPanel.add(loginPanelBtn);		
 		loginDataPanel.add(emailBox);
@@ -103,7 +104,7 @@ public class Login extends VerticalPanel {
 		loginDataPanel.add(loginResult);
 		loginDataPanel.setVisible(false);
 		loginPanel.add(loginDataPanel);
-		
+
 		VerticalPanel signupPanel = new VerticalPanel();
 		Label joinPanelBtn = new Label("Kaydol");
 		joinPanelBtn.setStyleName("loginPanelButton");
@@ -113,7 +114,7 @@ public class Login extends VerticalPanel {
 				loginDataPanel.setVisible(false);
 				signupDataPanel.setVisible(true);
 			}
-			
+
 		});
 		signupPanel.add(joinPanelBtn);
 		signupDataPanel.add(nameBox);
@@ -126,8 +127,10 @@ public class Login extends VerticalPanel {
 		signupDataPanel.add(joinResult);
 		signupDataPanel.setVisible(false);
 		signupPanel.add(signupDataPanel);
-		
+
+		VerticalPanel facebookPanel = new VerticalPanel();
 		Label facebookLogin = new Label("facebook");
+
 		facebookLogin.setStyleName("loginPanelButton");
 		facebookLogin.addClickHandler(new ClickHandler(){
 			public void onClick(ClickEvent event) {
@@ -136,26 +139,39 @@ public class Login extends VerticalPanel {
 				signupDataPanel.setVisible(false);
 			}	
 		});
-		
+		facebookPanel.add(facebookLogin);
+		facebookStatus.setVisible(false);
+		facebookPanel.add(facebookStatus);
+
 		HorizontalPanel mainPanel = new HorizontalPanel();
 		mainPanel.setStyleName("loginPanel");
 		mainPanel.add(signupPanel);
 		mainPanel.add(loginPanel);
-		mainPanel.add(facebookLogin);
+		mainPanel.add(facebookPanel);
 
 		this.setWidth("100%");
 		this.add(mainPanel);
 	}
-	
+
 	public void login(ClientPlayer player){
-		loginStatus.setVisible(true);
+		if(player!=null){
+			if(player.getFacebookId() == 0){
+				loginStatus.setVisible(true);
+			}
+		}
 		loginService.login(player, new  LoginCallback());
 	}
 	
+	//this method is called after user clicks login in facebook window
+	//real login operation will call login method
+	public void facebookLogin(){
+		facebookStatus.setVisible(true);
+	}
+
 	public void setFocus(){
 		emailBox.setFocus(true);
 	}
-	
+
 	public void join(){
 		ClientPlayer player = new ClientPlayer();
 		player.setEmail(newEmailBox.getText());
@@ -163,7 +179,7 @@ public class Login extends VerticalPanel {
 		joinStatus.setVisible(true);
 		login(player);
 	}
-	
+
 	public void logout(){
 		loginService.logout(new  AsyncCallback<ClientPlayer>(){
 
@@ -172,9 +188,7 @@ public class Login extends VerticalPanel {
 			}
 
 			public void onSuccess(ClientPlayer result) {
-				System.out.println("logout result received "+result.getFacebookId());
 				if(result != null && result.getFacebookId() != 0){
-					System.out.println("for facebook");
 					//facebook user. logout from facebook
 					FacebookUtil.logout();
 				}
@@ -182,17 +196,19 @@ public class Login extends VerticalPanel {
 				signupDataPanel.setVisible(false);
 				handler.loggedOut();
 			}
-			
+
 		});
 	}
-	
+
 	private class LoginCallback implements AsyncCallback<ClientPlayer>{
 
 		public void onFailure(Throwable caught) {
 			loginStatus.setVisible(false);
 			joinStatus.setVisible(false);
+			facebookStatus.setVisible(false);
 			if(caught instanceof PlayerException){
 				Label error = new Label(((PlayerException)caught).getMessage());
+				warningBox.clear();
 				warningBox.add(error);
 				warningBox.center();
 				joinResult.setText("");
@@ -209,8 +225,7 @@ public class Login extends VerticalPanel {
 		public void onSuccess(ClientPlayer result) {
 			loginStatus.setVisible(false);
 			joinStatus.setVisible(false);
-			loginDataPanel.setVisible(false);
-			signupDataPanel.setVisible(false);
+			facebookStatus.setVisible(false);
 			if(result == null){
 				if(notFirst){
 					loginResult.setText("Bilinmeyen kullanici");
@@ -219,10 +234,12 @@ public class Login extends VerticalPanel {
 				}
 				notFirst = true;
 			}else{
+				loginDataPanel.setVisible(false);
+				signupDataPanel.setVisible(false);
 				handler.loggedIn(result);
 			}
 		}
-		
+
 	}
-	
+
 }

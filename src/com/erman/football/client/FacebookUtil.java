@@ -81,7 +81,7 @@ public class FacebookUtil {
 	}
 	
 	public void onLogin() {
-		//this.subscribeLogout();
+		login.facebookLogin();
 		getMe();
 	}
 	

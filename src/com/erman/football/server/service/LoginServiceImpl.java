@@ -78,7 +78,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			// unknown user with no name provided. return null (not logged in)
 			return result;
 		}else{
-			//known user
+			//known user if username supplied it is a join
+			if(player.getName()!=null && !player.getName().equals("") && !player.getName().equals("name")){
+				//it is a join. throw exception
+				throw new PlayerException("Email kullaniliyor");
+			}
 			request.getSession().setAttribute("player",String.valueOf(playerDO.getKey()));
 			return playerDO.convert();
 		}

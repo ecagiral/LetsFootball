@@ -53,7 +53,14 @@ public class ClientPlayer extends DataObject implements Serializable {
 		String result = "";
 		for(String token:tokens){
 			String word = token.trim(); 
-			result += " "+Character.toUpperCase(word.charAt(0))+word.substring(1);
+			if(word.length()==0){
+				continue;
+			}else if(word.length()==1){
+				result += " "+Character.toUpperCase(word.charAt(0));
+			}else{
+				result += " "+Character.toUpperCase(word.charAt(0))+word.substring(1);
+			}
+			
 		}
 		this.name = result.trim();
 	}
