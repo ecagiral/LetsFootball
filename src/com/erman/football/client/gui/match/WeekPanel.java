@@ -2,8 +2,10 @@ package com.erman.football.client.gui.match;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 
 import com.erman.football.client.cache.Cache;
 import com.erman.football.client.cache.CacheScheduleHandler;
@@ -20,10 +22,13 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 
 public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 	
+	private final static int DAY_NUMBER = 5;
+	
 	private final  DateTimeFormat dateFormat = DateTimeFormat.getFormat("d MMM, EEE");
 	private final  DateTimeFormat timeFormat = DateTimeFormat.getFormat("d MMM, EEE H:mm");
 	private final  DateTimeFormat hourFormat = DateTimeFormat.getFormat("H:mm");
 	private ArrayList<String> dateList = new ArrayList<String>();
+	private TreeSet<String> sortedHourList = new TreeSet<String>(new HourComparator());
 	private ArrayList<String> hourList= new ArrayList<String>();
 	private Grid hourTable;
 	private ScheduleCell selectedCell;
@@ -64,18 +69,19 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 		if(closeDate.before(startDate)){
 			CalendarUtil.addDaysToDate(closeDate,1);
 		}
-		hourList.clear();
+		sortedHourList.clear();
 		Date tmpTime = (Date)time.clone();
 		do{
-			hourList.add(hourFormat.format(tmpTime));
+			String tmpHour = hourFormat.format(tmpTime);
+			sortedHourList.add(tmpHour);
 			tmpTime.setTime(tmpTime.getTime()+matchTime);
 		}while(tmpTime.before(closeDate));
-		//hourList = new ArrayList<String>(hourArray);
+		hourList = new ArrayList<String>(sortedHourList);
 		dateList.clear();
 		int dayCount = 0;
 		while(true){
 				dayCount++;
-				if(dayCount>4){
+				if(dayCount>DAY_NUMBER){
 					break;
 				}
 				CalendarUtil.addDaysToDate(startDate,1);
@@ -94,8 +100,8 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 				if(column == 0 && row!=0){
 						hourTable.setText(row, 0, hourList.get(row-1));
 						hourTable.getCellFormatter().setStyleName(row, 0, "hourTableHoursLeft");
-						hourTable.setText(row, 5, hourList.get(row-1));
-						hourTable.getCellFormatter().setStyleName(row, 5, "hourTableHoursRight");
+						hourTable.setText(row, DAY_NUMBER+1, hourList.get(row-1));
+						hourTable.getCellFormatter().setStyleName(row, DAY_NUMBER+1, "hourTableHoursRight");
 						continue;
 				}
 				if(row==0 && column!=0 && column != maxColumn-1){
@@ -123,13 +129,14 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 		hourTable.getCellFormatter().setStyleName(0, 0, "hourTableNext");
 		Label rNextLabel = new Label(">");
 		rNextLabel.setHorizontalAlignment(ALIGN_CENTER);
-		hourTable.setWidget(0, 5, rNextLabel);
-		hourTable.getCellFormatter().setStyleName(0, 5, "hourTableNext");
+		hourTable.setWidget(0, DAY_NUMBER+1, rNextLabel);
+		hourTable.getCellFormatter().setStyleName(0, DAY_NUMBER+1, "hourTableNext");
 		
 		hourTable.setCellSpacing(0);
 		hourTable.addClickHandler(new TimeClickHandler());
 		this.clear();
 		this.add(hourTable);
+		this.setStyleName("weekPanel");
 		this.setVisible(true);
 	}
 	
@@ -138,11 +145,12 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 		public void onClick(ClickEvent event) {
 			Cell clickedCell = hourTable.getCellForEvent(event);
 			if(clickedCell.getCellIndex()==0 && clickedCell.getRowIndex()==0){
-				CalendarUtil.addDaysToDate(startDate,-7);
+				CalendarUtil.addDaysToDate(startDate, 1-2*DAY_NUMBER);
 				load(match,startDate);
 				return;
 			}
-			if(clickedCell.getCellIndex()==5 && clickedCell.getRowIndex()==0){
+			if(clickedCell.getCellIndex()==DAY_NUMBER+1 && clickedCell.getRowIndex()==0){
+				CalendarUtil.addDaysToDate(startDate,-1);
 				load(match,startDate);
 				return;
 			}
@@ -205,6 +213,20 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 			return cellIndex;
 		}
 	
+	}
+	
+	private class HourComparator implements Comparator<String>{
+
+		@Override
+		public int compare(String arg0, String arg1) {
+			int first =  Integer.parseInt(arg0.split(":")[0]);
+			int second = Integer.parseInt(arg1.split(":")[0]);
+			if(first==second){
+				return 1;
+			}else{
+				return first-second;
+			}
+		}
 	}
 	
 }

@@ -35,6 +35,15 @@ public class PitchDO {
 	
 	@Persistent
 	private double latitude;
+	
+	@Persistent
+	private String openTime;
+	
+	@Persistent
+	private String closeTime;
+	
+	@Persistent
+	private long matchTime;
 
 	public String getName() {
 		return name;
@@ -104,6 +113,30 @@ public class PitchDO {
 	public void setKey(Key key) {
 		this.key = key;
 	}
+	
+	public String getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(String openTime) {
+		this.openTime = openTime;
+	}
+
+	public String getCloseTime() {
+		return closeTime;
+	}
+
+	public void setCloseTime(String closeTime) {
+		this.closeTime = closeTime;
+	}
+
+	public long getMatchTime() {
+		return matchTime;
+	}
+
+	public void setMatchTime(long matchTime) {
+		this.matchTime = matchTime;
+	}
 
 	public static PitchDO generate(Pitch pitch){
 		PitchDO pitchDO = new PitchDO();
@@ -114,6 +147,9 @@ public class PitchDO {
 		pitchDO.setPhone(pitch.getPhone());
 		pitchDO.setTown(pitch.getTown());
 		pitchDO.setCity(pitch.getCity());
+		pitchDO.setOpenTime(pitch.getOpenTime());
+		pitchDO.setCloseTime(pitch.getCloseTime());
+		pitchDO.setMatchTime(pitch.getMatchTime());
 		return pitchDO;
 	}
 	
@@ -127,6 +163,9 @@ public class PitchDO {
 		pitch.setName(getName());
 		pitch.setCity(getCity());
 		pitch.setTown(getTown());
+		pitch.setOpenTime(getOpenTime());
+		pitch.setCloseTime(getCloseTime());
+		pitch.setMatchTime(getMatchTime());
 		return pitch;
 	}
 	
@@ -138,5 +177,8 @@ public class PitchDO {
 		this.setName(pitch.getName());
 		this.setTown(pitch.getTown());
 		this.setCity(pitch.getCity());
+		this.setOpenTime(pitch.getOpenTime());
+		this.setCloseTime(pitch.getCloseTime());
+		this.setMatchTime(pitch.getMatchTime());
 	}
 }

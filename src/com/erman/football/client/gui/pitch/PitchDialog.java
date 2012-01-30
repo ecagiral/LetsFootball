@@ -17,6 +17,8 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 	private final Label pitchCapacityText = new Label();
 	private final Label pitchPhoneText = new Label();
 	private final Label pitchLocationText = new Label();
+	private final Label pitchOpenCloseText = new Label();
+	private final Label pitchMatchText = new Label();
 
 	private Pitch pitch;
 	 
@@ -35,16 +37,28 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 		HorizontalPanel locationPanel = new HorizontalPanel();
 		locationPanel.add(new Label("Lokasyon:"));
 		locationPanel.add(pitchLocationText);
-		pitchLocationText.setWidth("10px");
+		pitchLocationText.setWidth("200px");
 		
 		HorizontalPanel phonePanel = new HorizontalPanel();
 		phonePanel.add(new Label("Telefon:"));
 		phonePanel.add(pitchPhoneText);
 		pitchPhoneText.setWidth("30px");
 		
+		HorizontalPanel openClosePanel = new HorizontalPanel();
+		openClosePanel.add(new Label("Acilis-Kapanis:"));
+		openClosePanel.add(pitchOpenCloseText);
+		pitchOpenCloseText.setWidth("30px");
+		
+		HorizontalPanel matchPanel = new HorizontalPanel();
+		matchPanel.add(new Label("Mac Suresi(dk) :"));
+		matchPanel.add(pitchMatchText);
+		pitchMatchText.setWidth("50px");
+		
 		this.add(namePanel);
 		this.add(locationPanel);
 		this.add(capacityPanel);
+		this.add(openClosePanel);
+		this.add(matchPanel);
 		this.add(phonePanel);
   		
 	}
@@ -55,6 +69,8 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()));
 		pitchPhoneText.setText(pitch.getPhone());
 		pitchLocationText.setText(pitch.getTown()+", "+pitch.getCity());
+		pitchOpenCloseText.setText(pitch.getOpenTime()+"-"+pitch.getCloseTime());
+		pitchMatchText.setText(pitch.getMatchTime()+" dk");
 		if(basePanel!=null){
 			basePanel.clear();
 			basePanel.add(this);

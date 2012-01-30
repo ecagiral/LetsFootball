@@ -88,6 +88,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		stepPanel.add(selectDate);
 		stepPanel.add(selectPlayer);
 		stepPanel.add(matchSummary);
+		stepPanel.setStyleName("matchAddTopPanel");
 
 		HorizontalPanel pitchNamePanel = new HorizontalPanel();
 		pitchNamePanel.add(new Label("Secilen Saha: "));
@@ -107,10 +108,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		mainPanel.add(summaryPanel);
 		
 		VerticalPanel bottomPanel = new VerticalPanel();
-		bottomPanel.setWidth("100%");
-		bottomPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		HorizontalPanel nextPanel = new HorizontalPanel();
-		
 		applyButton.addClickHandler(new ClickHandler(){
 
 			public void onClick(ClickEvent event) {
@@ -124,16 +122,17 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		nextPanel.add(applyButton);
 		nextPanel.add(laodImg);
 		nextPanel.add(successImg);
+		bottomPanel.setStyleName("matchAddBottomPanel");
+		bottomPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		bottomPanel.add(nextPanel);
 
 		VerticalPanel dialogPanel = new VerticalPanel();
 		dialogPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		dialogPanel.setHeight("500px");
+		//dialogPanel.setHeight("500px");
 		dialogPanel.setWidth("500px");
 		dialogPanel.add(stepPanel);
 		dialogPanel.add(mainPanel);
 		dialogPanel.add(bottomPanel);
-		dialogPanel.setCellVerticalAlignment(bottomPanel, HasVerticalAlignment.ALIGN_BOTTOM);
 		
 		this.setPopupPosition(400, 50);
 		this.setGlassEnabled(true);

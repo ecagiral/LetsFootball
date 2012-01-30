@@ -265,6 +265,22 @@ div.soccer{
 	width:100px;
 }
 
+.matchAddTopPanel{
+	border-bottom-style:solid;
+	border-bottom-width:1px;
+	border-bottom-color:#ccc;
+}
+
+.weekPanel{
+	border-bottom-style:solid;
+	border-bottom-width:1px;
+	border-bottom-color:#000;
+}
+
+.matchAddBottomPanel{
+	height:50px;
+}
+
 .hourTable{
 	border-top-style:solid;
 	border-top-width:1px;

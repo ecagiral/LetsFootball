@@ -23,6 +23,9 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 	private final TextInput pitchNameText = new TextInput(this);
 	private final TextInput pitchCapacityText = new TextInput(this);
 	private final TextInput pitchPhoneText = new TextInput(this);
+	private final TextInput pitchOpenText = new TextInput(this);
+	private final TextInput pitchCloseText = new TextInput(this);
+	private final TextInput pitchMatchText = new TextInput(this);
 	private final Label pitchLocation = new Label();
 	private final Button updateButton = new Button("Guncelle");
 	private final Button deleteButton = new Button("Sil");
@@ -39,19 +42,37 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		this.handler = _handler;
 		cache.regiserPitch(this);
 		
-		Grid infoGrid = new Grid(5,2);
+		Grid infoGrid = new Grid(8,2);
 		infoGrid.setWidget(0, 0,new Label("Isim:"));
 		infoGrid.setWidget(0, 1,pitchNameText.getTextBox());
 		pitchNameText.getTextBox().setWidth("194px");
 		pitchNameText.getTextBox().setMaxLength(24);
+		
 		infoGrid.setWidget(1, 0,new Label("Lokasyon"));
 		infoGrid.setWidget(1, 1,pitchLocation);
+		
 		infoGrid.setWidget(2, 0,new Label("Kapasite:"));
 		infoGrid.setWidget(2, 1,pitchCapacityText.getTextBox());
 		pitchCapacityText.getTextBox().setWidth("16px");
 		pitchCapacityText.getTextBox().setMaxLength(2);
-		infoGrid.setWidget(3, 0,new Label("Telefon"));
-		infoGrid.setWidget(3, 1,pitchPhoneText.getTextBox());
+		
+		infoGrid.setWidget(3, 0,new Label("Acilis:"));
+		infoGrid.setWidget(3, 1,pitchOpenText.getTextBox());
+		pitchOpenText.getTextBox().setWidth("36px");
+		pitchOpenText.getTextBox().setMaxLength(5);
+		
+		infoGrid.setWidget(4, 0,new Label("Kapanis:"));
+		infoGrid.setWidget(4, 1,pitchCloseText.getTextBox());
+		pitchCloseText.getTextBox().setWidth("36px");
+		pitchCloseText.getTextBox().setMaxLength(5);
+		
+		infoGrid.setWidget(5, 0,new Label("Mac Suresi:"));
+		infoGrid.setWidget(5, 1,pitchMatchText.getTextBox());
+		pitchMatchText.getTextBox().setWidth("16px");
+		pitchMatchText.getTextBox().setMaxLength(2);
+		
+		infoGrid.setWidget(6, 0,new Label("Telefon"));
+		infoGrid.setWidget(6, 1,pitchPhoneText.getTextBox());
 		pitchPhoneText.getTextBox().setWidth("80px");
 		pitchPhoneText.getTextBox().setMaxLength(10);
 		updateButton.addClickHandler(new ClickHandler(){
@@ -73,7 +94,7 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		buttonPanel.add(deleteButton);
 		buttonPanel.add(laodImg);
 		buttonPanel.add(successImg);		
-		infoGrid.setWidget(4,1,buttonPanel);
+		infoGrid.setWidget(7,1,buttonPanel);
 		laodImg.setVisible(false);
 		successImg.setVisible(false);
 		
@@ -101,6 +122,9 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		pitchCapacityText.setText(Integer.toString(pitch.getCapacity()), add);
 		pitchPhoneText.setText(pitch.getPhone(),add);
 		pitchLocation.setText(pitch.getTown()+", "+pitch.getCity());
+		pitchOpenText.setText(pitch.getOpenTime(), add);
+		pitchCloseText.setText(pitch.getCloseTime(), add);
+		pitchMatchText.setText(Long.toString(pitch.getMatchTime()), add);
 		inProgress = false;
 		if(basePanel!=null){
 			basePanel.clear();
@@ -113,6 +137,9 @@ public class PitchEditDialog extends VerticalPanel implements DialogIf, ParamUpd
 		pitch.setName(pitchNameText.getText());
 		pitch.setCapacity(Integer.parseInt(pitchCapacityText.getText()));
 		pitch.setPhone(pitchPhoneText.getText());
+		pitch.setOpenTime(pitchOpenText.getText());
+		pitch.setCloseTime(pitchCloseText.getText());
+		pitch.setMatchTime(Long.parseLong(pitchMatchText.getText()));
 		return true;
 	}
 	
