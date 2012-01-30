@@ -97,7 +97,11 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 			return null;
 		}
 		request.getSession().setAttribute("player",null);
-		return Player_JDO_DB.getUserbyId(Long.parseLong(playerId)).convert();
+		Player tmpPlayer =  Player_JDO_DB.getUserbyId(Long.parseLong(playerId));
+		if(tmpPlayer!=null){
+			return tmpPlayer.convert();
+		}
+		return null;
 	}
 
 }

@@ -40,40 +40,32 @@ public class MatchDetailPanel extends HorizontalPanel implements CacheMatchHandl
 		cache.regiserMatch(this);
 		loggedPlayer = cache.getLoggedPlayer();
 		
-
-		this.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-
-		teamAContainer.setHorizontalAlignment(ALIGN_CENTER);
 		teamALabel.setStyleName("matchAName");
+		teamAContainer.setHorizontalAlignment(ALIGN_CENTER);
 		teamAContainer.add(teamALabel); 
-		HorizontalPanel teamAaddPanel = new HorizontalPanel();
 		teamAAddButton = new Button("Beni Ekle");
 		teamAAddButton.addClickHandler(new AddPlayerHandler(true));
-		teamAaddPanel.add(teamAAddButton);
-		teamAContainer.add(teamAaddPanel);
+		teamAAddButton.setWidth("100%");
+		teamAContainer.add(teamAAddButton);
 		SimplePanel teamAListContainer = new SimplePanel();
 		teamAListContainer.setStyleName("teamAContainer");
 		teamAListContainer.add(teamAPanel);
 		teamAContainer.add(teamAListContainer);
-		teamAListContainer.setHeight("200px");
-		teamAListContainer.setWidth("200px");
 		teamAContainer.setVisible(false);
 		this.add(teamAContainer);
 		
-		teamBContainer.setHorizontalAlignment(ALIGN_CENTER);
+
 		teamBLabel.setStyleName("matchBName");
+		teamBContainer.setHorizontalAlignment(ALIGN_CENTER);
 		teamBContainer.add(teamBLabel);
-		HorizontalPanel teamBaddPanel = new HorizontalPanel();
 		teamBAddButton = new Button("Beni Ekle");
 		teamBAddButton.addClickHandler(new AddPlayerHandler(false));
-		teamBaddPanel.add(teamBAddButton);
-		teamBContainer.add(teamBaddPanel);
+		teamBAddButton.setWidth("100%");
+		teamBContainer.add(teamBAddButton);
 		SimplePanel teamBListContainer = new SimplePanel();
 		teamBListContainer.setStyleName("teamBContainer");
 		teamBListContainer.add(teamBPanel);
 		teamBContainer.add(teamBListContainer);
-		teamBListContainer.setHeight("200px");
-		teamBListContainer.setWidth("200px");
 		teamBContainer.setVisible(false);
 		this.add(teamBContainer);
 	

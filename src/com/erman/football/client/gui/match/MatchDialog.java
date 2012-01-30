@@ -32,9 +32,9 @@ public class MatchDialog implements DialogIf{
 		matchInfos.setWidget(2,0,new Label("Saha: "));
 		matchInfos.setWidget(2,1,matchLocationText);
 
-		matchBoxPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		matchBoxPanel.add(matchInfos);
+		//matchBoxPanel.add(matchInfos);
 		matchBoxPanel.add(detailPanel);
+		matchBoxPanel.setStyleName("matchDetailPanel");
 	}
 
 	public void derender(){

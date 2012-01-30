@@ -120,6 +120,9 @@ public class MatchPanel extends HorizontalPanel implements CacheMatchHandler ,Li
 	public void load(){
 		matchAddPanel.setVisible(false);
 		infoPanel.clear();
+		if(currentMatch!=null){
+			currentMatch.setStyleName("matchCard");
+		}
 	}
 
 	private class EndMatchDialog extends DialogBox{
