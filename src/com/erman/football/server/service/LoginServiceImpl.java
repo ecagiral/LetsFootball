@@ -39,6 +39,9 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 		}
 		if(player.getFacebookId()!=0){
 			//facebook user. Add and return if not in db, return user if in db
+			//facebook user email should be null. this is not a good place to set it null
+			//but works for now
+			player.setEmail(null);
 			Player playerDO = Player_JDO_DB.getFacebookPlayer(player.getFacebookId());
 			if(playerDO==null){
 				try {
