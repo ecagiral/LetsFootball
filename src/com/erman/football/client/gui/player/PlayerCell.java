@@ -41,6 +41,7 @@ public class PlayerCell extends DataCell{
 			namePhoto.add(new Image("http://graph.facebook.com/" + cell.getPlayer().getFacebookId() + "/picture"));
 		}	
 		namePhoto.add(cell.getName());
+		namePhoto.setHeight("100%");
 		/*result.add(namePhoto);
 		
 		if(cell.isAdmin()){
@@ -63,7 +64,6 @@ public class PlayerCell extends DataCell{
 		ClientPlayer player = (ClientPlayer)data;
 		this.data = player;
 		name.setText(player.getName());
-		
 	}
 	
 	public ClientPlayer getPlayer(){

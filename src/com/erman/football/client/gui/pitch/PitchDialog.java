@@ -22,7 +22,7 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 
 	private Pitch pitch;
 	 
-	public PitchDialog(Cache cache,PitchEditDialogHandler _handler){
+	public PitchDialog(Cache cache){
 		cache.regiserPitch(this);
 
 		HorizontalPanel namePanel = new HorizontalPanel();
@@ -47,7 +47,7 @@ public class PitchDialog extends VerticalPanel implements DialogIf, CachePitchHa
 		HorizontalPanel openClosePanel = new HorizontalPanel();
 		openClosePanel.add(new Label("Acilis-Kapanis:"));
 		openClosePanel.add(pitchOpenCloseText);
-		pitchOpenCloseText.setWidth("30px");
+		pitchOpenCloseText.setWidth("100px");
 		
 		HorizontalPanel matchPanel = new HorizontalPanel();
 		matchPanel.add(new Label("Mac Suresi(dk) :"));

@@ -33,7 +33,10 @@ public class Player_JDO_DB {
 	}
 
 	public static ClientPlayer addUser(ClientPlayer clientPlayer) throws PlayerException{
-		if(getUser(clientPlayer.getEmail())!=null){
+		if(clientPlayer.getEmail().equals("")&&clientPlayer.getFacebookId()==0){
+			throw new PlayerException("Email tanimlayin");
+		}
+		if(getUser(clientPlayer.getEmail())!=null && clientPlayer.getFacebookId()==0){
 			throw new PlayerException("Email kullaniliyor");
 		}
 		Player playerDO = Player.convert(clientPlayer);

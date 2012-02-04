@@ -129,7 +129,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 		VerticalPanel dialogPanel = new VerticalPanel();
 		dialogPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		//dialogPanel.setHeight("500px");
-		dialogPanel.setWidth("500px");
+		//dialogPanel.setWidth("750px");
 		dialogPanel.add(stepPanel);
 		dialogPanel.add(mainPanel);
 		dialogPanel.add(bottomPanel);

@@ -17,8 +17,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,ListPanelListener{
+public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,ListPanelListener, PlayerEditDialogHandler{
 
+	final private PlayerEditDialog playerEditDialog;
 	final private PlayerDialog playerDialog;	
 	final private ListPanel listMainPanel;
 	final private SimplePanel infoPanel = new SimplePanel();
@@ -29,6 +30,7 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 	public PlayerPanel(Cache _cache){
 		this.cache = _cache;
 		cache.regiserPlayer(this);
+		playerEditDialog = new PlayerEditDialog(cache,this);
 		playerDialog = new PlayerDialog(cache);
 		PlayerFilterPanel filter = new PlayerFilterPanel(cache);
 		listMainPanel = new ListPanel(filter, new PlayerCell(this));
@@ -69,14 +71,19 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 	private void displayPlayer(PlayerCell cell){
 		if(cell == null){
 			listMainPanel.setVisible(false);
-			playerDialog.render(true,new ClientPlayer(),infoPanel);	
+			playerEditDialog.render(new ClientPlayer(),infoPanel);	
 		}else{
 			if(currentPlayer!=null){
 				currentPlayer.setStyleName("matchCard");
 			}
 			cell.setStyleName("selectedMatchCard");
 			currentPlayer = cell;
-			playerDialog.render(false,cell.getPlayer(),infoPanel);	
+			if(cache.getLoggedPlayer().isAdmin() || cache.getLoggedPlayer().getKey() == cell.getPlayer().getKey()){
+				playerEditDialog.render(cell.getPlayer(),infoPanel);
+			}else{
+				playerDialog.render(cell.getPlayer(),infoPanel);	
+			}
+			
 		}
 
 	}
@@ -117,6 +124,11 @@ public class PlayerPanel extends HorizontalPanel implements CachePlayerHandler ,
 	public void endClicked(DataCell dataCell, int x, int y) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void handleModify(ClientPlayer player) {
+		cache.updatePlayer(player);
 	}
 
 }

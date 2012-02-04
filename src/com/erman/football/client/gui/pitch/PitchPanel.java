@@ -21,7 +21,7 @@ public class PitchPanel extends HorizontalPanel implements PitchMapPanelHandler{
 		if(_cache.getLoggedPlayer().isAdmin()){
 			pitchDialog = new PitchEditDialog(_cache,pitchMap);
 		}else{
-			pitchDialog = new PitchDialog(_cache,pitchMap);
+			pitchDialog = new PitchDialog(_cache);
 		}
 		VerticalPanel buttonPanel = new VerticalPanel();
 		buttonPanel.setStyleName("leftPanel");

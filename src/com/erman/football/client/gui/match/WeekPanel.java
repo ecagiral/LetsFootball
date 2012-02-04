@@ -35,6 +35,7 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 	private Date startDate;
 	private Match match;
 	private Cache cache;
+	long matchTime;
 	
 	private ArrayList<Long> reserved;
 	
@@ -57,7 +58,7 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 		
 		
 		
-		long matchTime = match.getLocation().getMatchTime()*60*1000; 
+		matchTime = match.getLocation().getMatchTime()*60*1000; 
 		if(_startDate == null){
 			startDate = timeFormat.parse(dateFormat.format(new Date())+" "+match.getLocation().getOpenTime());
 		}else{
@@ -113,6 +114,9 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 					Date cellDate = timeFormat.parse(dateList.get(column-1)+" "+hourList.get(row-1));
 					if(cellDate.equals(match.getDate())){
 						hourTable.getCellFormatter().setStyleName(row, column, "hourTableSelected");
+						String start = hourFormat.format(cellDate);
+						String finish = hourFormat.format(new Date(cellDate.getTime()+matchTime));
+						hourTable.setWidget(selectedCell.getRowIndex(), selectedCell.getCellIndex(), new Label(start+"-"+finish));
 						selectedCell = new ScheduleCell(row,column);
 					}else if(reserved.contains(cellDate.getTime())){
 						hourTable.getCellFormatter().setStyleName(row, column, "hourTable");
@@ -163,10 +167,15 @@ public class WeekPanel extends HorizontalPanel implements CacheScheduleHandler{
 			}
 			if(selectedCell!=null){
 				hourTable.getCellFormatter().setStyleName(selectedCell.getRowIndex(), selectedCell.getCellIndex(),"hourTable");
+				hourTable.setText(selectedCell.getRowIndex(), selectedCell.getCellIndex(), "");
 			}
 			selectedCell = new ScheduleCell(clickedCell);
 			hourTable.getCellFormatter().setStyleName(selectedCell.getRowIndex(), selectedCell.getCellIndex(),"hourTableSelected");
 			match.setDate(cellDate);
+			String start = hourFormat.format(cellDate);
+			String finish = hourFormat.format(new Date(cellDate.getTime()+matchTime));
+			hourTable.setWidget(selectedCell.getRowIndex(), selectedCell.getCellIndex(), new Label(start+"-"+finish));
+
 		}
 		
 	}

@@ -1,126 +1,69 @@
 package com.erman.football.client.gui.player;
 
+import java.util.List;
+
 import com.erman.football.client.cache.Cache;
-import com.erman.football.client.gui.ParamUpdateHandler;
-import com.erman.football.client.gui.TextInput;
+import com.erman.football.client.cache.CachePlayerHandler;
+import com.erman.football.client.gui.pitch.DialogIf;
 import com.erman.football.shared.ClientPlayer;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Grid;
+import com.erman.football.shared.DataObject;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class PlayerDialog implements ParamUpdateHandler{
+public class PlayerDialog extends VerticalPanel implements DialogIf, CachePlayerHandler{
 
-	final VerticalPanel playerInfoPanel = new VerticalPanel();
+	private final Label playerNameText = new Label();
+	private final Label playerScoreText = new Label();
 
-	final TextInput playerNameText = new TextInput(this);
-	final CheckBox playerNotifyBox = new CheckBox();
-	final CheckBox playerAdminBox = new CheckBox();
-	final TextInput playerEmailText = new TextInput(this);
-	final Button updateButton = new Button("Apply"); 
-
-	private Cache cache;
-	private boolean add;
-	private Grid playerInfos;
 	private ClientPlayer player;
-	private boolean admin;
+	 
+	public PlayerDialog(Cache cache){
+		cache.regiserPlayer(this);
 
-	public PlayerDialog(Cache _cache){
-		this.cache = _cache;
-		admin = cache.getLoggedPlayer().isAdmin();
-
-		updateButton.addClickHandler(new ClickHandler(){
-
-			public void onClick(ClickEvent event) {
-				updateData();
-			}
-
-		});
-		playerInfoPanel.setWidth("250px");
-		playerInfoPanel.setBorderWidth(1);
+		HorizontalPanel namePanel = new HorizontalPanel();
+		namePanel.add(new Label("Isim:"));
+		namePanel.add(playerNameText);
+		
+		HorizontalPanel scorePanel = new HorizontalPanel();
+		scorePanel.add(new Label("Puan:"));
+		scorePanel.add(playerScoreText);
+		playerScoreText.setWidth("30px");
+		
+		this.add(namePanel);
+		this.add(scorePanel);
+  		
 	}
-
-	public void render(boolean add, ClientPlayer player, Panel parent){
-		this.add = add;
-		this.player = player;
-		playerInfoPanel.clear();
-		if(admin){
-			playerInfos = new Grid(4,2);	
-			playerNameText.setEnabled(true);
-			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerEmailText.setEnabled(true);
-			playerInfos.setWidget(1,0,playerEmailText.getTextBox());
-			playerInfos.setWidget(2,0,new Label("Admin:"));
-			playerAdminBox.setEnabled(true);
-			playerInfos.setWidget(2,1,playerAdminBox);
-			playerInfos.setWidget(3, 1, updateButton);
-		}else if(player.getKey()==cache.getLoggedPlayer().getKey()){
-			playerInfos = new Grid(4,2);	
-			playerNameText.setEnabled(true);
-			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerEmailText.setEnabled(true);
-			playerInfos.setWidget(1,0,playerEmailText.getTextBox());
-			playerInfos.setWidget(2, 1, updateButton);
-		}else{	
-			playerInfos = new Grid(2,2);	
-			playerNameText.setEnabled(false);
-			playerInfos.setWidget(0,0,playerNameText.getTextBox());
-			playerAdminBox.setEnabled(false);
-			playerInfos.setWidget(1,0,new Label("Admin:"));
-			playerInfos.setWidget(1,1,playerAdminBox);
+	
+	public void render(DataObject data,Panel basePanel){
+		player = (ClientPlayer)data;
+		playerNameText.setText(player.getName());
+		playerScoreText.setText("5.00");
+		if(basePanel!=null){
+			basePanel.clear();
+			basePanel.add(this);
 		}
 		
-		playerInfoPanel.add(playerInfos);	
-		if(add){
-			playerNameText.setText(player.getName(),add);
-			playerEmailText.setText(player.getEmail(),add);
-		}else{
-			playerNameText.setText(player.getName(),add);
-			playerEmailText.setText(player.getEmail(),add);
-		}		
-		playerNotifyBox.setValue(player.isNotify());
-		playerAdminBox.setValue(player.isAdmin());
-		parent.clear();
-		parent.add(playerInfoPanel);
-		if(add){
-			playerNameText.setFocus(add);
+	}
+
+	@Override
+	public void playerAdded(List<ClientPlayer> player) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void playerUpdated(ClientPlayer player) {
+		if(player.getKey()==this.player.getKey()){
+			render(player,null);
 		}
 	}
 
-	private boolean retrieveData(){
-		boolean result = false;
-		if(!playerAdminBox.getValue().equals(player.isAdmin())){
-			player.setAdmin(playerAdminBox.getValue());
-			result = true;
-		}
-		if(!playerNotifyBox.getValue().equals(player.isNotify())){
-			player.setNotify(playerNotifyBox.getValue());
-			result = true;
-		}
-		if(!playerNameText.getText().equals(player.getName())){
-			player.setName(playerNameText.getText());
-			result = true;
-		}
-		if(!playerEmailText.getText().equals(player.getEmail())){
-			player.setEmail(playerEmailText.getText());
-			result = true;
-		}
-		return result;
-	}
-
-	public void updateData() {
-		if(retrieveData()){
-			if(add){
-				PlayerDialog.this.cache.addPlayer(player);
-				playerInfoPanel.removeFromParent();
-				add=false;
-			}else{
-				PlayerDialog.this.cache.updatePlayer(player);
-			}
+	@Override
+	public void playerRemoved(Long player) {
+		if(player==this.player.getKey()){
+			this.removeFromParent();
 		}
 	}
 

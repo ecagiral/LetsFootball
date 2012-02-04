@@ -1,5 +1,7 @@
 package com.erman.football.server.service;
 
+import java.util.logging.Logger;
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.erman.football.client.service.LoginService;
@@ -12,7 +14,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService{
 
+	private static final Logger log = Logger.getLogger(LoginServiceImpl.class.getName());
+	
 	public ClientPlayer login(ClientPlayer player) throws PlayerException {
+		
 		ClientPlayer result = null;
 		HttpServletRequest request = this.getThreadLocalRequest();
 		if(player==null){
@@ -37,11 +42,12 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 				}
 			}
 		}
+		log.info("login request for user name: "+player.getName()+" facebookId: "+player.getFacebookId()+" email: "+player.getEmail()+" key: "+player.getKey());
 		if(player.getFacebookId()!=0){
 			//facebook user. Add and return if not in db, return user if in db
-			//facebook user email should be null. this is not a good place to set it null
+			//facebook user email should be empty. this is not a good place to set it null
 			//but works for now
-			player.setEmail(null);
+			player.setEmail("");
 			Player playerDO = Player_JDO_DB.getFacebookPlayer(player.getFacebookId());
 			if(playerDO==null){
 				try {
