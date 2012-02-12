@@ -254,8 +254,7 @@ public class MatchAddPanel extends DialogBox implements CacheMatchHandler,PitchM
 
 	public void matchAdded(List<Match> matches) {
 		inProgress = false;
-		laodImg.setVisible(false);
-		successImg.setVisible(true);
+		this.hide();
 	}
 
 	public void matchUpdated(Match match) {
